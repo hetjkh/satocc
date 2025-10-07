@@ -2,14 +2,11 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import NavBar from "@/components/Home/NavBar";
+import FAQSection from "@/components/Home/FAQSection";
+import ReviewsSection from "@/components/Home/ReviewsSection";
+import NewsroomSection from "@/components/Home/NewsroomSection";
+import FeaturesSection from "@/components/Home/FeaturesSection";
+import AppShowcaseSection from "@/components/Home/AppShowcaseSection";
 
 export default function HomePage() {
   return (
@@ -28,7 +25,7 @@ export default function HomePage() {
           <source src="/Videos/home.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent from-[50%] via-white/50 via-[75%] to-white to-[100%]"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent from-[50%] via-background/50 via-[75%] to-background to-[100%]"></div>
         <div className="relative flex justify-between items-end w-[95%] lg:w-full mb-10 max-w-7xl">
           <div className="w-full lg:w-[50%] justify-start items-start text-left">
             <h1 className="Space text-4xl lg:text-6xl uppercase font-bold mb-5">
@@ -41,13 +38,13 @@ export default function HomePage() {
             </p>
 
             <div className="flex justify-start items-start gap-2">
-              <Button className="Space rounded-full text-xl lg:text-2xl font-bold p-6 lg:p-7 uppercase bg-white text-black border-2 border-black">
+              <Button className="Space rounded-full text-xl lg:text-2xl font-bold p-6 lg:p-7 uppercase bg-background text-foreground border-2 border-foreground">
                 Free demo
               </Button>
-              <Button className="flex justify-center items-center Space rounded-full text-md w-13 h-13 lg:w-15 lg:h-15 font-bold p-0 lg:p-2 uppercase bg-white text-black border-2 border-black">
+              <Button className="flex justify-center items-center Space rounded-full text-md w-13 h-13 lg:w-15 lg:h-15 font-bold p-0 lg:p-2 uppercase bg-background text-foreground border-2 border-foreground">
                 <Image src="/icons/play.png" alt="" height={30} width={30} />
               </Button>
-              <Button className="flex justify-center items-center Space rounded-full text-md w-13 h-13 lg:w-15 lg:h-15 font-bold p-0 lg:p-2 uppercase bg-white text-black border-2 border-black">
+              <Button className="flex justify-center items-center Space rounded-full text-md w-13 h-13 lg:w-15 lg:h-15 font-bold p-0 lg:p-2 uppercase bg-background text-foreground border-2 border-foreground">
                 <Image src="/icons/apple.png" alt="" height={35} width={35} />
               </Button>
             </div>
@@ -61,6 +58,23 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <AppShowcaseSection />
+
+      {/* Features Section */}
+      <FeaturesSection />
+
+      <ReviewsSection />
+
+      <NewsroomSection />
+     
+      {/* FAQ Section */}
+      <FAQSection />
+
+      {/* Latest News & Insights Section */}
+     
+
+      {/* What Our Customers Say Section */}
+    
     </div>
   );
 }

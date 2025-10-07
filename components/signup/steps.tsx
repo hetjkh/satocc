@@ -3,9 +3,18 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 export default function StepsClipPath() {
+  const containerRef = useRef<HTMLElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+  const stepRefs = useRef<(HTMLElement | null)[]>([]);
+
   const steps = [
     {
       title: "CONTACT US",
@@ -33,11 +42,70 @@ export default function StepsClipPath() {
     },
   ];
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Set initial states
+      gsap.set(stepRefs.current, {
+        x: (index) => index % 2 === 0 ? -150 : 150,
+        opacity: 0,
+        scale: 0.8
+      });
+      
+      gsap.set(lineRef.current, {
+        scaleX: 0,
+        transformOrigin: "left center"
+      });
+
+      // Create timeline for the steps animation
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          scrub: 1.5,
+          pin: false,
+        }
+      });
+
+      // Animate the connecting line first
+      tl.to(lineRef.current, {
+        scaleX: 1,
+        duration: 1.5,
+        ease: "power3.out"
+      });
+
+      // Animate steps sliding in from sides with scale effect
+      tl.to(stepRefs.current, {
+        x: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 1.5,
+        stagger: 0.4,
+        ease: "power3.out"
+      }, "-=0.8");
+
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="bg-background px-6 md:px-16 py-16">
+    <section ref={containerRef} className="bg-background px-6 md:px-16 py-16 relative">
+      {/* Connecting line */}
+      <div 
+        ref={lineRef}
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[60%] h-1 bg-foreground z-0 hidden md:block"
+      />
+      
       <div className="max-w-[1200px] mx-auto grid gap-8 md:grid-cols-3">
         {steps.map((s, i) => (
-          <article key={i} className="relative">
+          <article 
+            key={i} 
+            ref={(el) => { stepRefs.current[i] = el; }}
+            className="relative z-10"
+          >
             <div className="step-card">
               <h3 className="text-2xl font-extrabold mb-4">{s.title}</h3>
               <p className="text-base text-muted-foreground mb-6">{s.text}</p>

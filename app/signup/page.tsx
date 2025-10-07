@@ -9,7 +9,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import StepsClip from "@/components/signup/steps";
 import StepsClipPath from "@/components/signup/steps";
 import { MoveUpRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 import {
   Select,
@@ -20,6 +25,12 @@ import {
 } from "@/components/ui/select";
 
 export default function Home() {
+  // Refs for GSAP animations
+  const buttonStepsRef = useRef<HTMLElement>(null);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const lineSegment1Ref = useRef<HTMLDivElement>(null);
+  const lineSegment2Ref = useRef<HTMLDivElement>(null);
+
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',
@@ -38,6 +49,87 @@ export default function Home() {
       [field]: value
     }));
   };
+
+  // GSAP Animations
+  useEffect(() => {
+    if (buttonStepsRef.current) {
+      const ctx = gsap.context(() => {
+        // Set initial states for complete step units (button + card)
+        gsap.set(stepRefs.current, {
+          x: (index) => index % 2 === 0 ? -200 : 200,
+          opacity: 0,
+          scale: 0.8
+        });
+
+        // Set initial states for line segments
+        gsap.set(lineSegment1Ref.current, {
+          scaleX: 0,
+          transformOrigin: "left center"
+        });
+        
+        gsap.set(lineSegment2Ref.current, {
+          scaleX: 0,
+          transformOrigin: "left center"
+        });
+
+        // Create timeline for complete steps animation
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: buttonStepsRef.current,
+            start: "top 20%", // Start pinning when section reaches 20% from top
+            end: "+=200%", // Extended duration for pinning
+            scrub: 1,
+            pin: true, // Pin the section during animation
+            pinSpacing: true, // Maintain proper spacing
+          }
+        });
+
+        // Animate Step 1 first
+        tl.to(stepRefs.current[0], {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.3,
+          ease: "power3.out"
+        });
+
+        // Then animate line from Step 1 to Step 2
+        tl.to(lineSegment1Ref.current, {
+          scaleX: 1,
+          duration: 0.2,
+          ease: "power2.out"
+        });
+
+        // Then animate Step 2
+        tl.to(stepRefs.current[1], {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.3,
+          ease: "power3.out"
+        });
+
+        // Then animate line from Step 2 to Step 3
+        tl.to(lineSegment2Ref.current, {
+          scaleX: 1,
+          duration: 0.2,
+          ease: "power2.out"
+        });
+
+        // Finally animate Step 3
+        tl.to(stepRefs.current[2], {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.3,
+          ease: "power3.out"
+        });
+
+      }, buttonStepsRef);
+
+      return () => ctx.revert();
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,65 +210,68 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="relative flex gap-5 items-center justify-center w-full  mt-30">
-        <div className="relative py-5 flex gap-5 items-center justify-between z-10 max-w-7xl w-full ">
-          <div className="relative flex justify-center items-center flex-col w-[400px] h-auto ">
-            <Button className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 px-10 bg-green-400 text-foreground border-2 border-foreground">
+      <section ref={buttonStepsRef} className="relative flex gap-5 items-center justify-center w-full mt-30 mb-30">
+        <div className="relative py-5 flex gap-5 items-start justify-between z-10 max-w-7xl w-full ">
+          {/* Step 1 - Complete Unit */}
+          <div ref={(el) => { stepRefs.current[0] = el; }} className="relative flex justify-center items-start flex-col w-[400px] h-auto gap-4">
+            <Button className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 px-10 bg-green-400 text-foreground border-2 border-foreground mx-auto">
               Step 1
             </Button>
+            <div className="relative flex justify-start items-start flex-col border-foreground w-[400px] h-[400px] border-2 rounded-4xl p-7">
+              <h1 className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5">
+                Contact Us
+              </h1>
+              <p className="Poppins text-sm font-medium mb-5">
+                Fill in the form below to tell us more about your store, your
+                customers, and how you operate. This helps our team design a
+                tailor‑made solution that best fits your business.
+              </p>
+              <Button className=" absolute bottom-2 flex justify-center items-center Space rounded-full text-xl lg:text-xl font-medium py-6 px-1.5 pl-5 uppercase bg-background text-foreground border-2 border-foreground mb-5">
+                Contact us
+                <span className="flex justify-center items-center ml-2 bg-foreground rounded-full w-10 h-10">
+                  <MoveUpRight className="w-4 h-4 text-background" />
+                </span>
+              </Button>
+            </div>
           </div>
-          <div className="relative flex justify-center items-center flex-col w-[400px] h-auto ">
-            <Button className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 px-10 bg-green-400 text-foreground border-2 border-foreground">
+
+          {/* Step 2 - Complete Unit */}
+          <div ref={(el) => { stepRefs.current[1] = el; }} className="relative flex justify-center items-start flex-col w-[400px] h-auto gap-4">
+            <Button className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 px-10 bg-green-400 text-foreground border-2 border-foreground mx-auto">
               Step 2
             </Button>
+            <div className="relative flex justify-start items-start flex-col border-foreground w-[400px] h-[400px] border-2 rounded-4xl p-7">
+              <h1 className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5">
+                Onboarding Process
+              </h1>
+              <p className="Poppins text-sm font-medium mb-5">
+                Team Satocci will ensure that your inventories are in sync and
+                that your team is trained to start accepting shoppers using
+                Satocci in less than two weeks.
+              </p>
+            </div>
           </div>
-          <div className="relative flex justify-center items-center flex-col w-[400px] h-auto ">
-            <Button className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 px-10 bg-green-400 text-foreground border-2 border-foreground">
+
+          {/* Step 3 - Complete Unit */}
+          <div ref={(el) => { stepRefs.current[2] = el; }} className="relative flex justify-center items-start flex-col w-[400px] h-auto gap-4">
+            <Button className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 px-10 bg-green-400 text-foreground border-2 border-foreground mx-auto">
               Step 3
             </Button>
+            <div className="relative flex justify-start items-start flex-col border-foreground w-[400px] h-[400px] border-2 rounded-4xl p-7">
+              <h1 className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5">
+                Continuous Improvement
+              </h1>
+              <p className="Poppins text-sm font-medium mb-5">
+                We work closely with you even after launch - gathering feedback,
+                updating features, and ensuring Satocci keeps making checkout
+                smoother for all.
+              </p>
+            </div>
           </div>
         </div>
-        <div className="absolute w-[60%] border border-foreground z-0"></div>
-      </section>
-      <section className="flex gap-5 items-center justify-center w-full mb-30">
-        <div className="py-5 flex gap-5 items-center justify-between max-w-7xl w-full ">
-          <div className="relative flex justify-start items-start flex-col border-foreground w-[400px] h-[400px] border-2 rounded-4xl p-7">
-            <h1 className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5">
-              Contact Us
-            </h1>
-            <p className="Poppins text-sm font-medium mb-5">
-              Fill in the form below to tell us more about your store, your
-              customers, and how you operate. This helps our team design a
-              tailor‑made solution that best fits your business.
-            </p>
-            <Button className=" absolute bottom-2 flex justify-center items-center Space rounded-full text-xl lg:text-xl font-medium py-6 px-1.5 pl-5 uppercase bg-background text-foreground border-2 border-foreground mb-5">
-              Contact us
-              <span className="flex justify-center items-center ml-2 bg-foreground rounded-full w-10 h-10">
-                <MoveUpRight className="w-4 h-4 text-background" />
-              </span>
-            </Button>
-          </div>
-          <div className="relative flex justify-start items-start flex-col border-foreground w-[400px] h-[400px] border-2 rounded-4xl p-7">
-            <h1 className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5">
-              Onboarding Process
-            </h1>
-            <p className="Poppins text-sm font-medium mb-5">
-              Team Satocci will ensure that your inventories are in sync and
-              that your team is trained to start accepting shoppers using
-              Satocci in less than two weeks.
-            </p>
-          </div>
-          <div className="relative flex justify-start items-start flex-col border-foreground w-[400px] h-[400px] border-2 rounded-4xl p-7">
-            <h1 className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5">
-              Continuous Improvement
-            </h1>
-            <p className="Poppins text-sm font-medium mb-5">
-              We work closely with you even after launch - gathering feedback,
-              updating features, and ensuring Satocci keeps making checkout
-              smoother for all.
-            </p>
-          </div>
-        </div>
+        {/* Progressive connecting lines - positioned to connect button centers */}
+        <div ref={lineSegment1Ref} className="absolute top-[50px] left-[20%] w-[30%] border border-foreground z-0"></div>
+        <div ref={lineSegment2Ref} className="absolute top-[50px] left-[50%] w-[30%] border border-foreground z-0"></div>
       </section>
 
       <section
