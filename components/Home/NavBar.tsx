@@ -17,15 +17,16 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="w-full fixed top-0 left-0 z-50">
-      <div className="max-w-8xl bg-gradient-to-b from-black/50 to-transparent mx-auto flex items-center justify-between px-6 py-2">
+    <nav className="w-full h-20 fixed top-0 left-0 z-50 bg-gradient-to-b from-black/70 to-transparent">
+      <div className="max-w-7xl bg-transparent mx-auto flex items-center justify-between py-2">
         {/* Logo */}
-        <Link href="/" className="flex items-center w-[50%] lg:w-[30%] gap-2">
+        <Link href="/" className="flex items-center w-[50%] lg:w-auto gap-2">
           <Image src="/logo_white.png" alt="Satocci" width={200} height={200} />
         </Link>
 
+        <div className="flex justify-center items-center w-auto h-full">
         {/* Desktop Menu */}
-        <div className="hidden w-[40%] Poppins font-medium lg:flex items-center justify-center gap-5 text-white">
+        <div className="hidden w-auto Poppins font-medium lg:flex items-center justify-center gap-5 text-white">
           <Link href="/" className="hover:text-primary transition">HOME</Link>
 
           {/* About Dropdown */}
@@ -59,15 +60,16 @@ export default function Navbar() {
         </div>
 
         {/* Right Side */}
-        <div className="hidden lg:flex items-center w-[30%] gap-2">
+        <div className="hidden lg:flex items-center w-auto ml-5 gap-2">
             <ModeToggle/>
-          <Button className="bg-white/50 text-black rounded-full" size="icon">
+          <Button className="bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_30px] shadow-purple rounded-full transition-all duration-300 cursor-pointer" size="icon">
             <Languages className="h-5 w-5" />
           </Button>
-          <Button className="Space rounded-full text-md font-bold px-5 py-5 bg-white text-black">FREE DEMO</Button>
-          <Button className="Space rounded-full text-md font-bold px-5 py-5" variant="outline">
+          <Button className="Space rounded-full text-md font-bold px-5 py-5 bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer">FREE DEMO</Button>
+          <Button className="Space rounded-full text-md font-bold px-5 py-5 bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer">
             BUSINESS LOGIN
           </Button>
+        </div>
         </div>
 
         {/* Mobile Menu Toggle */}

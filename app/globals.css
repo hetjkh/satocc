@@ -4,6 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+
+  --color-purple: var(--purple);
+  --color-green: var(--green);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -41,10 +45,33 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
+  --color-color-5: var(----color-5);
+  --color-color-4: var(----color-4);
+  --color-color-3: var(----color-3);
+  --color-color-2: var(----color-2);
+  --color-color-1: var(----color-1);
+
+  @keyframes rainbow {
+    0% {
+      background-position: 0%;
+    }
+    100% {
+      background-position: 200%;
+    }
+  }
+  @keyframes rainbow {
+  0% {
+    background-position: 0%;
+    }
+  100% {
+    background-position: 200%;
+    }
+  }
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.65rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -68,6 +95,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -76,6 +104,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --purple: #6C2DC7;
+  --green: #4BFF77;
+  --color-1: hsl(0 100% 63%);
+  --color-2: hsl(270 100% 63%);
+  --color-3: hsl(210 100% 63%);
+  --color-4: hsl(195 100% 63%);
+  --color-5: hsl(90 100% 63%);
+
 }
 
 .dark {
@@ -110,28 +146,21 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --purple: #833ee4;
+  --green: #4BFF77;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
-
 /* ////////////////////////////////////////
-
-
-
-
-
-
-
-
-
 
 /* Regular */
 @font-face {
@@ -282,18 +311,6 @@
   font-family: 'Poppins', sans-serif;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 /* ////////////////////////////////////// */
 .PoppinMedium {
   font-family: 'PoppinMediam', sans-serif;
@@ -305,6 +322,7 @@
   font-family: 'Space Grotesk';
   src: url('/Space_Grotesk/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');
 }
+
 .Space {
   font-family: 'Space Grotesk', sans-serif;
 }
@@ -313,7 +331,6 @@
 .clip-bottom-left {
 
   clip-path: path("M10 40 L70 40 L10 10 L0 0 L80 30 L80 10 A10 10 0 0 1 90 0 L140 0 A10 10 0 0 1 150 10 L150 190 A10 10 0 0 1 140 200 L10 200 A10 10 0 0 1 0 190 L0 50 L10 40 Z");
-
 
   border: 3px solid red;
 }

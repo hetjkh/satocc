@@ -2,17 +2,19 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { MoveUpRight } from "lucide-react";
+import { RainbowButton } from "../ui/rainbow-button";
 
 export default function AppShowcaseSection() {
   return (
-    <section className="w-full py-20 bg-background relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col lg:flex-row lg:items-start gap-12 lg:gap-20">
+    <section className="relative flex justify-center items-center w-full min-h-[100vh] h-auto z-10 my-30 bg-transparent overflow-hidden">
+      <div className="w-7xl">
+        <div className="relative flex flex-col lg:flex-row justify-between items-center w-full min-h-[100vh]">
           
           {/* Left Side - Text Content */}
           <div className="lg:w-1/2 flex flex-col justify-start">
-            <div className="max-w-lg">
-              <h2 className="Space text-3xl lg:text-4xl xl:text-5xl font-bold text-foreground mb-8 leading-tight">
+            <div className="w-full">
+              <h2 className="Space text-3xl lg:text-5xl uppercase font-semibold text-foreground w-full mb-8">
                 CHOOSE YOUR FAVORITE
                 <br />
                 ITEMS. SCAN & PAY VIA
@@ -22,30 +24,15 @@ export default function AppShowcaseSection() {
                 <span className="text-3xl lg:text-4xl xl:text-5xl">SIMPLE!</span>
               </h2>
               
-              <p className="Poppins text-base lg:text-lg text-muted-foreground leading-relaxed mb-32">
+              <p className="Poppins text-sm font-medium max-w-xl mb-32">
                 With Satocci you scan and pay in seconds and skip
                 the line so shopping becomes faster smarter and
                 easier using only your mobile.
               </p>
-              
-              <Button className="inline-flex items-center gap-4 Space text-lg font-bold px-6 py-6 rounded-full border-2 border-border bg-background text-foreground hover:bg-foreground hover:text-background transition-all duration-300 w-fit">
-                <span>SEE HOW IT WORKS</span>
-                <div className="w-10 h-10 bg-foreground rounded-full flex items-center justify-center">
-                  <svg 
-                    width="16" 
-                    height="16" 
-                    viewBox="0 0 16 16" 
-                    fill="none" 
-                    className="text-background"
-                  >
-                    <path 
-                      d="M4 12L12 4M12 4H4M12 4V12" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+              <Button className="Space rounded-full text-md font-bold px-2 py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer">
+                <span className="ml-3">SEE HOW IT WORKS</span>
+                <div className="w-10 h-10 bg-background text-foreground rounded-full flex items-center justify-center">
+                  <MoveUpRight />
                 </div>
               </Button>
             </div>
@@ -53,19 +40,19 @@ export default function AppShowcaseSection() {
 
           {/* Right Side - Image */}
           <div className="lg:w-1/2 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-lg">
-              <Image
-                src="/signup.jpg"
-                alt="Satocci in action - seamless shopping experience"
-                width={600}
-                height={600}
-                className="rounded-2xl shadow-2xl object-cover w-full h-auto max-h-[600px]"
-                priority
-              />
-            </div>
           </div>
         </div>
       </div>
+                <div className="absolute bottom-0 right-0 w-full h-full max-w-xl">
+              <Image
+                src="/apphand.png"
+                alt="Satocci in action - seamless shopping experience"
+                width={600}
+                height={600}
+                className="object-cover w-full h-auto"
+                priority
+              />
+            </div>
     </section>
   );
 }

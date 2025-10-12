@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function ReviewsSection() {
   return (
-    <section className="w-full py-20 bg-background relative overflow-hidden">
+    <section className="w-full z-10 py-20 bg-background relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-start gap-8 mb-32">

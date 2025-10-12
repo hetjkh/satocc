@@ -1,22 +1,23 @@
 "use client";
 
 import Image from "next/image";
+import DefaultDemo from "./features_card";
 
 export default function FeaturesSection() {
   return (
-    <section className="w-full py-20 bg-background relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="flex justify-center items-center w-full z-10 py-30 bg-transparent relative border overflow-hidden">
+      <div className="max-w-7xl flex justify-center items-center flex-col">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-start gap-8 mb-20">
-          <div className="lg:w-1/2">
-            <h2 className="Space text-4xl lg:text-5xl font-bold text-foreground mb-4">
+        <div className="flex flex-col lg:flex-row justify-between items-start mb-20 border">
+          <div className="lg:w-[60%]">
+            <h2 className="Space text-3xl lg:text-5xl uppercase font-semibold text-foreground mb-4">
               SAY GOODBYE TO
               <br />
-              <span className="text-5xl lg:text-6xl">STRESSFUL SHOPPING</span>
+              STRESSFUL SHOPPING
             </h2>
           </div>
-          <div className="lg:w-1/2">
-            <p className="Poppins text-lg text-muted-foreground leading-relaxed">
+          <div className="lg:w-[40%]">
+            <p className="Poppins text-md font-medium">
               Imagine shopping without the stress of waiting in line. No crumpled receipts. No missing out on rewards. 
               With Satocci™ every shopping trip feels smoother lighter and more rewarding.
             </p>
@@ -69,8 +70,8 @@ export default function FeaturesSection() {
             </div>
           </div>
         </div>
-
       </div>
+<DefaultDemo/>
     </section>
   );
 }

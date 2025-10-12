@@ -9,7 +9,7 @@ import {
 
 export default function FAQSection() {
   return (
-    <section className="w-full py-20 bg-background">
+    <section className="w-full z-10 py-20 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-start gap-8 mb-12">
