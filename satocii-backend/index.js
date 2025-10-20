@@ -3,9 +3,35 @@ const mongoose = require('mongoose');
 const axios = require('axios');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Cloudinary Configuration
+cloudinary.config({
+  cloud_name: 'dvrko1y0a', // Replace with your Cloudinary cloud name
+  api_key: '718679757661864',       // Replace with your Cloudinary API key
+  api_secret: 'U7urAnAcBIyXSeGgkJL6ylv0uGo'  // Replace with your Cloudinary API secret
+});
+
+// Configure multer for memory storage (upload to memory before cloudinary)
+const storage = multer.memoryStorage();
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept images only
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  }
+});
 
 // MongoDB connection
 const MONGODB_URI = 'mongodb+srv://hetjani818_db_user:123@cluster0.v1x2mx9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
@@ -28,15 +54,31 @@ const postSchema = new mongoose.Schema({
   title: { type: String },                      // post title
   linkedinPostId: { type: String },            // LinkedIn post ID for tracking
   linkedinUserId: { type: String },             // LinkedIn user ID (sub field)
-  mediaType: { type: String, default: 'NONE' }, // NONE, ARTICLE, VIDEO, etc.
+  mediaType: { type: String, default: 'NONE' }, // NONE, ARTICLE, VIDEO, IMAGE, etc.
   mediaUrl: { type: String },                   // URL for media content
   mediaTitle: { type: String },                 // Title for media content
   mediaDescription: { type: String },           // Description for media content
   mediaThumbnail: { type: String },             // Thumbnail URL for media
-  status: { type: String, default: 'pending' } // pending, posted, failed
+  uploadedImages: [{ type: String }],           // Array of Cloudinary image URLs
+  postToLinkedIn: { type: Boolean, default: true }, // Whether to post to LinkedIn or just save
+  status: { type: String, default: 'pending' } // pending, posted, failed, saved
 }, { timestamps: true });
 
 const Post = mongoose.model('Post', postSchema);
+
+// ✅ Define Schema & Model for Reviews
+const reviewSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  role: { type: String, required: true },
+  content: { type: String, required: true },
+  type: { type: String, required: true, enum: ['text', 'image', 'video'] }, // text, image, video
+  mediaUrl: { type: String }, // Cloudinary URL for image or video URL
+  imageUrl: { type: String }, // Profile image URL
+  order: { type: Number, default: 0 }, // For ordering reviews
+  isActive: { type: Boolean, default: true }
+}, { timestamps: true });
+
+const Review = mongoose.model('Review', reviewSchema);
 
 // ✅ LinkedIn API Helper Functions
 async function getLinkedInUserInfo() {
@@ -54,6 +96,67 @@ async function getLinkedInUserInfo() {
   }
 }
 
+// Upload image to LinkedIn and get media URN
+async function uploadImageToLinkedIn(imageUrl, userInfo) {
+  try {
+    console.log('📸 Uploading image to LinkedIn:', imageUrl);
+    
+    const personUrn = `urn:li:person:${userInfo.sub}`;
+    
+    // Step 1: Register the upload
+    const registerUploadResponse = await axios.post(
+      'https://api.linkedin.com/v2/assets?action=registerUpload',
+      {
+        registerUploadRequest: {
+          recipes: ['urn:li:digitalmediaRecipe:feedshare-image'],
+          owner: personUrn,
+          serviceRelationships: [
+            {
+              relationshipType: 'OWNER',
+              identifier: 'urn:li:userGeneratedContent'
+            }
+          ]
+        }
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${LINKEDIN_CONFIG.accessToken}`,
+          'Content-Type': 'application/json',
+          'X-Restli-Protocol-Version': '2.0.0'
+        }
+      }
+    );
+
+    const uploadUrl = registerUploadResponse.data.value.uploadMechanism['com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest'].uploadUrl;
+    const asset = registerUploadResponse.data.value.asset;
+
+    console.log('✅ Upload registered. Asset URN:', asset);
+
+    // Step 2: Download image from Cloudinary
+    const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+    const imageBuffer = Buffer.from(imageResponse.data);
+
+    console.log('📥 Downloaded image from Cloudinary, size:', imageBuffer.length, 'bytes');
+
+    // Step 3: Upload the image binary to LinkedIn
+    await axios.put(uploadUrl, imageBuffer, {
+      headers: {
+        'Authorization': `Bearer ${LINKEDIN_CONFIG.accessToken}`,
+        'Content-Type': 'application/octet-stream'
+      },
+      maxBodyLength: Infinity,
+      maxContentLength: Infinity
+    });
+
+    console.log('✅ Image uploaded to LinkedIn successfully');
+
+    return asset; // Return the asset URN
+  } catch (error) {
+    console.error('❌ Error uploading image to LinkedIn:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
 async function postToLinkedIn(content, options = {}) {
   try {
     const { 
@@ -62,12 +165,17 @@ async function postToLinkedIn(content, options = {}) {
       mediaUrl = '', 
       mediaTitle = '', 
       mediaDescription = '', 
-      mediaThumbnail = '' 
+      mediaThumbnail = '',
+      uploadedImages = []
     } = options;
 
     // Get user info to get the user ID
     const userInfo = await getLinkedInUserInfo();
     const authorUrn = `urn:li:person:${userInfo.sub}`;
+
+    // Determine if we have images to post
+    const hasUploadedImages = uploadedImages && uploadedImages.length > 0;
+    const effectiveMediaType = hasUploadedImages ? 'IMAGE' : mediaType;
 
     // Build the post data
     const postData = {
@@ -78,7 +186,7 @@ async function postToLinkedIn(content, options = {}) {
           shareCommentary: {
             text: content
           },
-          shareMediaCategory: mediaType
+          shareMediaCategory: effectiveMediaType
         }
       },
       visibility: {
@@ -86,8 +194,37 @@ async function postToLinkedIn(content, options = {}) {
       }
     };
 
-    // Add media if provided
-    if (mediaType !== 'NONE' && mediaUrl) {
+    // Add uploaded images if available
+    if (hasUploadedImages) {
+      console.log(`🔄 Uploading ${uploadedImages.length} image(s) to LinkedIn...`);
+      
+      // Upload each image to LinkedIn and get media URNs
+      const mediaUrns = [];
+      for (let i = 0; i < uploadedImages.length; i++) {
+        try {
+          const assetUrn = await uploadImageToLinkedIn(uploadedImages[i], userInfo);
+          mediaUrns.push(assetUrn);
+          console.log(`✅ Image ${i + 1}/${uploadedImages.length} uploaded successfully`);
+        } catch (uploadError) {
+          console.error(`❌ Failed to upload image ${i + 1}:`, uploadError.message);
+          throw new Error(`Failed to upload image ${i + 1} to LinkedIn: ${uploadError.message}`);
+        }
+      }
+
+      // Use the media URNs in the post
+      postData.specificContent['com.linkedin.ugc.ShareContent'].media = mediaUrns.map((assetUrn, index) => ({
+        status: 'READY',
+        description: {
+          text: mediaDescription || content
+        },
+        media: assetUrn,
+        title: {
+          text: mediaTitle || title || `Image ${index + 1}`
+        }
+      }));
+    }
+    // Add media URL if provided (for ARTICLE or VIDEO)
+    else if (mediaType !== 'NONE' && mediaUrl) {
       postData.specificContent['com.linkedin.ugc.ShareContent'].media = [{
         status: 'READY',
         description: {
@@ -107,7 +244,10 @@ async function postToLinkedIn(content, options = {}) {
       }
     }
 
-    console.log('Posting to LinkedIn with data:', JSON.stringify(postData, null, 2));
+    console.log('📤 Posting to LinkedIn:');
+    console.log('   - Media Category:', effectiveMediaType);
+    console.log('   - Uploaded Images:', uploadedImages.length);
+    console.log('   - Post Data:', JSON.stringify(postData, null, 2));
 
     // Post to LinkedIn using the UGC Posts API
     const response = await axios.post('https://api.linkedin.com/v2/ugcPosts', postData, {
@@ -212,6 +352,68 @@ app.get('/api/test', (req, res) => {
   });
 });
 
+// ✅ API endpoint to upload image to Cloudinary
+app.post('/api/upload-image', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'No image file provided'
+      });
+    }
+
+    // Upload to Cloudinary using buffer
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'linkedin-posts',
+        resource_type: 'image',
+        transformation: [
+          { quality: 'auto' },
+          { fetch_format: 'auto' }
+        ]
+      },
+      (error, result) => {
+        if (error) {
+          console.error('Cloudinary upload error:', error);
+          return res.status(500).json({
+            success: false,
+            message: 'Failed to upload image to Cloudinary',
+            error: error.message
+          });
+        }
+
+        res.json({
+          success: true,
+          message: 'Image uploaded successfully',
+          data: {
+            url: result.secure_url,
+            publicId: result.public_id,
+            format: result.format,
+            width: result.width,
+            height: result.height,
+            size: result.bytes
+          }
+        });
+      }
+    );
+
+    // Convert buffer to stream and pipe to cloudinary
+    const { Readable } = require('stream');
+    const bufferStream = new Readable();
+    bufferStream.push(req.file.buffer);
+    bufferStream.push(null);
+    bufferStream.pipe(uploadStream);
+
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to upload image',
+      error: error.message
+    });
+  }
+});
+
 // ✅ API endpoint to get LinkedIn user info
 app.get('/api/linkedin-userinfo', async (req, res) => {
   try {
@@ -240,14 +442,18 @@ app.post('/api/post-to-linkedin', async (req, res) => {
       mediaUrl = '', 
       mediaTitle = '', 
       mediaDescription = '', 
-      mediaThumbnail = '' 
+      mediaThumbnail = '',
+      uploadedImages = [],
+      postToLinkedIn: shouldPostToLinkedIn = true
     } = req.body;
 
     console.log('📝 Received LinkedIn post request:', { 
       content: content.substring(0, 50) + '...', 
       title, 
       mediaType,
-      mediaUrl 
+      mediaUrl,
+      uploadedImages: uploadedImages.length,
+      postToLinkedIn: shouldPostToLinkedIn
     });
 
     // Validate required fields
@@ -268,11 +474,28 @@ app.post('/api/post-to-linkedin', async (req, res) => {
       mediaTitle: mediaTitle,
       mediaDescription: mediaDescription,
       mediaThumbnail: mediaThumbnail,
-      status: 'pending'
+      uploadedImages: uploadedImages,
+      postToLinkedIn: shouldPostToLinkedIn,
+      status: shouldPostToLinkedIn ? 'pending' : 'saved'
     });
 
     await newPost.save();
     console.log('💾 Post saved to database with ID:', newPost._id);
+
+    // Check if user wants to post to LinkedIn
+    if (!shouldPostToLinkedIn) {
+      console.log('📥 Post saved without posting to LinkedIn (user preference)');
+      return res.json({
+        success: true,
+        message: 'Post saved successfully without posting to LinkedIn',
+        data: {
+          postId: newPost._id,
+          content: content,
+          status: 'saved',
+          uploadedImages: uploadedImages
+        }
+      });
+    }
 
     try {
       // Post to LinkedIn
@@ -283,7 +506,8 @@ app.post('/api/post-to-linkedin', async (req, res) => {
         mediaUrl,
         mediaTitle,
         mediaDescription,
-        mediaThumbnail
+        mediaThumbnail,
+        uploadedImages
       });
       
       // Update post record with LinkedIn post ID and user ID
@@ -303,6 +527,7 @@ app.post('/api/post-to-linkedin', async (req, res) => {
           linkedinUserId: linkedinResponse.userInfo.sub,
           content: content,
           status: 'posted',
+          uploadedImages: uploadedImages,
           userInfo: linkedinResponse.userInfo
         }
       });
@@ -342,7 +567,8 @@ app.post('/api/save-post', async (req, res) => {
       mediaUrl = '', 
       mediaTitle = '', 
       mediaDescription = '', 
-      mediaThumbnail = '' 
+      mediaThumbnail = '',
+      uploadedImages = []
     } = req.body;
 
     if (!content) {
@@ -361,6 +587,8 @@ app.post('/api/save-post', async (req, res) => {
       mediaTitle: mediaTitle,
       mediaDescription: mediaDescription,
       mediaThumbnail: mediaThumbnail,
+      uploadedImages: uploadedImages,
+      postToLinkedIn: false,
       status: 'saved'
     });
 
@@ -372,6 +600,7 @@ app.post('/api/save-post', async (req, res) => {
       data: {
         postId: newPost._id,
         content: content,
+        uploadedImages: uploadedImages,
         status: 'saved'
       }
     });
@@ -381,6 +610,206 @@ app.post('/api/save-post', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to save post',
+      error: error.message
+    });
+  }
+});
+
+// ===== REVIEWS API ENDPOINTS =====
+
+// ✅ Get all active reviews
+app.get('/api/reviews', async (req, res) => {
+  try {
+    const reviews = await Review.find({ isActive: true }).sort({ order: 1, createdAt: -1 });
+    res.json({
+      success: true,
+      data: reviews
+    });
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch reviews',
+      error: error.message
+    });
+  }
+});
+
+// ✅ Get all reviews (including inactive - for admin)
+app.get('/api/reviews/all', async (req, res) => {
+  try {
+    const reviews = await Review.find().sort({ order: 1, createdAt: -1 });
+    res.json({
+      success: true,
+      data: reviews
+    });
+  } catch (error) {
+    console.error('Error fetching all reviews:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch reviews',
+      error: error.message
+    });
+  }
+});
+
+// ✅ Create a new review
+app.post('/api/reviews', async (req, res) => {
+  try {
+    const { name, role, content, type, mediaUrl, imageUrl, order, isActive } = req.body;
+
+    // Validate required fields
+    if (!name || !role || !content || !type) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name, role, content, and type are required'
+      });
+    }
+
+    // Validate type
+    if (!['text', 'image', 'video'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Type must be text, image, or video'
+      });
+    }
+
+    const newReview = new Review({
+      name,
+      role,
+      content,
+      type,
+      mediaUrl,
+      imageUrl,
+      order: order || 0,
+      isActive: isActive !== undefined ? isActive : true
+    });
+
+    await newReview.save();
+    console.log('✅ Review created:', newReview._id);
+
+    res.json({
+      success: true,
+      message: 'Review created successfully',
+      data: newReview
+    });
+  } catch (error) {
+    console.error('Error creating review:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create review',
+      error: error.message
+    });
+  }
+});
+
+// ✅ Update a review
+app.put('/api/reviews/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, role, content, type, mediaUrl, imageUrl, order, isActive } = req.body;
+
+    const review = await Review.findById(id);
+    if (!review) {
+      return res.status(404).json({
+        success: false,
+        message: 'Review not found'
+      });
+    }
+
+    // Update fields
+    if (name !== undefined) review.name = name;
+    if (role !== undefined) review.role = role;
+    if (content !== undefined) review.content = content;
+    if (type !== undefined) {
+      if (!['text', 'image', 'video'].includes(type)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Type must be text, image, or video'
+        });
+      }
+      review.type = type;
+    }
+    if (mediaUrl !== undefined) review.mediaUrl = mediaUrl;
+    if (imageUrl !== undefined) review.imageUrl = imageUrl;
+    if (order !== undefined) review.order = order;
+    if (isActive !== undefined) review.isActive = isActive;
+
+    await review.save();
+    console.log('✅ Review updated:', review._id);
+
+    res.json({
+      success: true,
+      message: 'Review updated successfully',
+      data: review
+    });
+  } catch (error) {
+    console.error('Error updating review:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update review',
+      error: error.message
+    });
+  }
+});
+
+// ✅ Delete a review
+app.delete('/api/reviews/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const review = await Review.findByIdAndDelete(id);
+    if (!review) {
+      return res.status(404).json({
+        success: false,
+        message: 'Review not found'
+      });
+    }
+
+    console.log('✅ Review deleted:', id);
+
+    res.json({
+      success: true,
+      message: 'Review deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete review',
+      error: error.message
+    });
+  }
+});
+
+// ✅ Toggle review active status
+app.patch('/api/reviews/:id/toggle', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const review = await Review.findById(id);
+    if (!review) {
+      return res.status(404).json({
+        success: false,
+        message: 'Review not found'
+      });
+    }
+
+    review.isActive = !review.isActive;
+    await review.save();
+
+    console.log('✅ Review status toggled:', id, '- isActive:', review.isActive);
+
+    res.json({
+      success: true,
+      message: 'Review status updated successfully',
+      data: review
+    });
+  } catch (error) {
+    console.error('Error toggling review status:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to toggle review status',
       error: error.message
     });
   }
