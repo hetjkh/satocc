@@ -6,30 +6,122 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function FAQSection() {
+  const headerTitleRef = useRef<HTMLDivElement>(null);
+  const headerDescRef = useRef<HTMLDivElement>(null);
+  const faqContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (!headerTitleRef.current || !headerDescRef.current || !faqContainerRef.current) return;
+
+      // Ensure elements are visible by default
+      gsap.set([headerTitleRef.current, headerDescRef.current, faqContainerRef.current], { opacity: 1 });
+
+      // Header animations - faster
+      gsap.fromTo(headerTitleRef.current,
+        { opacity: 0, y: 40 },
+        {
+          scrollTrigger: {
+            trigger: headerTitleRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "power2.out",
+        }
+      );
+
+      gsap.fromTo(headerDescRef.current,
+        { opacity: 0, x: 50 },
+        {
+          scrollTrigger: {
+            trigger: headerDescRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          opacity: 1,
+          x: 0,
+          duration: 0.4,
+          delay: 0.1,
+          ease: "power2.out",
+        }
+      );
+
+      // FAQ container animation - faster
+      gsap.fromTo(faqContainerRef.current,
+        { opacity: 0, y: 40, scale: 0.98 },
+        {
+          scrollTrigger: {
+            trigger: faqContainerRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        }
+      );
+
+      // Wait for DOM to be ready before animating items
+      setTimeout(() => {
+        const faqItems = faqContainerRef.current?.querySelectorAll('[data-radix-collection-item]');
+        if (faqItems && faqItems.length > 0) {
+          gsap.set(faqItems, { opacity: 1 });
+          gsap.fromTo(faqItems,
+            { opacity: 0, x: -30 },
+            {
+              scrollTrigger: {
+                trigger: faqContainerRef.current,
+                start: "top 80%",
+                toggleActions: "play none none none",
+              },
+              opacity: 1,
+              x: 0,
+              duration: 0.4,
+              stagger: 0.08,
+              ease: "power2.out",
+            }
+          );
+        }
+      }, 100);
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="w-full z-10 py-20 bg-background">
+    <section className="w-full z-10 py-20 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-start gap-8 mb-12">
-          <div className="lg:w-1/2">
+          <div ref={headerTitleRef} className="lg:w-1/2">
             <h2 className="Space text-4xl lg:text-5xl font-bold text-foreground mb-4">
               FREQUENTLY ASKED
               <br />
               <span className="ml-8">QUESTIONS</span>
             </h2>
           </div>
-          <div className="lg:w-1/2">
+          <div ref={headerDescRef} className="lg:w-1/2">
             <p className="Poppins text-lg text-muted-foreground leading-relaxed">
-              Got questions? We've got answers. Explore the most common queries about Satocci, 
+              Got questions? We&apos;ve got answers. Explore the most common queries about Satocci, 
               how it works, and how it makes your shopping experience easier.
             </p>
           </div>
         </div>
 
         {/* FAQ Container */}
-        <div className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
+        <div ref={faqContainerRef} className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1" className="border-b border-border">
               <AccordionTrigger className="px-8 py-6 hover:no-underline">

@@ -2,9 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { 
   Play, 
   Pause, 
@@ -259,27 +264,17 @@ export default function MusicPlayer({ isOpen, onClose }: MusicPlayerProps) {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-4xl max-h-[80vh] overflow-hidden bg-background border-2 border-foreground">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2 Space text-2xl font-semibold">
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetContent side="right" className="w-full sm:w-[540px] overflow-y-auto bg-background border-l-2 border-foreground">
+        <SheetHeader>
+          <SheetTitle className="flex items-center gap-2 Space text-2xl font-semibold">
             <Music className="w-6 h-6" />
             Music Player
-          </CardTitle>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={onClose}
-            className="text-foreground hover:bg-foreground/10"
-          >
-            ×
-          </Button>
-        </CardHeader>
+          </SheetTitle>
+        </SheetHeader>
 
-        <CardContent className="space-y-6">
+        <div className="space-y-6 mt-6">
           {/* Current Track Display */}
           {currentTrack && (
             <div className="bg-foreground/5 rounded-2xl p-4 border border-foreground/20">
@@ -476,8 +471,8 @@ export default function MusicPlayer({ isOpen, onClose }: MusicPlayerProps) {
               )}
             </div>
           )}
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }

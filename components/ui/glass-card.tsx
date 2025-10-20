@@ -51,7 +51,7 @@ interface CardProps {
     color: string;
 }
 
-const Card: React.FC<CardProps> = ({ title, description, index, totalCards, color }) => {
+const Card: React.FC<CardProps> = ({ index, totalCards, color }) => {
     const cardRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -279,7 +279,6 @@ export const StackedCards: React.FC = () => {
                 width: '100%'
             }}>
                 {cardData.map((card, index) => {
-                    const targetScale = 1 - (cardData.length - index) * 0.05;
                     return (
                         <Card
                             key={card.id}

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "lenis/dist/lenis.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -156,7 +157,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-b from-background/95 to-background/98 text-foreground;
   }
 }
 
@@ -346,4 +347,25 @@
 /* Optional: better browser support */
 .step-card {
   -webkit-clip-path: path("M0 0 H100% V100% Q0 95% 15% 85% Q0 80% 0 65% Z");
+}
+
+/* Lenis Smooth Scroll Styling */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }

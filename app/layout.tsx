@@ -3,6 +3,8 @@ import "./globals.css";
 import NavBar from "@/components/Home/NavBar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MusicProvider } from "@/contexts/MusicContext";
+import Background from "@/components/Home/Particles";
+import LenisWrapper from "@/components/LenisWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -82,17 +84,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class" // adds `class="dark"` or `class="light"` on <html>
-          defaultTheme="system" // can be "light" | "dark" | "system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <MusicProvider>
-            <NavBar />
-            {children}
-          </MusicProvider>
-        </ThemeProvider>
+        <LenisWrapper>
+          <ThemeProvider
+            attribute="class" // adds `class="dark"` or `class="light"` on <html>
+            defaultTheme="system" // can be "light" | "dark" | "system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <MusicProvider>
+              <Background />
+              <NavBar />
+              {children}
+            </MusicProvider>
+          </ThemeProvider>
+        </LenisWrapper>
       </body>
     </html>
   );

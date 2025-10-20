@@ -12,6 +12,8 @@ interface MusicContextType {
   queue: YouTubeTrack[];
   currentIndex: number;
   isPlayerReady: boolean;
+  progress: number;
+  duration: number;
   play: (track: YouTubeTrack, trackList?: YouTubeTrack[]) => void;
   pause: () => void;
   resume: () => void;
@@ -31,9 +33,12 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [queue, setQueue] = useState<YouTubeTrack[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const playerRef = useRef<any>(null);
   const initAttemptRef = useRef(0);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize YouTube Player on mount
   useEffect(() => {
@@ -114,6 +119,34 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Track progress
+  useEffect(() => {
+    if (isPlaying && playerRef.current) {
+      progressIntervalRef.current = setInterval(() => {
+        try {
+          const currentTime = playerRef.current.getCurrentTime();
+          const totalDuration = playerRef.current.getDuration();
+          if (totalDuration > 0) {
+            setProgress((currentTime / totalDuration) * 100);
+            setDuration(totalDuration);
+          }
+        } catch (error) {
+          // Player might not be ready
+        }
+      }, 1000);
+
+      return () => {
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+        }
+      };
+    } else {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    }
+  }, [isPlaying]);
+
   const play = (track: YouTubeTrack, trackList?: YouTubeTrack[]) => {
     if (!playerRef.current || !isPlayerReady) {
       toast.info('Player is loading...', {
@@ -124,6 +157,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     }
 
     setCurrentTrack(track);
+    setProgress(0);
 
     if (trackList) {
       setQueue(trackList);
@@ -205,6 +239,8 @@ export function MusicProvider({ children }: { children: ReactNode }) {
         queue,
         currentIndex,
         isPlayerReady,
+        progress,
+        duration,
         play,
         pause,
         resume,

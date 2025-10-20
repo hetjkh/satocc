@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -50,6 +51,7 @@ interface Post {
 const API_BASE_URL = 'http://localhost:5000';
 
 export default function LinkedInPage() {
+  const router = useRouter();
   const [userInfo, setUserInfo] = useState<LinkedInUser | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
@@ -68,6 +70,20 @@ export default function LinkedInPage() {
     uploadedImages: [] as string[],
     postToLinkedIn: true
   });
+
+  // Check authentication on mount
+  useEffect(() => {
+    const isLoggedIn = sessionStorage.getItem("adminLoggedIn");
+    if (isLoggedIn !== "true") {
+      router.push("/admin/login");
+    }
+  }, [router]);
+
+  // Logout handler
+  const handleLogout = () => {
+    sessionStorage.removeItem("adminLoggedIn");
+    router.push("/admin/login");
+  };
 
   // Fetch LinkedIn user info
   const fetchUserInfo = async () => {
@@ -279,12 +295,21 @@ export default function LinkedInPage() {
   return (
     <div className="min-h-screen bg-transparent p-6 relative z-10">
       <div className="max-w-6xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">LinkedIn Post Manager</h1>
-          <p className="text-muted-foreground">
-            Create, save, and share posts on LinkedIn with media support
-          </p>
+        {/* Header with Logout */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex-1 text-center space-y-2">
+            <h1 className="text-3xl font-bold">LinkedIn Post Manager</h1>
+            <p className="text-muted-foreground">
+              Create, save, and share posts on LinkedIn with media support
+            </p>
+          </div>
+          <Button 
+            onClick={handleLogout}
+            variant="outline"
+            className="Space rounded-full font-bold px-6 py-3 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-300"
+          >
+            LOGOUT
+          </Button>
         </div>
 
         {/* Message Alert */}

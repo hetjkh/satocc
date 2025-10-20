@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, useCallback } from "react"
 import { useTheme } from "next-themes"
 
 function cn(...classes: (string | undefined | null | false)[]) {
@@ -30,7 +30,6 @@ const Particles = ({
   ease = 80,
   color = "#ffffff",
   staticity = 50,
-  size = 0.4,
   vx = 0,
   vy = 0,
 }: {
@@ -39,34 +38,20 @@ const Particles = ({
   ease?: number
   color?: string
   staticity?: number
-  size?: number
   vx?: number
   vy?: number
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const ctx = useRef<CanvasRenderingContext2D | null>(null)
-  const circles = useRef<any[]>([])
+  const circles = useRef<Array<{ x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number }>>([])
   const mouse = useMousePosition()
   const mouseRef = useRef({ x: 0, y: 0 })
   const sizeRef = useRef({ w: 0, h: 0 })
   const dpr = typeof window !== "undefined" ? window.devicePixelRatio : 1
   const rgb = hexToRgb(color)
 
-  useEffect(() => {
-    if (canvasRef.current) ctx.current = canvasRef.current.getContext("2d")
-    resizeCanvas()
-    drawParticles()
-    animate()
-    window.addEventListener("resize", resizeCanvas)
-    return () => window.removeEventListener("resize", resizeCanvas)
-  }, [color])
-
-  useEffect(() => {
-    updateMouse()
-  }, [mouse.x, mouse.y])
-
-  const resizeCanvas = () => {
+  const resizeCanvas = useCallback(() => {
     if (containerRef.current && canvasRef.current && ctx.current) {
       circles.current = []
       sizeRef.current.w = containerRef.current.offsetWidth
@@ -77,7 +62,7 @@ const Particles = ({
       canvasRef.current.style.height = `${sizeRef.current.h}px`
       ctx.current.scale(dpr, dpr)
     }
-  }
+  }, [dpr])
 
   const circleParams = () => {
     const x = Math.random() * sizeRef.current.w
@@ -98,7 +83,7 @@ const Particles = ({
     }
   }
 
-  const drawCircle = (circle: any, update = false) => {
+  const drawCircle = (circle: { x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number }, update = false) => {
     if (!ctx.current) return
     const { x, y, translateX, translateY, size, alpha } = circle
     ctx.current.save()
@@ -115,26 +100,26 @@ const Particles = ({
 
   const clear = () => ctx.current?.clearRect(0, 0, sizeRef.current.w, sizeRef.current.h)
 
-  const drawParticles = () => {
+  const drawParticles = useCallback(() => {
     clear()
     for (let i = 0; i < quantity; i++) drawCircle(circleParams())
-  }
+  }, [quantity])
 
-  const updateMouse = () => {
+  const updateMouse = useCallback(() => {
     if (canvasRef.current) {
       const rect = canvasRef.current.getBoundingClientRect()
       mouseRef.current.x = mouse.x - rect.left - sizeRef.current.w / 2
       mouseRef.current.y = mouse.y - rect.top - sizeRef.current.h / 2
     }
-  }
+  }, [mouse.x, mouse.y])
 
   const remap = (v: number, a1: number, b1: number, a2: number, b2: number) =>
     Math.max(((v - a1) * (b2 - a2)) / (b1 - a1) + a2, 0)
 
-  const animate = () => {
+  const animate = useCallback(() => {
     clear()
     const time = Date.now() / 1000
-    circles.current.forEach((c: any, i: number) => {
+    circles.current.forEach((c: { x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number }, i: number) => {
       const edge = [
         c.x + c.translateX - c.size,
         sizeRef.current.w - c.x - c.translateX - c.size,
@@ -165,7 +150,20 @@ const Particles = ({
       }
     })
     requestAnimationFrame(animate)
-  }
+  }, [])
+
+  useEffect(() => {
+    if (canvasRef.current) ctx.current = canvasRef.current.getContext("2d")
+    resizeCanvas()
+    drawParticles()
+    animate()
+    window.addEventListener("resize", resizeCanvas)
+    return () => window.removeEventListener("resize", resizeCanvas)
+  }, [color, resizeCanvas, drawParticles, animate])
+
+  useEffect(() => {
+    updateMouse()
+  }, [mouse.x, mouse.y, updateMouse])
 
   return (
     <div ref={containerRef} className={cn("pointer-events-none", className)}>
@@ -184,7 +182,7 @@ export default function Background() {
   }, [theme])
 
   return (
-    <div className="fixed z-0 top-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center overflow-hidden bg-transparent">
+    <div className="fixed z-0 top-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center overflow-hidden bg-transparent pointer-events-none">
       <Particles className="absolute inset-0" quantity={150} ease={80} color={color} />
     </div>
   )

@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, useCallback } from "react"
 
 interface MousePosition {
   x: number
@@ -88,22 +88,22 @@ const Particles: React.FC<ParticlesProps> = ({
     return () => {
       window.removeEventListener("resize", initCanvas)
     }
-  }, [color])
+  }, [color, initCanvas])
 
   useEffect(() => {
     onMouseMove()
-  }, [mousePosition.x, mousePosition.y])
+  }, [mousePosition.x, mousePosition.y, onMouseMove])
 
   useEffect(() => {
     initCanvas()
-  }, [refresh])
+  }, [refresh, initCanvas])
 
-  const initCanvas = () => {
+  const initCanvas = useCallback(() => {
     resizeCanvas()
     drawParticles()
-  }
+  }, [])
 
-  const onMouseMove = () => {
+  const onMouseMove = useCallback(() => {
     if (canvasRef.current) {
       const rect = canvasRef.current.getBoundingClientRect()
       const { w, h } = canvasSize.current
@@ -115,7 +115,7 @@ const Particles: React.FC<ParticlesProps> = ({
         mouse.current.y = y
       }
     }
-  }
+  }, [mousePosition.x, mousePosition.y])
 
   type Circle = {
     x: number
@@ -218,7 +218,7 @@ const Particles: React.FC<ParticlesProps> = ({
     return remapped > 0 ? remapped : 0
   }
 
-  const animate = () => {
+  const animate = useCallback(() => {
     clearContext()
     circles.current.forEach((circle: Circle, i: number) => {
       // Handle the alpha value
@@ -267,7 +267,7 @@ const Particles: React.FC<ParticlesProps> = ({
       }
     })
     window.requestAnimationFrame(animate)
-  }
+  }, [])
 
   return (
     <div
