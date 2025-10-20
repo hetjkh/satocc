@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import MusicButton from "@/components/music/MusicButton";
 import Footer from "@/components/Footer";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { MoveUpRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,7 +21,7 @@ export default function AboutPage() {
   const coreIdentityRef = useRef<HTMLDivElement>(null);
 
   // Story section refs
-  const storyBadgeRef = useRef<HTMLDivElement>(null);
+  const storyBadgeRef = useRef<HTMLButtonElement>(null);
   const storyTitleRef = useRef<HTMLHeadingElement>(null);
   const storyContentRef = useRef<HTMLDivElement>(null);
   const storyImageRef = useRef<HTMLDivElement>(null);
@@ -340,7 +340,7 @@ export default function AboutPage() {
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent from-[50%] via-background/50 via-[75%] to-background to-[100%]"></div>
         <div className="relative flex justify-between items-end w-[95%] lg:w-full mb-10 max-w-7xl">
           <div className="w-full lg:w-[50%] justify-start items-start text-left">
-            <Button ref={heroBadgeRef} className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 bg-transparent text-foreground border-2 border-foreground mb-5 hover:scale-105 transition-transform duration-300">
+            <Button ref={heroBadgeRef} className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 bg-transparent text-foreground border-2 border-foreground mb-5 hover:scale-105 hover:bg-foreground hover:text-background transition-all duration-300">
               About Satocci
             </Button>
             <h1 ref={heroTitleRef} className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5 lg:mb-0">
@@ -450,11 +450,9 @@ export default function AboutPage() {
         <div className="relative w-[95%] lg:w-full max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div ref={storyContentRef}>
-              <div ref={storyBadgeRef}>
-              <Badge className="Poppins bg-green-400 text-foreground border-0 mb-4">
+              <Button ref={storyBadgeRef} className="Poppins rounded-full text-base lg:text-lg font-medium px-5 py-5 bg-transparent text-foreground border-2 border-foreground mb-6 hover:scale-105 hover:bg-foreground hover:text-background transition-all duration-300">
                 Our Journey
-              </Badge>
-              </div>
+              </Button>
               <h2 ref={storyTitleRef} className="Space text-4xl lg:text-5xl uppercase font-semibold mb-6">
                 From Sweden to the World
               </h2>
@@ -468,8 +466,11 @@ export default function AboutPage() {
                 helping retailers create seamless, contactless shopping experiences that delight 
                 customers and drive business growth.
               </p>
-              <Button className="Space rounded-full text-lg font-medium py-4 px-8 bg-green-400 text-foreground border-2 border-foreground hover:scale-105 hover:shadow-lg transition-all duration-300">
-                Learn More About Our Journey
+              <Button className="Space rounded-full text-sm sm:text-base lg:text-md font-bold px-2 py-6 lg:py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">
+                <span className="ml-2 sm:ml-3">Learn More About Our Journey</span>
+                <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-background text-foreground rounded-full flex items-center justify-center">
+                  <MoveUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
               </Button>
             </div>
             <div ref={storyImageRef} className="relative h-[500px] overflow-hidden rounded-4xl">
@@ -564,128 +565,112 @@ export default function AboutPage() {
                 title: "Chief Technology Officer",
                 email: "ashoksahu@satocci.com",
                 experience: "+12 years in Software Development, AI & Machine Learning.",
-                image: "/team/team2.jpg",
-                greeting: "Namaste"
+                image: "/team/team2.jpg"
               },
               {
                 name: "Michael Rodriguez",
                 title: "Head of Product",
                 email: "michaelrodriguez@satocci.com",
                 experience: "+10 years in Product Strategy & User Experience Design.",
-                image: "/team/team3.jpg",
-                greeting: "Hello"
+                image: "/team/team3.jpg"
               },
               {
                 name: "Sarah Chen",
                 title: "Head of Engineering",
                 email: "sarahchen@satocci.com",
                 experience: "+8 years in Full-Stack Development & Cloud Architecture.",
-                image: "/team/team4.jpg",
-                greeting: "Hello"
+                image: "/team/team4.jpg"
               },
               {
                 name: "David Kim",
                 title: "Head of Business Development",
                 email: "davidkim@satocci.com",
                 experience: "+14 years in Strategic Partnerships & Global Expansion.",
-                image: "/team/team5.jpg",
-                greeting: "Namaste"
+                image: "/team/team5.jpg"
               },
               {
                 name: "Emma Thompson",
                 title: "Head of Marketing",
                 email: "emmathompson@satocci.com",
                 experience: "+9 years in Digital Marketing & Brand Strategy.",
-                image: "/team/team6.jpg",
-                greeting: "Hello"
+                image: "/team/team6.jpg"
               },
               {
                 name: "James Wilson",
                 title: "Head of Operations",
                 email: "jameswilson@satocci.com",
                 experience: "+11 years in Operations Management & Process Optimization.",
-                image: "/team/team7.jpg",
-                greeting: "Hello"
+                image: "/team/team7.jpg"
               },
               {
                 name: "Lisa Anderson",
                 title: "Head of Customer Success",
                 email: "lisaanderson@satocci.com",
                 experience: "+8 years in Customer Relations & Support Management.",
-                image: "/team/team8.jpg",
-                greeting: "Hello"
+                image: "/team/team8.jpg"
               },
               {
                 name: "Robert Brown",
                 title: "Senior Software Engineer",
                 email: "robertbrown@satocci.com",
                 experience: "+7 years in Backend Development & API Design.",
-                image: "/team/team9.jpg",
-                greeting: "Namaste"
+                image: "/team/team9.jpg"
               },
               {
                 name: "Maria Garcia",
                 title: "UX/UI Designer",
                 email: "mariagarcia@satocci.com",
                 experience: "+6 years in User Interface Design & User Experience.",
-                image: "/team/team10.jpg",
-                greeting: "Hello"
+                image: "/team/team10.jpg"
               },
               {
                 name: "Ahmed Hassan",
                 title: "DevOps Engineer",
                 email: "ahmedhassan@satocci.com",
                 experience: "+9 years in Cloud Infrastructure & Deployment.",
-                image: "/team/team11.jpg",
-                greeting: "Namaste"
+                image: "/team/team11.jpg"
               },
               {
                 name: "Jennifer Lee",
                 title: "Data Scientist",
                 email: "jenniferlee@satocci.com",
                 experience: "+10 years in Machine Learning & Data Analytics.",
-                image: "/team/team12.jpg",
-                greeting: "Hello"
+                image: "/team/team12.jpg"
               },
               {
                 name: "Carlos Martinez",
                 title: "Frontend Developer",
                 email: "carlosmartinez@satocci.com",
                 experience: "+5 years in React, TypeScript & Modern Web Technologies.",
-                image: "/team/team13.jpg",
-                greeting: "Hello"
+                image: "/team/team13.jpg"
               },
               {
                 name: "Priya Sharma",
                 title: "Quality Assurance Lead",
                 email: "priyasharma@satocci.com",
                 experience: "+8 years in Software Testing & Quality Assurance.",
-                image: "/team/team14.jpg",
-                greeting: "Namaste"
+                image: "/team/team14.jpg"
               },
               {
                 name: "Thomas Johnson",
                 title: "Security Engineer",
                 email: "thomasjohnson@satocci.com",
                 experience: "+12 years in Cybersecurity & Information Security.",
-                image: "/team/team15.jpg",
-                greeting: "Hello"
+                image: "/team/team15.jpg"
               },
               {
                 name: "Fatima Al-Rashid",
                 title: "Business Analyst",
                 email: "fatimaalrashid@satocci.com",
                 experience: "+7 years in Business Process Analysis & Strategy.",
-                image: "/team/team16.jpg",
-                greeting: "Namaste"
+                image: "/team/team16.jpg"
               },
               {
                 name: "Kevin O'Connor",
                 title: "Mobile App Developer",
                 email: "kevinoconnor@satocci.com",
                 experience: "+6 years in iOS & Android Development.",
-                image: "/team/team17.jpg",
-                greeting: "Hello"
+                image: "/team/team17.jpg"
               }
             ].map((member, index) => (
               <div key={index} className="bg-card border border-foreground/20 rounded-2xl p-5 shadow-lg hover:shadow-2xl hover:scale-[1.05] transition-all duration-500 group">
@@ -698,9 +683,6 @@ export default function AboutPage() {
                       height={288}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                  </div>
-                  <div className="absolute bottom-3 right-3 bg-green-400 text-foreground px-3 py-1 rounded-full text-xs font-medium">
-                    {member.greeting === "Namaste" ? "🙏 Namaste" : "👋 Hello"}
                   </div>
                 </div>
                 <h3 className="Space text-xl font-bold mb-2 text-foreground">{member.name}</h3>

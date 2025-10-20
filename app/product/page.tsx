@@ -77,12 +77,12 @@ export default function ProductPage() {
               FEATURES FOR MODERN<br />
               RETAIL SOLUTIONS
             </h1>
-            <p ref={heroDescRef} className="block lg:hidden Poppins text-sm font-medium mb-5">
+            <p ref={heroDescRef} className="block lg:hidden Poppins text-sm font-medium mb-8">
               Revolutionize your shopping experience with our innovative payment solutions and smart features designed to make every transaction seamless and effortless.
             </p>
           </div>
           <div className="hidden lg:block w-[40%] justify-start items-end text-left">
-            <p ref={heroDescRef} className="Poppins text-md font-normal">
+            <p ref={heroDescRef} className="Poppins text-md font-normal mb-8">
               Revolutionize your shopping experience with our innovative payment solutions and smart features designed to make every transaction seamless and effortless.
             </p>
           </div>

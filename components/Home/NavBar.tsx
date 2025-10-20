@@ -122,9 +122,11 @@ export default function Navbar() {
             <Languages className="h-5 w-5" />
           </Button>
           <Button className="Space rounded-full text-md font-bold px-5 py-5 bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">FREE DEMO</Button>
-          <Button className="Space rounded-full text-md font-bold px-5 py-5 bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">
-            BUSINESS LOGIN
-          </Button>
+          <Link href="https://app.satoccifinance.se/dashboard" target="_blank" rel="noopener noreferrer">
+            <Button className="Space rounded-full text-md font-bold px-5 py-5 bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">
+              BUSINESS LOGIN
+            </Button>
+          </Link>
         </div>
         </div>
 
@@ -163,9 +165,11 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3 mt-6">
             <Button className="rounded-full font-bold w-full">FREE DEMO</Button>
-            <Button className="rounded-full font-bold w-full" variant="outline">
-              BUSINESS LOGIN
-            </Button>
+            <Link href="https://app.satoccifinance.se/dashboard" target="_blank" rel="noopener noreferrer" className="w-full">
+              <Button className="rounded-full font-bold w-full" variant="outline">
+                BUSINESS LOGIN
+              </Button>
+            </Link>
           </div>
         </div>
       )}

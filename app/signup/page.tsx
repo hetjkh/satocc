@@ -39,6 +39,7 @@ export default function Home() {
 
   const [formData, setFormData] = useState({
     fullName: '',
+    storeName: '',
     address: '',
     email: '',
     phone: '',
@@ -284,13 +285,7 @@ export default function Home() {
           );
 
           // Floating animation
-          gsap.to(imageRef.current, {
-            y: -15,
-            duration: 2.5,
-            repeat: -1,
-            yoyo: true,
-            ease: "power1.inOut",
-          });
+          // Removed floating/bounce animation for static presentation
         }
       });
 
@@ -320,6 +315,7 @@ export default function Home() {
         setSubmitMessage('Form submitted successfully! We will get in touch with you soon.');
         setFormData({
           fullName: '',
+          storeName: '',
           address: '',
           email: '',
           phone: '',
@@ -465,8 +461,8 @@ export default function Home() {
           </div>
         </div>
         <div className="relative flex flex-col lg:flex-row justify-between items-start w-full lg:w-full mb-10 max-w-7xl gap-6 lg:gap-10">
-          <div className="relative flex justify-between items-end w-full lg:w-1/2 mb-10 max-w-7xl">
-            <form ref={formRef} className="space-y-6 w-full" onSubmit={handleSubmit}>
+          <div className="relative flex justify-between items-end w-full lg:w-1/2 mb-10 max-w-7xl mt-12 lg:mt-18">
+            <form ref={formRef} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 w-full" onSubmit={handleSubmit}>
               {/* Full Name */}
               <div className="relative flex items-center w-full form-input-group">
                 <Input
@@ -483,6 +479,25 @@ export default function Home() {
           peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
                 >
                   Full Name
+                </p>
+              </div>
+
+              {/* Store Name */}
+              <div className="relative flex items-center w-full form-input-group">
+                <Input
+                  id="store-name"
+                  placeholder=" "
+                  value={formData.storeName}
+                  onChange={(e) => handleInputChange('storeName', e.target.value)}
+                  className="peer Poppins rounded-full text-lg lg:text-xl font-medium p-5 lg:p-6 bg-transparent text-foreground border-2 border-foreground transition-all duration-300 focus:scale-105"
+                />
+                <p
+                  className="Poppins absolute left-4 lg:left-6 text-lg lg:text-xl rounded-full font-medium bg-transparent text-foreground/50 transition-all duration-200
+          peer-placeholder-shown:top-2.5 lg:peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg lg:peer-placeholder-shown:text-xl
+          peer-focus:-top-3 lg:peer-focus:-top-4
+          peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
+                >
+                  Store Name
                 </p>
               </div>
 
@@ -570,7 +585,7 @@ export default function Home() {
                   <SelectTrigger className="peer Poppins rounded-full text-lg lg:text-xl w-full font-medium p-5 lg:p-6 bg-transparent text-foreground border-2 border-foreground">
                     <SelectValue placeholder="Shopify" />
                   </SelectTrigger>
-                  <SelectContent className="Poppins rounded-2xl text-lg lg:text-xl w-full font-medium bg-background text-foreground border-2 border-foreground">
+                  <SelectContent className="Poppins rounded-2xl text-lg lg:text-xl w-full font-medium bg-background text-foreground border-2 border-foreground z-50">
                     <SelectItem value="square">Square</SelectItem>
                     <SelectItem value="toast">Toast</SelectItem>
                     <SelectItem value="clover">Clover</SelectItem>
@@ -578,10 +593,10 @@ export default function Home() {
                   </SelectContent>
                 </Select>
                 <p
-                  className="Poppins absolute left-4 lg:left-6 text-lg lg:text-xl rounded-full font-medium bg-transparent text-foreground/50 transition-all duration-200
-          peer-placeholder-shown:top-2.5 lg:peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg lg:peer-placeholder-shown:text-xl
+                  className="Poppins pointer-events-none absolute left-4 lg:left-6 text-base lg:text-lg rounded-full font-medium bg-background text-foreground/50 transition-all duration-200
+          peer-placeholder-shown:top-2.5 lg:peer-placeholder-shown:top-3 peer-placeholder-shown:text-base lg:peer-placeholder-shown:text-lg
           peer-focus:-top-3 lg:peer-focus:-top-4
-          peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
+          peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 px-2"
                 >
                   What POS Do You Use?
                 </p>
@@ -593,7 +608,7 @@ export default function Home() {
                   <SelectTrigger className="peer Poppins rounded-full text-lg lg:text-xl w-full font-medium p-5 lg:p-6 bg-transparent text-foreground border-2 border-foreground">
                     <SelectValue placeholder="100-200" />
                   </SelectTrigger>
-                  <SelectContent className="Poppins rounded-2xl text-lg lg:text-xl w-full font-medium bg-background text-foreground border-2 border-foreground">
+                  <SelectContent className="Poppins rounded-2xl text-lg lg:text-xl w-full font-medium bg-background text-foreground border-2 border-foreground z-50">
                     <SelectItem value="0-50">0 - 50</SelectItem>
                     <SelectItem value="51-200">51 - 200</SelectItem>
                     <SelectItem value="201-500">201 - 500</SelectItem>
@@ -601,10 +616,10 @@ export default function Home() {
                   </SelectContent>
                 </Select>
                 <p
-                  className="Poppins absolute left-4 lg:left-6 text-lg lg:text-xl rounded-full font-medium bg-transparent text-foreground/50 transition-all duration-200
-          peer-placeholder-shown:top-2.5 lg:peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg lg:peer-placeholder-shown:text-xl
+                  className="Poppins pointer-events-none absolute left-4 lg:left-6 text-base lg:text-lg rounded-full font-medium bg-background text-foreground/50 transition-all duration-200
+          peer-placeholder-shown:top-2.5 lg:peer-placeholder-shown:top-3 peer-placeholder-shown:text-base lg:peer-placeholder-shown:text-lg
           peer-focus:-top-3 lg:peer-focus:-top-4
-          peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
+          peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 px-2 whitespace-nowrap"
                 >
                   Range of Daily Customers
                 </p>
@@ -614,7 +629,7 @@ export default function Home() {
               <Button 
                 type="submit"
                 disabled={isSubmitting}
-                className="Space rounded-full text-base lg:text-lg font-bold px-3 lg:px-4 py-6 lg:py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer uppercase disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 form-input-group w-full lg:w-auto"
+                className="Space rounded-full text-base lg:text-lg font-bold px-3 lg:px-4 py-6 lg:py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer uppercase disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 form-input-group w-full lg:w-auto md:col-span-2"
               >
                 <span className="ml-3 lg:ml-4">{isSubmitting ? 'Submitting...' : 'Submit'}</span>
                 <div className="w-8 h-8 lg:w-10 lg:h-10 bg-background text-foreground rounded-full flex items-center justify-center">
@@ -634,13 +649,41 @@ export default function Home() {
               )}
             </form>
           </div>
-          <div ref={imageRef} className="relative w-full lg:w-1/2 h-[400px] lg:h-[600px] overflow-hidden rounded-xl">
-            <Image
-              src="/signup.jpg" // replace with actual image in public folder
-              alt="Contact"
-              fill
-              className="object-cover rounded-xl hover:scale-110 transition-transform duration-700"
-            />
+          <div ref={imageRef} className="relative w-full lg:w-1/2 h-auto rounded-2xl mt-12 lg:mt-18">
+            <div className="flex flex-col gap-5 lg:gap-6 justify-center">
+              {/* Step 1 */}
+              <div className="bg-card border border-foreground/20 rounded-2xl p-5 lg:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-foreground text-background Space font-bold shrink-0 aspect-square">1</div>
+                  <div>
+                    <p className="Space text-lg lg:text-xl font-semibold text-foreground">Contact Us</p>
+                    <p className="Poppins text-sm lg:text-base text-foreground/70 leading-relaxed mt-1">Tell us more about your store, your customers, and how you operate.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="bg-card border border-foreground/20 rounded-2xl p-5 lg:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-foreground text-background Space font-bold shrink-0 aspect-square">2</div>
+                  <div>
+                    <p className="Space text-lg lg:text-xl font-semibold text-foreground">Live Demo & Onboarding</p>
+                    <p className="Poppins text-sm lg:text-base text-foreground/70 leading-relaxed mt-1">We will ensure that your inventories are in sync and that your team is trained to start.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="bg-card border border-foreground/20 rounded-2xl p-5 lg:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-foreground text-background Space font-bold shrink-0 aspect-square">3</div>
+                  <div>
+                    <p className="Space text-lg lg:text-xl font-semibold text-foreground">Continuous Improvement</p>
+                    <p className="Poppins text-sm lg:text-base text-foreground/70 leading-relaxed mt-1">We work closely with you even after launch gathering feedback and updating features.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
