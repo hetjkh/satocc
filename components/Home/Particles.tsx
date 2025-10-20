@@ -44,7 +44,7 @@ const Particles = ({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const ctx = useRef<CanvasRenderingContext2D | null>(null)
-  const circles = useRef<Array<{ x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number }>>([])
+  const circles = useRef<Array<{ x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number; twinkleSpeed: number; twinkleOffset: number }>>([])
   const mouse = useMousePosition()
   const mouseRef = useRef({ x: 0, y: 0 })
   const sizeRef = useRef({ w: 0, h: 0 })
@@ -83,7 +83,7 @@ const Particles = ({
     }
   }
 
-  const drawCircle = (circle: { x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number }, update = false) => {
+  const drawCircle = (circle: { x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number; twinkleSpeed: number; twinkleOffset: number }, update = false) => {
     if (!ctx.current) return
     const { x, y, translateX, translateY, size, alpha } = circle
     ctx.current.save()
@@ -119,7 +119,7 @@ const Particles = ({
   const animate = useCallback(() => {
     clear()
     const time = Date.now() / 1000
-    circles.current.forEach((c: { x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number }, i: number) => {
+    circles.current.forEach((c: { x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number; twinkleSpeed: number; twinkleOffset: number }, i: number) => {
       const edge = [
         c.x + c.translateX - c.size,
         sizeRef.current.w - c.x - c.translateX - c.size,
