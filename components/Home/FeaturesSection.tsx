@@ -13,13 +13,18 @@ export default function FeaturesSection() {
   const headerDescRef = useRef<HTMLDivElement>(null);
   const mainCardRef = useRef<HTMLDivElement>(null);
   const secondaryCardRef = useRef<HTMLDivElement>(null);
+  const thirdCardRef = useRef<HTMLDivElement>(null);
+  const fourthCardRef = useRef<HTMLDivElement>(null);
+  const fifthCardRef = useRef<HTMLDivElement>(null);
+  const sixthCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      if (!headerTitleRef.current || !headerDescRef.current || !mainCardRef.current || !secondaryCardRef.current) return;
+      if (!headerTitleRef.current || !headerDescRef.current || !mainCardRef.current || !secondaryCardRef.current || !thirdCardRef.current || !fourthCardRef.current || !fifthCardRef.current || !sixthCardRef.current || !sectionRef.current) return;
 
       // Ensure all elements are visible by default
       gsap.set([headerTitleRef.current, headerDescRef.current, mainCardRef.current, secondaryCardRef.current], { opacity: 1 });
+      gsap.set([thirdCardRef.current, fourthCardRef.current, fifthCardRef.current, sixthCardRef.current], { opacity: 0 });
 
       // Header title animation - faster
       gsap.fromTo(headerTitleRef.current,
@@ -54,7 +59,7 @@ export default function FeaturesSection() {
         }
       );
 
-      // Main card animation - faster
+      // Initial card animations
       gsap.fromTo(mainCardRef.current,
         { opacity: 0, x: -60, scale: 0.95 },
         {
@@ -71,7 +76,6 @@ export default function FeaturesSection() {
         }
       );
 
-      // Secondary card animation - faster
       gsap.fromTo(secondaryCardRef.current,
         { opacity: 0, x: 60, scale: 0.9 },
         {
@@ -89,31 +93,217 @@ export default function FeaturesSection() {
         }
       );
 
-      // Hover animation enhancement for main card
-      const mainCard = mainCardRef.current;
-      if (mainCard) {
-        mainCard.addEventListener('mouseenter', () => {
-          gsap.to(mainCard, {
-            y: -10,
-            duration: 0.3,
-            ease: "power2.out",
-          });
-        });
-        mainCard.addEventListener('mouseleave', () => {
-          gsap.to(mainCard, {
-            y: 0,
-            duration: 0.3,
-            ease: "power2.out",
-          });
-        });
-      }
+      // Pinned scroll animation - Card transformation
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "center center",
+          end: "+=3000",
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.5,
+          anticipatePin: 1,
+        }
+      });
+
+      tl
+        // Main card comes out of the page (3D effect)
+        .to(mainCardRef.current, {
+          z: 200,
+          scale: 1.1,
+          duration: 0.6,
+          ease: "power2.inOut",
+        })
+        // Main card vanishes - comes straight toward viewer
+        .to(mainCardRef.current, {
+          opacity: 0,
+          scale: 1.3,
+          z: 600,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.3,
+          ease: "power2.in",
+        })
+        // Simultaneously, blur card transforms in place and moves toward center
+        .to(secondaryCardRef.current, {
+          filter: "blur(0px)",
+          opacity: 1,
+          width: "28rem",
+          scale: 1,
+          z: 0,
+          x: -200,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        }, "-=0.3")
+        // Third card appears on the left as blur
+        .to(thirdCardRef.current, {
+          opacity: 0.6,
+          x: 0,
+          scale: 0.9,
+          duration: 0.4,
+          ease: "power2.out",
+        }, "-=0.4")
+        // Secondary card (now clear) comes out more
+        .to(secondaryCardRef.current, {
+          z: 200,
+          scale: 1.1,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.3,
+          ease: "power2.inOut",
+        }, "+=0.1")
+        // Secondary card vanishes - comes straight toward viewer
+        .to(secondaryCardRef.current, {
+          opacity: 0,
+          scale: 1.3,
+          z: 600,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.3,
+          ease: "power2.in",
+        })
+        // Third card becomes clear and moves toward center
+        .to(thirdCardRef.current, {
+          filter: "blur(0px)",
+          opacity: 1,
+          width: "28rem",
+          scale: 1,
+          z: 0,
+          x: 200,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        }, "-=0.3")
+        // Fourth card appears on the right as blur
+        .to(fourthCardRef.current, {
+          opacity: 0.6,
+          x: 0,
+          scale: 0.9,
+          duration: 0.4,
+          ease: "power2.out",
+        }, "-=0.4")
+        // Third card (now clear) comes out more
+        .to(thirdCardRef.current, {
+          z: 200,
+          scale: 1.1,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.3,
+          ease: "power2.inOut",
+        }, "+=0.1")
+        // Third card vanishes - comes straight toward viewer
+        .to(thirdCardRef.current, {
+          opacity: 0,
+          scale: 1.3,
+          z: 600,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.3,
+          ease: "power2.in",
+        })
+        // Fourth card becomes clear and moves toward center
+        .to(fourthCardRef.current, {
+          filter: "blur(0px)",
+          opacity: 1,
+          width: "28rem",
+          scale: 1,
+          z: 0,
+          x: -200,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        }, "-=0.3")
+        // Fifth card appears on the left as blur
+        .to(fifthCardRef.current, {
+          opacity: 0.6,
+          x: 0,
+          scale: 0.9,
+          duration: 0.4,
+          ease: "power2.out",
+        }, "-=0.4")
+        // Fourth card (now clear) comes out more
+        .to(fourthCardRef.current, {
+          z: 200,
+          scale: 1.1,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.3,
+          ease: "power2.inOut",
+        }, "+=0.1")
+        // Fourth card vanishes - comes straight toward viewer
+        .to(fourthCardRef.current, {
+          opacity: 0,
+          scale: 1.3,
+          z: 600,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.3,
+          ease: "power2.in",
+        })
+        // Fifth card becomes clear and moves toward center
+        .to(fifthCardRef.current, {
+          filter: "blur(0px)",
+          opacity: 1,
+          width: "28rem",
+          scale: 1,
+          z: 0,
+          x: 200,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        }, "-=0.3")
+        // Sixth card appears on the right as blur
+        .to(sixthCardRef.current, {
+          opacity: 0.6,
+          x: 0,
+          scale: 0.9,
+          duration: 0.4,
+          ease: "power2.out",
+        }, "-=0.4")
+        // Fifth card (now clear) comes out more
+        .to(fifthCardRef.current, {
+          z: 200,
+          scale: 1.1,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.3,
+          ease: "power2.inOut",
+        }, "+=0.1")
+        // Fifth card vanishes - comes straight toward viewer
+        .to(fifthCardRef.current, {
+          opacity: 0,
+          scale: 1.3,
+          z: 600,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.3,
+          ease: "power2.in",
+        })
+        // Sixth card becomes clear and moves toward center
+        .to(sixthCardRef.current, {
+          filter: "blur(0px)",
+          opacity: 1,
+          width: "28rem",
+          scale: 1,
+          z: 0,
+          x: -200,
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        }, "-=0.3");
     });
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="w-full py-20 bg-transparent relative overflow-hidden">
+    <section ref={sectionRef} className="w-full py-20 bg-background relative overflow-hidden z-10">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-start gap-8 mb-20">
@@ -133,9 +323,9 @@ export default function FeaturesSection() {
         </div>
 
         {/* Features Cards Row 1 */}
-        <div className="relative mb-20">
+        <div className="relative mb-20" style={{ perspective: "1000px", transformStyle: "preserve-3d" }}>
           {/* Main Feature Card - Fixed Width */}
-          <div ref={mainCardRef} className="w-full max-w-xl bg-card rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 transform hover:scale-105">
+          <div ref={mainCardRef} className="w-full max-w-xl bg-card rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 ml-20" style={{ transformStyle: "preserve-3d" }}>
             <div className="h-96 relative p-6">
               <div className="relative w-full h-full rounded-2xl overflow-hidden">
                 <Image
@@ -157,7 +347,7 @@ export default function FeaturesSection() {
           </div>
 
           {/* Secondary Feature Card - Blurred & Smaller - Positioned Absolutely */}
-          <div ref={secondaryCardRef} className="absolute top-1/2 right-0 w-[28rem] -translate-y-1/2 bg-card rounded-3xl shadow-xl overflow-hidden opacity-60 blur-sm hover:opacity-80 hover:blur-none transition-all duration-500">
+          <div ref={secondaryCardRef} className="absolute top-[20%] right-0 w-[28rem] -translate-y-1/2 bg-card rounded-3xl shadow-xl overflow-hidden opacity-60 blur-sm transition-all duration-500" style={{ transformStyle: "preserve-3d" }}>
             <div className="h-64 relative p-4">
               <div className="relative w-full h-full rounded-2xl overflow-hidden">
                 <Image
@@ -174,6 +364,94 @@ export default function FeaturesSection() {
               </h3>
               <p className="Poppins text-sm text-muted-foreground leading-relaxed">
                 Digital receipts that never fade or get lost. Organize, share, and track your purchases effortlessly.
+              </p>
+            </div>
+          </div>
+
+          {/* Third Feature Card - Blurred & Smaller - Positioned on Left */}
+          <div ref={thirdCardRef} className="absolute top-[20%] left-0 w-[28rem] -translate-y-1/2 bg-card rounded-3xl shadow-xl overflow-hidden opacity-0 blur-sm transition-all duration-500" style={{ transformStyle: "preserve-3d" }}>
+            <div className="h-64 relative p-4">
+              <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                <Image
+                  src="/signup.jpg"
+                  alt="Instant Rewards"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            <div className="p-4 pt-3">
+              <h3 className="Space text-lg font-bold text-foreground mb-3">
+                Instant Rewards
+              </h3>
+              <p className="Poppins text-sm text-muted-foreground leading-relaxed">
+                Automatically earn and track rewards with every purchase. Never miss a point again.
+              </p>
+            </div>
+          </div>
+
+          {/* Fourth Feature Card - Blurred & Smaller - Positioned on Right */}
+          <div ref={fourthCardRef} className="absolute top-[20%] right-0 w-[28rem] -translate-y-1/2 bg-card rounded-3xl shadow-xl overflow-hidden opacity-0 blur-sm transition-all duration-500" style={{ transformStyle: "preserve-3d" }}>
+            <div className="h-64 relative p-4">
+              <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                <Image
+                  src="/signup.jpg"
+                  alt="Budget Tracking"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            <div className="p-4 pt-3">
+              <h3 className="Space text-lg font-bold text-foreground mb-3">
+                Budget Tracking
+              </h3>
+              <p className="Poppins text-sm text-muted-foreground leading-relaxed">
+                Track your spending in real-time. Stay on budget with smart insights and alerts.
+              </p>
+            </div>
+          </div>
+
+          {/* Fifth Feature Card - Blurred & Smaller - Positioned on Left */}
+          <div ref={fifthCardRef} className="absolute top-[20%] left-0 w-[28rem] -translate-y-1/2 bg-card rounded-3xl shadow-xl overflow-hidden opacity-0 blur-sm transition-all duration-500" style={{ transformStyle: "preserve-3d" }}>
+            <div className="h-64 relative p-4">
+              <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                <Image
+                  src="/signup.jpg"
+                  alt="Secure Payments"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            <div className="p-4 pt-3">
+              <h3 className="Space text-lg font-bold text-foreground mb-3">
+                Secure Payments
+              </h3>
+              <p className="Poppins text-sm text-muted-foreground leading-relaxed">
+                Bank-level security for every transaction. Your payment data is always protected.
+              </p>
+            </div>
+          </div>
+
+          {/* Sixth Feature Card - Blurred & Smaller - Positioned on Right */}
+          <div ref={sixthCardRef} className="absolute top-[20%] right-0 w-[28rem] -translate-y-1/2 bg-card rounded-3xl shadow-xl overflow-hidden opacity-0 blur-sm transition-all duration-500" style={{ transformStyle: "preserve-3d" }}>
+            <div className="h-64 relative p-4">
+              <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                <Image
+                  src="/signup.jpg"
+                  alt="Shopping History"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            <div className="p-4 pt-3">
+              <h3 className="Space text-lg font-bold text-foreground mb-3">
+                Shopping History
+              </h3>
+              <p className="Poppins text-sm text-muted-foreground leading-relaxed">
+                Access your complete purchase history anytime. Reorder favorites with one tap.
               </p>
             </div>
           </div>
