@@ -86,29 +86,32 @@ export default function Navbar() {
         <div ref={menuRef} className="hidden w-auto Poppins font-medium lg:flex items-center justify-center gap-5 text-white">
           <Link href="/" className="hover:text-primary transition">HOME</Link>
 
-          {/* About Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1 hover:text-primary transition cursor-pointer">
-              ABOUT <ArrowUp className="rotate-180 w-5 h-5" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="left-20 rounded-xl bg-black/50 border-border/50 text-white p-5 backdrop-blur-lg">
-              <DropdownMenuItem asChild>
-                <Link href="/achievements" className="flex justify-between w-full">
-                  ACHIEVEMENTS <MoveUpRight className="w-4 h-4 text-green-500" />
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/partnership" className="flex justify-between w-full">
-                  PARTNERSHIP <MoveUpRight className="w-4 h-4 text-green-500" />
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/board" className="flex justify-between w-full">
-                  BOARD MEMBERS <MoveUpRight className="w-4 h-4 text-green-500" />
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* About link + dropdown icon */}
+          <div className="flex items-center gap-1">
+            <Link href="/about" className="hover:text-primary transition">ABOUT</Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="hover:text-primary transition cursor-pointer">
+                <ArrowUp className="rotate-180 w-5 h-5" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="left-20 rounded-xl bg-black/50 border-border/50 text-white p-5 backdrop-blur-lg">
+                <DropdownMenuItem asChild>
+                  <Link href="/achievements" className="flex justify-between w-full">
+                    ACHIEVEMENTS <MoveUpRight className="w-4 h-4 text-green-500" />
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/partnership" className="flex justify-between w-full">
+                    PARTNERSHIP <MoveUpRight className="w-4 h-4 text-green-500" />
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/board" className="flex justify-between w-full">
+                    BOARD MEMBERS <MoveUpRight className="w-4 h-4 text-green-500" />
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
 
           <Link href="/product" className="hover:text-primary transition">PRODUCT</Link>
           <Link href="/signup" className="hover:text-primary transition">SIGN UP</Link>
