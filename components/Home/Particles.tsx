@@ -103,6 +103,7 @@ const Particles = ({
   const drawParticles = useCallback(() => {
     clear()
     for (let i = 0; i < quantity; i++) drawCircle(circleParams())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quantity])
 
   const updateMouse = useCallback(() => {
@@ -150,6 +151,7 @@ const Particles = ({
       }
     })
     requestAnimationFrame(animate)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

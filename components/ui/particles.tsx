@@ -227,11 +227,13 @@ const Particles: React.FC<ParticlesProps> = ({
       }
     })
     window.requestAnimationFrame(animate)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ease, staticity, vx, vy])
 
   const initCanvas = useCallback(() => {
     resizeCanvas()
     drawParticles()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onMouseMove = useCallback(() => {
