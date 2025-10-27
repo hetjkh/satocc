@@ -156,8 +156,48 @@
     @apply border-border outline-ring/50;
   }
 
+  html {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   body {
     @apply bg-gradient-to-b from-background/95 to-background/98 text-foreground;
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+  }
+
+  /* Prevent horizontal scroll on mobile */
+  #__next {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Ensure all containers respect viewport width */
+  .w-\[28rem\] {
+    max-width: 28rem;
+  }
+
+  /* Hide absolute positioned elements on mobile to prevent overflow */
+  @media (max-width: 1024px) {
+    .absolute.top-\[20\%\] {
+      display: none;
+    }
+  }
+
+  /* Prevent carousel cards from causing overflow */
+  @media (max-width: 768px) {
+    .w-\[450px\] {
+      width: calc(100vw - 3rem);
+      max-width: 450px;
+    }
+  }
+
+  /* Global overflow prevention */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 

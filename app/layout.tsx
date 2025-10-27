@@ -83,7 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
         <LenisWrapper>
           <ThemeProvider
@@ -96,7 +96,9 @@ export default function RootLayout({
               <MusicProvider>
                 <Background />
                 <NavBar />
-                {children}
+                <div className="w-full overflow-x-hidden">
+                  {children}
+                </div>
               </MusicProvider>
             </LanguageProvider>
           </ThemeProvider>
