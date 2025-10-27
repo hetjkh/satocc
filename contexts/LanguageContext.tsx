@@ -252,7 +252,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const t = (key: string): string => {
     const currentTranslations = translations[language];
-    return currentTranslations[key] || key;
+    return (currentTranslations as any)[key] || key;
   };
 
   return (

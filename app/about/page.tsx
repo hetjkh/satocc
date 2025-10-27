@@ -640,7 +640,7 @@ export default function AboutPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
               <div className="absolute bottom-4 left-4 text-white">
                 <p className="Space text-sm font-bold uppercase mb-1">HELLO!</p>
-                <p className="Space text-lg font-bold uppercase mb-1">I'M MELODI ASKELÖF</p>
+                <p className="Space text-lg font-bold uppercase mb-1">I&apos;M MELODI ASKELÖF</p>
                 <p className="Poppins text-xs font-medium uppercase text-white/90">CEO & CO-FOUNDER</p>
               </div>
             </div>
@@ -688,13 +688,13 @@ export default function AboutPage() {
                 <div id="vision-content" className="hidden mt-4">
                   <div className="space-y-3">
                     <p className="Poppins text-sm text-foreground/80 leading-relaxed italic">
-                      "I've always believed in the power of trust, relationships, and innovation to transform industries."
+                      &ldquo;I&apos;ve always believed in the power of trust, relationships, and innovation to transform industries.&rdquo;
                     </p>
                     <p className="Poppins text-sm text-foreground/80 leading-relaxed italic">
-                      "That's why I co-founded <strong>Satocci</strong> – to create a smarter, simpler, and more sustainable way to shop."
+                      &ldquo;That&apos;s why I co-founded <strong>Satocci</strong> – to create a smarter, simpler, and more sustainable way to shop.&rdquo;
                     </p>
                     <p className="Poppins text-sm text-foreground/80 leading-relaxed italic">
-                      "Technology is about freedom. <strong>Satocci</strong>'s mission is to make checkout lines obsolete."
+                      &ldquo;Technology is about freedom. <strong>Satocci</strong>&apos;s mission is to make checkout lines obsolete.&rdquo;
                     </p>
                   </div>
                 </div>
