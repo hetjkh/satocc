@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import MusicButton from "@/components/music/MusicButton";
 import Footer from "@/components/Footer";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { MoveUpRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +23,8 @@ interface TeamMember {
 }
 
 export default function AboutPage() {
+  const { t } = useLanguage();
+  
   // State for team members
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loadingTeam, setLoadingTeam] = useState(true);
@@ -376,21 +378,18 @@ export default function AboutPage() {
         <div className="relative flex justify-between items-end w-[95%] lg:w-full mb-10 max-w-7xl">
           <div className="w-full lg:w-[50%] justify-start items-start text-left">
             <Button ref={heroBadgeRef} className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 bg-transparent text-foreground border-2 border-foreground mb-5 hover:scale-105 hover:bg-foreground hover:text-background transition-all duration-300">
-              About Satocci
+              {t('about.hero.badge')}
             </Button>
-            <h1 ref={heroTitleRef} className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5 lg:mb-0">
-              Revolutionizing Retail <br /> Through Innovation
-              <br /> and Technology
+            <h1 ref={heroTitleRef} className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5 lg:mb-0 whitespace-pre-line">
+              {t('about.hero.title')}
             </h1>
-            <p ref={heroDescRef} className="block lg:hidden Poppins text-sm font-medium mb-5">
-              We&apos;re transforming the retail experience with cutting-edge scan-and-pay technology, 
-              creating seamless shopping experiences for customers worldwide.
+            <p ref={heroDescRef} className="block lg:hidden Poppins text-sm font-medium mb-5 whitespace-pre-line">
+              {t('about.hero.description')}
             </p>
           </div>
           <div className="hidden lg:block w-[40%] justify-start items-end text-left">
-            <p ref={heroDescRef} className="Poppins text-md font-normal">
-              We&apos;re transforming the retail experience with cutting-edge scan-and-pay technology, 
-              creating seamless shopping experiences for customers worldwide.
+            <p ref={heroDescRef} className="Poppins text-md font-normal whitespace-pre-line">
+              {t('about.hero.description')}
             </p>
           </div>
         </div>
@@ -409,12 +408,12 @@ export default function AboutPage() {
                     <span className="text-lg sm:text-xl font-bold">01</span>
                   </div>
                   <h3 className="Space text-xl sm:text-2xl font-semibold uppercase identity-title">
-                    WHO WE ARE
+                    {t('about.identity.whoWeAre')}
                   </h3>
                 </div>
                 <div className="h-px bg-foreground/20 mb-4 identity-line"></div>
                 <p className="Poppins text-sm sm:text-base font-normal text-foreground/80 leading-relaxed identity-description">
-                  We&apos;re driven by the everyday challenges shoppers and retailers face, turning technology into trust and ease, one payment at a time.
+                  {t('about.identity.whoWeAreDesc')}
                 </p>
               </div>
 
@@ -425,12 +424,12 @@ export default function AboutPage() {
                     <span className="text-lg sm:text-xl font-bold">02</span>
                   </div>
                   <h3 className="Space text-xl sm:text-2xl font-semibold uppercase identity-title">
-                    WHAT WE BELIEVE
+                    {t('about.identity.whatWeBelieve')}
                   </h3>
                 </div>
                 <div className="h-px bg-foreground/20 mb-4 identity-line"></div>
                 <p className="Poppins text-sm sm:text-base font-normal text-foreground/80 leading-relaxed identity-description">
-                  Our mission is to revolutionize the way people engage in transactions, simplifying the payment process through cutting-edge technology.
+                  {t('about.identity.whatWeBelieveDesc')}
                 </p>
               </div>
 
@@ -441,12 +440,12 @@ export default function AboutPage() {
                     <span className="text-lg sm:text-xl font-bold">03</span>
                   </div>
                   <h3 className="Space text-xl sm:text-2xl font-semibold uppercase identity-title">
-                    OUR MISSION
+                    {t('about.identity.ourMission')}
                   </h3>
                 </div>
                 <div className="h-px bg-foreground/20 mb-4 identity-line"></div>
                 <p className="Poppins text-sm sm:text-base font-normal text-foreground/80 leading-relaxed identity-description">
-                  To simplify shopping by delivering faster, smarter, and greener checkout experiences for consumers and retailers worldwide.
+                  {t('about.identity.ourMissionDesc')}
                 </p>
               </div>
 
@@ -457,12 +456,12 @@ export default function AboutPage() {
                     <span className="text-lg sm:text-xl font-bold">04</span>
                   </div>
                   <h3 className="Space text-xl sm:text-2xl font-semibold uppercase identity-title">
-                    OUR VISION
+                    {t('about.identity.ourVision')}
                   </h3>
                 </div>
                 <div className="h-px bg-foreground/20 mb-4 identity-line"></div>
                 <p className="Poppins text-sm sm:text-base font-normal text-foreground/80 leading-relaxed identity-description">
-                  To create a future where every store offers seamless shopping without lines, delays, or waste.
+                  {t('about.identity.ourVisionDesc')}
                 </p>
               </div>
             </div>
@@ -476,7 +475,7 @@ export default function AboutPage() {
               <div className="w-full lg:w-1/3 lg:pr-12">
                 <div className="py-12">
                   <h3 className="Space text-2xl lg:text-3xl font-semibold uppercase identity-title">
-                    WHO WE ARE
+                    {t('about.identity.whoWeAre')}
                   </h3>
                 </div>
               </div>
@@ -484,7 +483,7 @@ export default function AboutPage() {
                 <div className="h-px bg-foreground/20 mb-6 absolute -left-[50vw] right-0 identity-line"></div>
                 <div className="py-12">
                   <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed identity-description">
-                    We&apos;re driven by the everyday challenges shoppers and retailers face, turning technology into trust and ease, one payment at a time.
+                    {t('about.identity.whoWeAreDesc')}
                   </p>
                 </div>
               </div>
@@ -495,7 +494,7 @@ export default function AboutPage() {
               <div className="w-full lg:w-1/3 lg:pr-12">
                 <div className="py-12">
                   <h3 className="Space text-2xl lg:text-3xl font-semibold uppercase identity-title">
-                    WHAT WE BELIEVE
+                    {t('about.identity.whatWeBelieve')}
                   </h3>
                 </div>
               </div>
@@ -503,7 +502,7 @@ export default function AboutPage() {
                 <div className="h-px bg-foreground/20 mb-6 absolute -left-[50vw] right-0 identity-line"></div>
                 <div className="py-12">
                   <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed identity-description">
-                    Our mission is to revolutionize the way people engage in transactions, simplifying the payment process through cutting-edge technology.
+                    {t('about.identity.whatWeBelieveDesc')}
                   </p>
                 </div>
               </div>
@@ -514,7 +513,7 @@ export default function AboutPage() {
               <div className="w-full lg:w-1/3 lg:pr-12">
                 <div className="py-12">
                   <h3 className="Space text-2xl lg:text-3xl font-semibold uppercase identity-title">
-                    OUR MISSION
+                    {t('about.identity.ourMission')}
                   </h3>
                 </div>
               </div>
@@ -522,7 +521,7 @@ export default function AboutPage() {
                 <div className="h-px bg-foreground/20 mb-6 absolute -left-[50vw] right-0 identity-line"></div>
                 <div className="py-12">
                   <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed identity-description">
-                    To simplify shopping by delivering faster, smarter, and greener checkout experiences for consumers and retailers worldwide.
+                    {t('about.identity.ourMissionDesc')}
                   </p>
                 </div>
               </div>
@@ -533,7 +532,7 @@ export default function AboutPage() {
               <div className="w-full lg:w-1/3 lg:pr-12">
                 <div className="py-12">
                   <h3 className="Space text-2xl lg:text-3xl font-semibold uppercase identity-title">
-                    OUR VISION
+                    {t('about.identity.ourVision')}
                   </h3>
                 </div>
               </div>
@@ -541,7 +540,7 @@ export default function AboutPage() {
                 <div className="h-px bg-foreground/20 mb-6 absolute -left-[50vw] right-0 identity-line"></div>
                 <div className="py-12">
                   <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed identity-description">
-                    To create a future where every store offers seamless shopping without lines, delays, or waste.
+                    {t('about.identity.ourVisionDesc')}
                   </p>
                 </div>
                 <div className="h-px bg-foreground/20 mt-6 absolute -left-[50vw] right-0 identity-line"></div>
@@ -559,7 +558,7 @@ export default function AboutPage() {
             {/* Mobile Layout - Badge above image */}
             <div className="lg:hidden order-1">
               <Button ref={storyBadgeRef} className="Poppins rounded-full text-sm sm:text-base font-medium px-4 sm:px-5 py-4 sm:py-5 bg-transparent text-foreground border-2 border-foreground mb-4 sm:mb-6 hover:scale-105 hover:bg-foreground hover:text-background transition-all duration-300">
-                Our Journey
+                {t('about.story.badge')}
               </Button>
             </div>
             
@@ -575,23 +574,19 @@ export default function AboutPage() {
             {/* Desktop Layout - Full content */}
             <div ref={storyContentRef} className="hidden lg:block lg:order-1">
               <Button ref={storyBadgeRef} className="Poppins rounded-full text-base lg:text-lg font-medium px-5 py-5 bg-transparent text-foreground border-2 border-foreground mb-6 hover:scale-105 hover:bg-foreground hover:text-background transition-all duration-300">
-                Our Journey
+                {t('about.story.badge')}
               </Button>
               <h2 ref={storyTitleRef} className="Space text-4xl lg:text-5xl uppercase font-semibold mb-6">
-                From Sweden to the World
+                {t('about.story.title')}
               </h2>
-              <p className="Poppins text-lg font-normal mb-6 text-foreground/80">
-                Satocci™ began as a vision to revolutionize retail technology. Despite initial challenges, 
-                including a &quot;no&quot; on Sweden&apos;s Dragon&apos;s Den, we persevered and transformed rejection into 
-                global success.
+              <p className="Poppins text-lg font-normal mb-6 text-foreground/80 whitespace-pre-line">
+                {t('about.story.paragraph1')}
               </p>
-              <p className="Poppins text-lg font-normal mb-8 text-foreground/80">
-                Today, we&apos;re scaling our retail tech solution across the Middle East and beyond, 
-                helping retailers create seamless, contactless shopping experiences that delight 
-                customers and drive business growth.
+              <p className="Poppins text-lg font-normal mb-8 text-foreground/80 whitespace-pre-line">
+                {t('about.story.paragraph2')}
               </p>
               <Button className="Space rounded-full text-sm sm:text-base lg:text-md font-bold px-2 py-6 lg:py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">
-                <span className="ml-2 sm:ml-3">Learn More About Our Journey</span>
+                <span className="ml-2 sm:ml-3">{t('about.story.button')}</span>
                 <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-background text-foreground rounded-full flex items-center justify-center">
                   <MoveUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
@@ -600,21 +595,17 @@ export default function AboutPage() {
             
             {/* Mobile Layout - Content below image */}
             <div ref={storyContentRef} className="lg:hidden order-3">
-              <h2 ref={storyTitleRef} className="Space text-2xl sm:text-3xl md:text-4xl uppercase font-semibold mb-4 sm:mb-6 leading-tight">
-                From Sweden to the World
+              <h2 ref={storyTitleRef} className="Space text-2xl sm:text-3xl md:text-4xl uppercase font-semibold mb-4 sm:mb-6 leading-tight whitespace-pre-line">
+                {t('about.story.title')}
               </h2>
-              <p className="Poppins text-sm sm:text-base font-normal mb-4 sm:mb-6 text-foreground/80 leading-relaxed">
-                Satocci™ began as a vision to revolutionize retail technology. Despite initial challenges, 
-                including a &quot;no&quot; on Sweden&apos;s Dragon&apos;s Den, we persevered and transformed rejection into 
-                global success.
+              <p className="Poppins text-sm sm:text-base font-normal mb-4 sm:mb-6 text-foreground/80 leading-relaxed whitespace-pre-line">
+                {t('about.story.paragraph1')}
               </p>
-              <p className="Poppins text-sm sm:text-base font-normal mb-6 sm:mb-8 text-foreground/80 leading-relaxed">
-                Today, we&apos;re scaling our retail tech solution across the Middle East and beyond, 
-                helping retailers create seamless, contactless shopping experiences that delight 
-                customers and drive business growth.
+              <p className="Poppins text-sm sm:text-base font-normal mb-6 sm:mb-8 text-foreground/80 leading-relaxed whitespace-pre-line">
+                {t('about.story.paragraph2')}
               </p>
               <Button className="Space rounded-full text-xs sm:text-sm font-bold px-3 sm:px-2 py-4 sm:py-5 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">
-                <span className="ml-2 sm:ml-3">Learn More About Our Journey</span>
+                <span className="ml-2 sm:ml-3">{t('about.story.button')}</span>
                 <div className="w-6 h-6 sm:w-8 sm:h-8 bg-background text-foreground rounded-full flex items-center justify-center">
                   <MoveUpRight className="w-3 h-3 sm:w-4 sm:h-4" />
                 </div>
@@ -639,9 +630,9 @@ export default function AboutPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
               <div className="absolute bottom-4 left-4 text-white">
-                <p className="Space text-sm font-bold uppercase mb-1">HELLO!</p>
-                <p className="Space text-lg font-bold uppercase mb-1">I&apos;M MELODI ASKELÖF</p>
-                <p className="Poppins text-xs font-medium uppercase text-white/90">CEO & CO-FOUNDER</p>
+                <p className="Space text-sm font-bold uppercase mb-1">{t('about.ceo.greeting')}</p>
+                <p className="Space text-lg font-bold uppercase mb-1">{t('about.ceo.name')}</p>
+                <p className="Poppins text-xs font-medium uppercase text-white/90">{t('about.ceo.title')}</p>
               </div>
             </div>
 
@@ -761,44 +752,41 @@ export default function AboutPage() {
                 className="object-cover hover:scale-110 transition-transform duration-700"
               />
               <div className="absolute bottom-8 left-8 text-white">
-                <p className="Space text-xl font-bold uppercase mb-2">HELLO!</p>
-                <p className="Space text-2xl font-bold uppercase mb-2">I&apos;M MELODI ASKELÖF</p>
-                <p className="Poppins text-base font-medium uppercase text-white/90">CEO & CO-FOUNDER, SATOCCI</p>
+                <p className="Space text-xl font-bold uppercase mb-2">{t('about.ceo.greeting')}</p>
+                <p className="Space text-2xl font-bold uppercase mb-2">{t('about.ceo.name')}</p>
+                <p className="Poppins text-base font-medium uppercase text-white/90">{t('about.ceo.title')}</p>
               </div>
             </div>
             <div>
               <div ref={ceoContentRef} className="space-y-5">
-                <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed">
-                  &quot;With over 15+ years of experience across banking, finance, sales, marketing, and telecommunications, 
-                  I&apos;ve always believed in the power of trust, relationships, and innovation to transform industries.&quot;
+                <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed whitespace-pre-line">
+                  {t('about.ceo.quote1')}
                 </p>
-                <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed">
-                  &quot;That&apos;s why I co-founded <strong>Satocci</strong> – to create a smarter, simpler, and more sustainable 
-                  way to shop. We&apos;re eliminating the friction that has plagued traditional shopping experiences for decades.&quot;
+                <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed whitespace-pre-line">
+                  {t('about.ceo.quote2')}
                 </p>
-                <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed">
-                  &quot;For me, technology is about freedom. <strong>Satocci</strong>&apos;s mission is to make checkout lines obsolete 
-                  and make paying as easy as a single scan.&quot;
+                <p className="Poppins text-lg font-normal text-foreground/80 leading-relaxed whitespace-pre-line">
+                  {t('about.ceo.quote3')}
                 </p>
               </div>
               
               <div ref={ceoStatsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
                 <div className="bg-foreground/5 rounded-2xl p-5 text-left hover:scale-105 hover:shadow-lg transition-all duration-300">
-                  <h3 className="Space text-lg font-semibold uppercase mb-3">15+ Years of Experience</h3>
+                  <h3 className="Space text-lg font-semibold uppercase mb-3">{t('about.ceo.experience')}</h3>
                   <p className="Poppins text-sm text-foreground/80">
-                    Across Banking, Finance, Sales, Marketing & Telecommunications.
+                    {t('about.ceo.experienceDesc')}
                   </p>
                 </div>
                 <div className="bg-foreground/5 rounded-2xl p-5 text-left hover:scale-105 hover:shadow-lg transition-all duration-300">
-                  <h3 className="Space text-lg font-semibold uppercase mb-3">Global Mission</h3>
+                  <h3 className="Space text-lg font-semibold uppercase mb-3">{t('about.ceo.global')}</h3>
                   <p className="Poppins text-sm text-foreground/80">
-                    Building a shopping experience that connects customers and retailers worldwide.
+                    {t('about.ceo.globalDesc')}
                   </p>
                 </div>
                 <div className="bg-foreground/5 rounded-2xl p-5 text-left hover:scale-105 hover:shadow-lg transition-all duration-300">
-                  <h3 className="Space text-lg font-semibold uppercase mb-3">Future-Ready Retail</h3>
+                  <h3 className="Space text-lg font-semibold uppercase mb-3">{t('about.ceo.future')}</h3>
                   <p className="Poppins text-sm text-foreground/80">
-                    On a mission to make checkout lines obsolete with Scan & Pay.
+                    {t('about.ceo.futureDesc')}
                   </p>
                   </div>
                 </div>
@@ -814,23 +802,23 @@ export default function AboutPage() {
           <div ref={teamHeaderRef} className="grid grid-cols-1 lg:grid-cols-3 gap-7 mb-14">
             <div className="lg:col-span-2">
               <h2 className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5">
-                MEET OUR TEAM
+                {t('about.team.title')}
               </h2>
             </div>
             <div>
               <p className="Poppins text-lg font-normal text-foreground/80">
-                Behind Satocci is a passionate team of innovators, designers, and problem-solvers who believe shopping should be faster, smarter, and more enjoyable.
+                {t('about.team.description')}
               </p>
             </div>
           </div>
           <div ref={teamGridRef} className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {loadingTeam ? (
               <div className="col-span-full text-center py-12">
-                <p className="text-foreground/60">Loading team members...</p>
+                <p className="text-foreground/60">{t('about.team.loading')}</p>
               </div>
             ) : teamMembers.length === 0 ? (
               <div className="col-span-full text-center py-12">
-                <p className="text-foreground/60">No team members to display.</p>
+                <p className="text-foreground/60">{t('about.team.empty')}</p>
               </div>
             ) : (
               teamMembers.map((member) => (
@@ -856,10 +844,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-
-      {/* Music Player */}
-      <MusicButton />
 
       {/* Footer */}
       <Footer />

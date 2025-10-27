@@ -9,6 +9,7 @@ import { MoveUpRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -22,6 +23,7 @@ import {
 } from "@/components/ui/select";
 
 export default function Home() {
+  const { t } = useLanguage();
   // Refs for GSAP animations - Steps
   const buttonStepsRef = useRef<HTMLElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -312,7 +314,7 @@ export default function Home() {
       const result = await response.json();
 
       if (result.success) {
-        setSubmitMessage('Form submitted successfully! We will get in touch with you soon.');
+        setSubmitMessage(t('signup.form.success'));
         setFormData({
           fullName: '',
           storeName: '',
@@ -327,7 +329,7 @@ export default function Home() {
         setSubmitMessage(`Error: ${result.message}`);
       }
     } catch (error) {
-      setSubmitMessage('Error submitting form. Please try again.');
+      setSubmitMessage(t('signup.form.error'));
       console.error('Form submission error:', error);
     } finally {
       setIsSubmitting(false);
@@ -354,23 +356,18 @@ export default function Home() {
         <div className="relative flex justify-between items-end w-[95%] lg:w-full mb-10 max-w-7xl">
           <div className="w-full lg:w-[50%] justify-start items-start text-left">
             <Button ref={heroBadgeRef} className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6  bg-transparent text-foreground border-2 border-foreground mb-5 hover:scale-105 transition-transform duration-300">
-              Are you a retailer?
+              {t('signup.hero.badge')}
             </Button>
-            <h1 ref={heroTitleRef} className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5 lg:mb-0">
-              Reimagine checkout with <br /> Satocci and bring
-              <br /> innovation to retail.
+            <h1 ref={heroTitleRef} className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5 lg:mb-0 whitespace-pre-line">
+              {t('signup.hero.title')}
             </h1>
-            <p ref={heroDescRef} className="block lg:hidden Poppins text-sm font-medium mb-5">
-              Satocci makes shopping seamless by letting you scan and pay
-              instantly so you skip the line and enjoy faster smarter
-              sustainable shopping.
+            <p ref={heroDescRef} className="block lg:hidden Poppins text-sm font-medium mb-5 whitespace-pre-line">
+              {t('signup.hero.description')}
             </p>
           </div>
           <div className="hidden lg:block w-[40%] justify-start items-end text-left">
-            <p ref={heroDescRef} className="Poppins text-md font-normal">
-              Satocci makes shopping seamless by letting you scan and pay
-              instantly so you skip the line and enjoy faster smarter
-              sustainable shopping.
+            <p ref={heroDescRef} className="Poppins text-md font-normal whitespace-pre-line">
+              {t('signup.hero.description')}
             </p>
           </div>
         </div>
@@ -384,15 +381,13 @@ export default function Home() {
             </Button>
             <div className="relative flex justify-start items-start flex-col border-foreground w-full lg:w-[400px] min-h-[350px] lg:h-[400px] border-2 rounded-4xl p-5 lg:p-7">
               <h1 className="Space text-3xl lg:text-4xl xl:text-5xl uppercase font-semibold mb-4 lg:mb-5">
-                Contact Us
+                {t('signup.step1.title')}
               </h1>
-              <p className="Poppins text-sm font-medium mb-5">
-                Fill in the form below to tell us more about your store, your
-                customers, and how you operate. This helps our team design a
-                tailor‑made solution that best fits your business.
+              <p className="Poppins text-sm font-medium mb-5 whitespace-pre-line">
+                {t('signup.step1.description')}
               </p>
               <Button className="mt-auto w-full lg:w-auto lg:absolute lg:bottom-7 Space rounded-full text-md font-bold px-2 py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer uppercase">
-                <span className="ml-3">Contact us</span>
+                <span className="ml-3">{t('signup.step1.button')}</span>
                 <div className="w-10 h-10 bg-background text-foreground rounded-full flex items-center justify-center">
                   <MoveUpRight />
                 </div>
@@ -407,12 +402,10 @@ export default function Home() {
             </Button>
             <div className="relative flex justify-start items-start flex-col border-foreground w-full lg:w-[400px] min-h-[350px] lg:h-[400px] border-2 rounded-4xl p-5 lg:p-7">
               <h1 className="Space text-3xl lg:text-4xl xl:text-5xl uppercase font-semibold mb-4 lg:mb-5">
-                Onboarding Process
+                {t('signup.step2.title')}
               </h1>
-              <p className="Poppins text-sm font-medium mb-5">
-                Team Satocci will ensure that your inventories are in sync and
-                that your team is trained to start accepting shoppers using
-                Satocci in less than two weeks.
+              <p className="Poppins text-sm font-medium mb-5 whitespace-pre-line">
+                {t('signup.step2.description')}
               </p>
             </div>
           </div>
@@ -424,12 +417,10 @@ export default function Home() {
             </Button>
             <div className="relative flex justify-start items-start flex-col border-foreground w-full lg:w-[400px] min-h-[350px] lg:h-[400px] border-2 rounded-4xl p-5 lg:p-7">
               <h1 className="Space text-3xl lg:text-4xl xl:text-5xl uppercase font-semibold mb-4 lg:mb-5">
-                Continuous Improvement
+                {t('signup.step3.title')}
               </h1>
-              <p className="Poppins text-sm font-medium mb-5">
-                We work closely with you even after launch - gathering feedback,
-                updating features, and ensuring Satocci keeps making checkout
-                smoother for all.
+              <p className="Poppins text-sm font-medium mb-5 whitespace-pre-line">
+                {t('signup.step3.description')}
               </p>
             </div>
           </div>
@@ -446,17 +437,15 @@ export default function Home() {
         <div className="relative flex flex-col lg:flex-row justify-between items-start w-full lg:w-full mb-10 max-w-7xl">
           <div className="w-full lg:w-[50%] justify-start items-start text-left">
             <h1 ref={formSectionTitleRef} className="Space text-3xl lg:text-4xl xl:text-5xl uppercase font-semibold mb-5 lg:mb-0">
-              Let&apos;s Get Started
+              {t('signup.form.title')}
             </h1>
             <p ref={formSectionDescRef} className="block lg:hidden Poppins text-sm font-medium mb-5">
-              Fill in the following details, and we will get in touch with you.
+              {t('signup.form.description')}
             </p>
           </div>
           <div className="hidden lg:block w-[40%] justify-start items-end text-left">
-            <p ref={formSectionDescRef} className="Poppins text-md font-normal">
-              Satocci makes shopping seamless by letting you scan and pay
-              instantly so you skip the line and enjoy faster smarter
-              sustainable shopping.
+            <p ref={formSectionDescRef} className="Poppins text-md font-normal whitespace-pre-line">
+              {t('signup.hero.description')}
             </p>
           </div>
         </div>
@@ -478,7 +467,7 @@ export default function Home() {
           peer-focus:-top-3 lg:peer-focus:-top-4
           peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
                 >
-                  Full Name
+                  {t('signup.form.fullName')}
                 </p>
               </div>
 
@@ -497,7 +486,7 @@ export default function Home() {
           peer-focus:-top-3 lg:peer-focus:-top-4
           peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
                 >
-                  Store Name
+                  {t('signup.form.storeName')}
                 </p>
               </div>
 
@@ -516,7 +505,7 @@ export default function Home() {
           peer-focus:-top-3 lg:peer-focus:-top-4
           peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
                 >
-                  Address
+                  {t('signup.form.address')}
                 </p>
               </div>
 
@@ -536,7 +525,7 @@ export default function Home() {
           peer-focus:-top-3 lg:peer-focus:-top-4
           peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
                 >
-                  Email
+                  {t('signup.form.email')}
                 </p>
               </div>
 
@@ -556,7 +545,7 @@ export default function Home() {
           peer-focus:-top-3 lg:peer-focus:-top-4
           peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
                 >
-                  Phone
+                  {t('signup.form.phone')}
                 </p>
               </div>
 
@@ -575,7 +564,7 @@ export default function Home() {
           peer-focus:-top-3 lg:peer-focus:-top-4
           peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:bg-background peer-focus:bg-background px-2"
                 >
-                  Company URL
+                  {t('signup.form.companyUrl')}
                 </p>
               </div>
 
@@ -598,7 +587,7 @@ export default function Home() {
           peer-focus:-top-3 lg:peer-focus:-top-4
           peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 px-2"
                 >
-                  What POS Do You Use?
+                  {t('signup.form.pos')}
                 </p>
               </div>
 
@@ -621,7 +610,7 @@ export default function Home() {
           peer-focus:-top-3 lg:peer-focus:-top-4
           peer-not-placeholder-shown:-top-3 lg:peer-not-placeholder-shown:-top-4 px-2 whitespace-nowrap"
                 >
-                  Range of Daily Customers
+                  {t('signup.form.dailyCustomers')}
                 </p>
               </div>
 
@@ -631,7 +620,7 @@ export default function Home() {
                 disabled={isSubmitting}
                 className="Space rounded-full text-base lg:text-lg font-bold px-3 lg:px-4 py-6 lg:py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer uppercase disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 form-input-group w-full lg:w-auto md:col-span-2"
               >
-                <span className="ml-3 lg:ml-4">{isSubmitting ? 'Submitting...' : 'Submit'}</span>
+                <span className="ml-3 lg:ml-4">{isSubmitting ? t('signup.form.submitting') : t('signup.form.submit')}</span>
                 <div className="w-8 h-8 lg:w-10 lg:h-10 bg-background text-foreground rounded-full flex items-center justify-center">
                   <MoveUpRight className="w-4 h-4 lg:w-5 lg:h-5" />
                 </div>

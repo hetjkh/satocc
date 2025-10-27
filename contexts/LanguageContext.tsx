@@ -122,6 +122,74 @@ const translations = {
     'footer.contact': 'Contact Us',
     'footer.address': 'Address:',
     'footer.addressText': 'Swedenborgsgatan 12, 753 34 Uppsala, Sweden.',
+
+    // About Page
+    'about.hero.badge': 'About Satocci',
+    'about.hero.title': 'Revolutionizing Retail\nThrough Innovation\nand Technology',
+    'about.hero.description': 'We\'re transforming the retail experience with cutting-edge scan-and-pay technology,\ncreating seamless shopping experiences for customers worldwide.',
+    
+    'about.identity.whoWeAre': 'WHO WE ARE',
+    'about.identity.whoWeAreDesc': 'We\'re driven by the everyday challenges shoppers and retailers face, turning technology into trust and ease, one payment at a time.',
+    'about.identity.whatWeBelieve': 'WHAT WE BELIEVE',
+    'about.identity.whatWeBelieveDesc': 'Our mission is to revolutionize the way people engage in transactions, simplifying the payment process through cutting-edge technology.',
+    'about.identity.ourMission': 'OUR MISSION',
+    'about.identity.ourMissionDesc': 'To simplify shopping by delivering faster, smarter, and greener checkout experiences for consumers and retailers worldwide.',
+    'about.identity.ourVision': 'OUR VISION',
+    'about.identity.ourVisionDesc': 'To create a future where every store offers seamless shopping without lines, delays, or waste.',
+    
+    'about.story.badge': 'Our Journey',
+    'about.story.title': 'From Sweden to the World',
+    'about.story.paragraph1': 'Satocci™ began as a vision to revolutionize retail technology. Despite initial challenges,\nincluding a "no" on Sweden\'s Dragon\'s Den, we persevered and transformed rejection into\nglobal success.',
+    'about.story.paragraph2': 'Today, we\'re scaling our retail tech solution across the Middle East and beyond,\nhelping retailers create seamless, contactless shopping experiences that delight\ncustomers and drive business growth.',
+    'about.story.button': 'Learn More About Our Journey',
+    
+    'about.ceo.greeting': 'HELLO!',
+    'about.ceo.name': 'I\'M MELODI ASKELÖF',
+    'about.ceo.title': 'CEO & CO-FOUNDER, SATOCCI',
+    'about.ceo.quote1': '"With over 15+ years of experience across banking, finance, sales, marketing, and telecommunications,\nI\'ve always believed in the power of trust, relationships, and innovation to transform industries."',
+    'about.ceo.quote2': '"That\'s why I co-founded Satocci – to create a smarter, simpler, and more sustainable\nway to shop. We\'re eliminating the friction that has plagued traditional shopping experiences for decades."',
+    'about.ceo.quote3': '"For me, technology is about freedom. Satocci\'s mission is to make checkout lines obsolete\nand make paying as easy as a single scan."',
+    'about.ceo.experience': '15+ Years of Experience',
+    'about.ceo.experienceDesc': 'Across Banking, Finance, Sales, Marketing & Telecommunications.',
+    'about.ceo.global': 'Global Mission',
+    'about.ceo.globalDesc': 'Building a shopping experience that connects customers and retailers worldwide.',
+    'about.ceo.future': 'Future-Ready Retail',
+    'about.ceo.futureDesc': 'On a mission to make checkout lines obsolete with Scan & Pay.',
+    
+    'about.team.title': 'MEET OUR TEAM',
+    'about.team.description': 'Behind Satocci is a passionate team of innovators, designers, and problem-solvers who believe shopping should be faster, smarter, and more enjoyable.',
+    'about.team.loading': 'Loading team members...',
+    'about.team.empty': 'No team members to display.',
+
+    // Signup Page
+    'signup.hero.badge': 'Are you a retailer?',
+    'signup.hero.title': 'Reimagine checkout with\nSatocci and bring\ninnovation to retail.',
+    'signup.hero.description': 'Satocci makes shopping seamless by letting you scan and pay\ninstantly so you skip the line and enjoy faster smarter\nsustainable shopping.',
+    
+    'signup.step1.title': 'Contact Us',
+    'signup.step1.description': 'Fill in the form below to tell us more about your store, your\ncustomers, and how you operate. This helps our team design a\ntailor‑made solution that best fits your business.',
+    'signup.step1.button': 'Contact us',
+    
+    'signup.step2.title': 'Onboarding Process',
+    'signup.step2.description': 'Team Satocci will ensure that your inventories are in sync and\nthat your team is trained to start accepting shoppers using\nSatocci in less than two weeks.',
+    
+    'signup.step3.title': 'Continuous Improvement',
+    'signup.step3.description': 'We work closely with you even after launch - gathering feedback,\nupdating features, and ensuring Satocci keeps making checkout\nsmoother for all.',
+    
+    'signup.form.title': 'Let\'s Get Started',
+    'signup.form.description': 'Fill in the following details, and we will get in touch with you.',
+    'signup.form.fullName': 'Full Name',
+    'signup.form.storeName': 'Store Name',
+    'signup.form.address': 'Address',
+    'signup.form.email': 'Email',
+    'signup.form.phone': 'Phone',
+    'signup.form.companyUrl': 'Company URL',
+    'signup.form.pos': 'What POS Do You Use?',
+    'signup.form.dailyCustomers': 'Range of Daily Customers',
+    'signup.form.submit': 'Submit',
+    'signup.form.submitting': 'Submitting...',
+    'signup.form.success': 'Form submitted successfully! We will get in touch with you soon.',
+    'signup.form.error': 'Error submitting form. Please try again.',
   },
   ar: {
     // Homepage
@@ -231,6 +299,74 @@ const translations = {
     'footer.contact': 'اتصل بنا',
     'footer.address': 'العنوان:',
     'footer.addressText': 'Swedenborgsgatan 12, 753 34 Uppsala, Sweden.',
+
+    // About Page
+    'about.hero.badge': 'حول ساتوتشي',
+    'about.hero.title': 'ثورة في التجزئة\nمن خلال الابتكار\nوالتكنولوجيا',
+    'about.hero.description': 'نقوم بتحويل تجربة التجزئة من خلال تقنية المسح والدفع المتطورة،\nخلق تجارب تسوق سلسة للعملاء حول العالم.',
+    
+    'about.identity.whoWeAre': 'من نحن',
+    'about.identity.whoWeAreDesc': 'نحن مدفوعون بالتحديات اليومية التي يواجهها المتسوقون والتجار، نحول التكنولوجيا إلى ثقة وسهولة، دفعة واحدة في كل مرة.',
+    'about.identity.whatWeBelieve': 'ما نؤمن به',
+    'about.identity.whatWeBelieveDesc': 'مهمتنا هي إحداث ثورة في طريقة تعامل الناس مع المعاملات، وتبسيط عملية الدفع من خلال التكنولوجيا المتطورة.',
+    'about.identity.ourMission': 'مهمتنا',
+    'about.identity.ourMissionDesc': 'تبسيط التسوق من خلال تقديم تجارب دفع أسرع وأذكى وأكثر خضرة للمستهلكين والتجار في جميع أنحاء العالم.',
+    'about.identity.ourVision': 'رؤيتنا',
+    'about.identity.ourVisionDesc': 'خلق مستقبل حيث يقدم كل متجر تجربة تسوق سلسة بدون طوابير أو تأخير أو هدر.',
+    
+    'about.story.badge': 'رحلتنا',
+    'about.story.title': 'من السويد إلى العالم',
+    'about.story.paragraph1': 'بدأت ساتوتشي™ كرؤية لإحداث ثورة في تكنولوجيا التجزئة. على الرغم من التحديات الأولية،\nبما في ذلك رفض في برنامج Dragon\'s Den السويدي، صمدنا وحولنا الرفض إلى\nنجاح عالمي.',
+    'about.story.paragraph2': 'اليوم، نوسع حلولنا التكنولوجية للتجزئة عبر الشرق الأوسط وما بعده،\nنساعد التجار على إنشاء تجارب تسوق سلسة ولاسلكية تسعد\nالعملاء وتدفع نمو الأعمال.',
+    'about.story.button': 'تعرف على المزيد عن رحلتنا',
+    
+    'about.ceo.greeting': 'مرحباً!',
+    'about.ceo.name': 'أنا ميلودي أسكلوف',
+    'about.ceo.title': 'الرئيس التنفيذي والمؤسس المشارك، ساتوتشي',
+    'about.ceo.quote1': '"مع أكثر من 15 عامًا من الخبرة عبر البنوك والمالية والمبيعات والتسويق والاتصالات،\nلطالما آمنت بقوة الثقة والعلاقات والابتكار لتحويل الصناعات."',
+    'about.ceo.quote2': '"لهذا السبب شاركت في تأسيس ساتوتشي – لخلق طريقة أذكى وأبسط وأكثر استدامة\nللتسوق. نحن نقضي على الاحتكاك الذي أزعج تجارب التسوق التقليدية لعقود."',
+    'about.ceo.quote3': '"بالنسبة لي، التكنولوجيا تتعلق بالحرية. مهمة ساتوتشي هي جعل طوابير الدفع عتيقة\nوجعل الدفع سهلاً مثل مسح واحد."',
+    'about.ceo.experience': '15+ سنة من الخبرة',
+    'about.ceo.experienceDesc': 'في البنوك والمالية والمبيعات والتسويق والاتصالات.',
+    'about.ceo.global': 'المهمة العالمية',
+    'about.ceo.globalDesc': 'بناء تجربة تسوق تربط العملاء والتجار في جميع أنحاء العالم.',
+    'about.ceo.future': 'تجارة المستقبل',
+    'about.ceo.futureDesc': 'في مهمة لجعل طوابير الدفع عتيقة مع المسح والدفع.',
+    
+    'about.team.title': 'تعرف على فريقنا',
+    'about.team.description': 'وراء ساتوتشي فريق شغوف من المبتكرين والمصممين وحل المشاكل الذين يؤمنون بأن التسوق يجب أن يكون أسرع وأذكى وأكثر متعة.',
+    'about.team.loading': 'جاري تحميل أعضاء الفريق...',
+    'about.team.empty': 'لا يوجد أعضاء فريق للعرض.',
+
+    // Signup Page
+    'signup.hero.badge': 'هل أنت تاجر؟',
+    'signup.hero.title': 'أعد تصور الدفع باستخدام\nساتوتشي واجلب\nالابتكار إلى التجزئة.',
+    'signup.hero.description': 'ساتوتشي يجعل التسوق سلسًا من خلال السماح لك بالمسح والدفع\nفورًا حتى تتخطى الطابور وتستمتع بتسوق أسرع وأذكى\nوأكثر استدامة.',
+    
+    'signup.step1.title': 'اتصل بنا',
+    'signup.step1.description': 'املأ النموذج أدناه لإخبارنا بالمزيد عن متجرك وعملائك\nوكيف تعمل. يساعد هذا فريقنا في تصميم حل مخصص\nيناسب عملك بشكل أفضل.',
+    'signup.step1.button': 'اتصل بنا',
+    
+    'signup.step2.title': 'عملية الدمج',
+    'signup.step2.description': 'سينتظم فريق ساتوتشي لضمان مزامنة المخزونات الخاصة بك\nوتدريب فريقك لبدء قبول المتسوقين باستخدام\nساتوتشي في أقل من أسبوعين.',
+    
+    'signup.step3.title': 'التحسين المستمر',
+    'signup.step3.description': 'نعمل معًا عن كثب حتى بعد الإطلاق - جمع الملاحظات\nوتحديث الميزات وضمان استمرار ساتوتشي في جعل الدفع\nأكثر سلاسة للجميع.',
+    
+    'signup.form.title': 'لنبدأ',
+    'signup.form.description': 'املأ التفاصيل التالية، وسنتواصل معك.',
+    'signup.form.fullName': 'الاسم الكامل',
+    'signup.form.storeName': 'اسم المتجر',
+    'signup.form.address': 'العنوان',
+    'signup.form.email': 'البريد الإلكتروني',
+    'signup.form.phone': 'الهاتف',
+    'signup.form.companyUrl': 'رابط الشركة',
+    'signup.form.pos': 'ما هو نظام نقاط البيع الذي تستخدمه؟',
+    'signup.form.dailyCustomers': 'نطاق العملاء اليوميين',
+    'signup.form.submit': 'إرسال',
+    'signup.form.submitting': 'جاري الإرسال...',
+    'signup.form.success': 'تم إرسال النموذج بنجاح! سنتواصل معك قريبًا.',
+    'signup.form.error': 'خطأ في إرسال النموذج. يرجى المحاولة مرة أخرى.',
   }
 };
 

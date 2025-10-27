@@ -2,7 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/Home/NavBar";
 import { ThemeProvider } from "@/components/theme-provider";
-import { MusicProvider } from "@/contexts/MusicContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Background from "@/components/Home/Particles";
 import LenisWrapper from "@/components/LenisWrapper";
@@ -93,13 +92,11 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <LanguageProvider>
-              <MusicProvider>
-                <Background />
-                <NavBar />
-                <div className="w-full overflow-x-hidden">
-                  {children}
-                </div>
-              </MusicProvider>
+              <Background />
+              <NavBar />
+              <div className="w-full overflow-x-hidden">
+                {children}
+              </div>
             </LanguageProvider>
           </ThemeProvider>
         </LenisWrapper>

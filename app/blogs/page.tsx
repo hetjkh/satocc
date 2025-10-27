@@ -7,7 +7,6 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, User, Search, Loader2, MoveUpRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import MusicButton from "@/components/music/MusicButton";
 import Footer from "@/components/Footer";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
@@ -543,8 +542,6 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
-
-      <MusicButton />
 
       {/* Footer */}
       <Footer />

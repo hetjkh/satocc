@@ -3,7 +3,6 @@
 import ProductSection from "@/components/Home/ProductSection";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
-import MusicButton from "@/components/music/MusicButton";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
@@ -91,9 +90,6 @@ export default function ProductPage() {
 
       {/* Product Features */}
       <ProductSection />
-
-      {/* Music Player */}
-      <MusicButton />
 
       {/* Footer */}
       <Footer />

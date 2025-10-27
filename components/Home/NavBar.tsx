@@ -5,13 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Menu, X, ExternalLink, Languages, ArrowUp, MoveUpRight } from "lucide-react";
+import { Menu, X, Languages } from "lucide-react";
 import { ModeToggle } from "../toggle";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { gsap } from "gsap";
@@ -92,32 +86,7 @@ export default function Navbar() {
         <div ref={menuRef} className="hidden w-auto Poppins font-medium lg:flex items-center justify-center gap-5 text-white">
           <Link href="/" className="hover:text-primary transition">{t('nav.home')}</Link>
 
-          {/* About link + dropdown icon */}
-          <div className="flex items-center gap-1">
-            <Link href="/about" className="hover:text-primary transition">{t('nav.about')}</Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="hover:text-primary transition cursor-pointer">
-                <ArrowUp className="rotate-180 w-5 h-5" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="left-20 rounded-xl bg-black/50 border-border/50 text-white p-5 backdrop-blur-lg">
-                <DropdownMenuItem asChild>
-                  <Link href="/achievements" className="flex justify-between w-full">
-                    {t('nav.achievements')} <MoveUpRight className="w-4 h-4 text-green-500" />
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/partnership" className="flex justify-between w-full">
-                    {t('nav.partnership')} <MoveUpRight className="w-4 h-4 text-green-500" />
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/board" className="flex justify-between w-full">
-                    {t('nav.boardMembers')} <MoveUpRight className="w-4 h-4 text-green-500" />
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <Link href="/about" className="hover:text-primary transition">{t('nav.about')}</Link>
 
           <Link href="/product" className="hover:text-primary transition">{t('nav.product')}</Link>
           <Link href="/signup" className="hover:text-primary transition">{t('nav.signup')}</Link>
@@ -156,22 +125,7 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="lg:hidden bg-background border-t border-border px-6 py-4 space-y-4">
           <Link href="/" className="block">{t('nav.home')}</Link>
-
-          <details>
-            <summary className="cursor-pointer">{t('nav.about')}</summary>
-            <div className="ml-4 mt-2 space-y-2 text-sm">
-              <Link href="/achievements" className="flex items-center gap-1">
-                {t('nav.achievements')} <ExternalLink className="w-4 h-4 text-green-500" />
-              </Link>
-              <Link href="/partnership" className="flex items-center gap-1">
-                {t('nav.partnership')} <ExternalLink className="w-4 h-4 text-green-500" />
-              </Link>
-              <Link href="/board" className="flex items-center gap-1">
-                {t('nav.boardMembers')} <ExternalLink className="w-4 h-4 text-green-500" />
-              </Link>
-            </div>
-          </details>
-
+          <Link href="/about" className="block">{t('nav.about')}</Link>
           <Link href="/product" className="block">{t('nav.product')}</Link>
           <Link href="/signup" className="block">{t('nav.signup')}</Link>
           <Link href="/blogs" className="block">{t('nav.blogs')}</Link>
