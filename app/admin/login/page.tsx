@@ -10,7 +10,7 @@ import { gsap } from "gsap";
 
 // Static credentials
 const ADMIN_EMAIL = "admin@satocci.com";
-const ADMIN_PASSWORD = " ";
+const ADMIN_PASSWORD = "12345678";
 
 export default function AdminLoginPage() {
   const router = useRouter();

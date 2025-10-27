@@ -3,6 +3,7 @@ import "./globals.css";
 import NavBar from "@/components/Home/NavBar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MusicProvider } from "@/contexts/MusicContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import Background from "@/components/Home/Particles";
 import LenisWrapper from "@/components/LenisWrapper";
 
@@ -91,11 +92,13 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <MusicProvider>
-              <Background />
-              <NavBar />
-              {children}
-            </MusicProvider>
+            <LanguageProvider>
+              <MusicProvider>
+                <Background />
+                <NavBar />
+                {children}
+              </MusicProvider>
+            </LanguageProvider>
           </ThemeProvider>
         </LenisWrapper>
       </body>

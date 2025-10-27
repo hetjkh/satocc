@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, MapPin, MoveUpRight } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { Search, MapPin, MoveUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
@@ -57,6 +57,18 @@ export default function StoreLocatorSection() {
   const searchInputRef = useRef<HTMLDivElement>(null);
   const storeListRef = useRef<HTMLDivElement>(null);
   const mapSectionRef = useRef<HTMLDivElement>(null);
+
+  // Carousel state
+  const [currentStoreIndex, setCurrentStoreIndex] = useState(0);
+
+  // Carousel navigation functions
+  const nextStore = () => {
+    setCurrentStoreIndex((prev) => (prev + 1) % stores.length);
+  };
+
+  const previousStore = () => {
+    setCurrentStoreIndex((prev) => (prev - 1 + stores.length) % stores.length);
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -205,26 +217,26 @@ export default function StoreLocatorSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="flex justify-center items-center w-full py-20 bg-background">
-      <div className="relative w-[95%] lg:w-full max-w-7xl">
+    <section ref={sectionRef} className="flex justify-center items-center w-full py-12 sm:py-16 lg:py-20 bg-background">
+      <div className="relative w-[95%] lg:w-full max-w-7xl px-4 sm:px-6">
         {/* Header Section */}
-        <div className="mb-12">
+        <div className="mb-8 sm:mb-12">
           <div ref={headerBadgeRef} className="mb-4">
-            <Badge className="Poppins bg-green-400 text-foreground border-0">
+            <Badge className="Poppins bg-green-400 text-foreground border-0 text-xs sm:text-sm">
               Store Locator
             </Badge>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
             <div>
-              <h2 ref={headerTitleRef} className="Space text-4xl lg:text-5xl uppercase font-semibold mb-6 leading-tight">
+              <h2 ref={headerTitleRef} className="Space text-2xl sm:text-3xl md:text-4xl lg:text-5xl uppercase font-semibold mb-4 sm:mb-6 leading-tight">
                 FIND SATOCCI NEAR YOU,<br />
                 ANYWHERE IN THE<br />
                 WORLD
               </h2>
             </div>
             <div className="flex items-start">
-              <p ref={headerDescRef} className="Poppins text-lg font-normal text-foreground/80 leading-relaxed">
+              <p ref={headerDescRef} className="Poppins text-sm sm:text-base lg:text-lg font-normal text-foreground/80 leading-relaxed">
                 Discover the future of shopping without borders. With Satocci, you&apos;re never far from a smarter, faster checkout experience. Spin the globe, explore our partner stores, and step into the new era of retail — where lines are optional, but convenience is guaranteed.
               </p>
             </div>
@@ -232,23 +244,152 @@ export default function StoreLocatorSection() {
         </div>
 
         {/* Search Section */}
-        <div ref={searchSectionRef} className="flex justify-center mb-8">
-          <div ref={searchInputRef} className="relative w-full max-w-md">
+        <div ref={searchSectionRef} className="flex justify-center mb-6 sm:mb-8">
+          <div ref={searchInputRef} className="relative w-full max-w-sm sm:max-w-md">
             <div className="flex items-center bg-card rounded-full border border-foreground/20 shadow-sm overflow-hidden">
               <input
                 type="text"
                 placeholder="SEARCH STORE"
-                className="flex-1 px-6 py-4 text-foreground placeholder-foreground/60 bg-transparent focus:outline-none"
+                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base text-foreground placeholder-foreground/60 bg-transparent focus:outline-none"
               />
-              <button className="bg-foreground text-background p-3 rounded-full m-1 hover:bg-foreground/90 transition-colors duration-300">
-                <Search className="w-5 h-5" />
+              <button className="bg-foreground text-background p-2 sm:p-3 rounded-full m-1 hover:bg-foreground/90 transition-colors duration-300">
+                <Search className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Mobile Layout - Carousel + Map Below */}
+        <div className="lg:hidden">
+          {/* Location Carousel */}
+          <div ref={storeListRef} className="mb-8">
+            <div className="relative">
+              {/* Carousel Container */}
+              <div className="overflow-hidden">
+                <div className="flex transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${currentStoreIndex * 100}%)` }}>
+                  {stores.map((store) => (
+                    <div key={store.id} className="w-full flex-shrink-0">
+                      <div className="bg-card border border-foreground/20 rounded-2xl p-6 shadow-sm mx-4">
+                        <div className="text-center">
+                          {/* Store Logo */}
+                          <div className="w-16 h-16 bg-foreground/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                            {store.logoText ? (
+                              <div className="text-center">
+                                {store.logoText === "Goldstar" ? (
+                                  <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center">
+                                    <span className="text-black font-bold text-sm">★</span>
+                                  </div>
+                                ) : store.logoText === "الحطب" ? (
+                                  <div className="text-2xl font-bold text-foreground">الحطب</div>
+                                ) : store.logoText === "بنده" ? (
+                                  <div className="text-center">
+                                    <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mb-1">
+                                      <span className="text-white font-bold text-xs">P</span>
+                                    </div>
+                                    <div className="text-xs font-bold text-foreground">بنده</div>
+                                  </div>
+                                ) : (
+                                  <div className="text-lg font-bold text-purple-600">CENOMI</div>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="w-12 h-12 bg-foreground/20 rounded-lg"></div>
+                            )}
+                          </div>
+                          
+                          {/* Store Info */}
+                          <h3 className="Space text-lg font-bold text-foreground mb-2">
+                            {store.name}
+                          </h3>
+                          <p className="Poppins text-sm text-foreground/70 leading-relaxed mb-6">
+                            {store.address}
+                          </p>
+                          
+                          {/* Get Directions Button */}
+                          <Button 
+                            className="Space rounded-full text-sm font-bold px-4 py-3 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105"
+                          >
+                            <span className="ml-2">GET DIRECTIONS</span>
+                            <div className="w-8 h-8 bg-background text-foreground rounded-full flex items-center justify-center">
+                              <MoveUpRight className="w-4 h-4" />
+                            </div>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Navigation Arrows */}
+              <button 
+                onClick={previousStore}
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-card border border-foreground/20 rounded-full flex items-center justify-center hover:bg-foreground/10 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4 text-foreground" />
+              </button>
+              <button 
+                onClick={nextStore}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-card border border-foreground/20 rounded-full flex items-center justify-center hover:bg-foreground/10 transition-colors"
+              >
+                <ChevronRight className="w-4 h-4 text-foreground" />
+              </button>
+            </div>
+            
+            {/* Pagination Dots */}
+            <div className="flex justify-center mt-4 space-x-2">
+              {stores.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentStoreIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    index === currentStoreIndex ? 'bg-foreground' : 'bg-foreground/30'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Map Section - Below Carousel */}
+          <div ref={mapSectionRef} className="relative">
+            <div className="bg-card border border-foreground/20 rounded-2xl overflow-hidden shadow-sm">
+              <div className="relative h-[300px] bg-foreground/5">
+                {/* Placeholder for map */}
+                <div className="absolute inset-0 bg-gradient-to-br from-foreground/5 to-foreground/10 flex items-center justify-center">
+                  <div className="text-center px-4">
+                    <MapPin className="w-12 h-12 text-foreground/40 mx-auto mb-3" />
+                    <p className="Poppins text-base font-medium text-foreground mb-2">Interactive Map</p>
+                    <p className="Poppins text-xs text-foreground/70">
+                      Store locations will be displayed here
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Map attribution */}
+                <div className="absolute bottom-3 left-3">
+                  <span className="Poppins text-xs text-foreground/70 bg-card px-2 py-1 rounded shadow-sm border border-foreground/20">
+                    Google Maps
+                  </span>
+                </div>
+
+                {/* Map Action Button */}
+                <div className="absolute bottom-3 right-3">
+                  <Button 
+                    className="Space rounded-full text-sm font-bold px-3 py-3 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105"
+                  >
+                    <span className="ml-2">EXPLORE MAP</span>
+                    <div className="w-6 h-6 bg-background text-foreground rounded-full flex items-center justify-center">
+                      <MapPin className="w-3 h-3" />
+                    </div>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Layout - Side by Side */}
+        <div className="hidden lg:grid grid-cols-2 gap-8">
           {/* Store List */}
           <div ref={storeListRef} className="space-y-4">
             {stores.map((store) => (
@@ -310,7 +451,7 @@ export default function StoreLocatorSection() {
           <div ref={mapSectionRef} className="relative">
             <div className="bg-card border border-foreground/20 rounded-2xl overflow-hidden shadow-sm">
               <div className="relative h-[500px] bg-foreground/5">
-                {/* Placeholder for map - you can replace this with actual map component */}
+                {/* Placeholder for map */}
                 <div className="absolute inset-0 bg-gradient-to-br from-foreground/5 to-foreground/10 flex items-center justify-center">
                   <div className="text-center">
                     <MapPin className="w-16 h-16 text-foreground/40 mx-auto mb-4" />

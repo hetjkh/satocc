@@ -8,10 +8,12 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
+  const { t } = useLanguage();
   // Refs for animations
   const newsletterSectionRef = useRef<HTMLDivElement>(null);
   const newsletterTitleRef = useRef<HTMLHeadingElement>(null);
@@ -183,17 +185,16 @@ export default function Footer() {
             {/* Newsletter Subscription */}
             <div>
                <h2 ref={newsletterTitleRef} className="Space text-3xl lg:text-4xl font-bold uppercase text-foreground mb-24 leading-tight">
-                 SUBSCRIBE TO<br />
-                 SATOCCI NEWSLETTER
+                 {t('footer.newsletter.title')}
                </h2>
                <div ref={newsletterInputRef} className="flex items-center gap-4 justify-end ml-20">
                  <Input
                    type="email"
-                   placeholder="ENTER EMAIL"
+                   placeholder={t('footer.newsletter.placeholder')}
                    className="rounded-full border-2 border-foreground bg-background text-foreground placeholder-foreground/60 focus:outline-none focus:ring-0 py-7 px-6 text-base w-80"
                  />
                  <Button className="Space rounded-full text-md font-bold px-2 py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">
-                   <span className="ml-3">SUBSCRIBE</span>
+                   <span className="ml-3">{t('footer.newsletter.button')}</span>
                    <div className="w-10 h-10 bg-background text-foreground rounded-full flex items-center justify-center">
                      <MoveUpRight className="w-4 h-4" />
                    </div>
@@ -204,7 +205,7 @@ export default function Footer() {
             {/* FAQ Text */}
             <div className="">
               <p ref={faqTextRef} className="Poppins text-lg text-foreground/80 leading-relaxed">
-                Got questions? We&apos;ve got answers. Explore the most common queries about Satocci, how it works, and how it makes your shopping experience easier.
+                {t('footer.newsletter.description')}
               </p>
             </div>
           </div>
@@ -233,11 +234,11 @@ export default function Footer() {
               <div ref={appButtonsRef} className="flex gap-2 mb-6">
                 <Button className="flex justify-center items-center gap-3 Space rounded-full text-base font-bold px-4 py-5 uppercase bg-white text-black border-2 border-white hover:scale-110 hover:rotate-12 transition-all duration-300">
                   <Image src="/icons/play.png" alt="" height={28} width={28} />
-                  <span>PLAY STORE</span>
+                  <span>{t('footer.playStore')}</span>
                 </Button>
                 <Button className="flex justify-center items-center gap-3 Space rounded-full text-base font-bold px-4 py-5 uppercase bg-white text-black border-2 border-white hover:scale-110 hover:rotate-12 transition-all duration-300">
                   <Image src="/icons/apple.png" alt="" height={32} width={32} />
-                  <span>APP STORE</span>
+                  <span>{t('footer.appStore')}</span>
                 </Button>
               </div>
 
@@ -260,32 +261,32 @@ export default function Footer() {
 
             {/* Column 2: Landing Pages */}
             <div ref={linksColumnsRef} className="footer-column">
-              <h3 className="Space text-lg font-bold text-white mb-4 uppercase">Landing Pages</h3>
+              <h3 className="Space text-lg font-bold text-white mb-4 uppercase">{t('footer.landingPages')}</h3>
               <ul className="space-y-2">
-                <li><Link href="/" className="Poppins text-white/80 hover:text-white transition-colors duration-300">Home</Link></li>
-                <li><a href="/about" className="Poppins text-white/80 hover:text-white transition-colors duration-300">About Us</a></li>
-                <li><a href="/signup" className="Poppins text-white/80 hover:text-white transition-colors duration-300">Join Us</a></li>
-                <li><a href="/blogs" className="Poppins text-white/80 hover:text-white transition-colors duration-300">News</a></li>
-                <li><a href="#faq" className="Poppins text-white/80 hover:text-white transition-colors duration-300">FAQs</a></li>
+                <li><Link href="/" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.home')}</Link></li>
+                <li><a href="/about" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.about')}</a></li>
+                <li><a href="/signup" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.join')}</a></li>
+                <li><a href="/blogs" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.news')}</a></li>
+                <li><a href="#faq" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.faqs')}</a></li>
               </ul>
             </div>
 
             {/* Column 3: Legal */}
             <div className="footer-column">
-              <h3 className="Space text-lg font-bold text-white mb-4 uppercase">Legal</h3>
+              <h3 className="Space text-lg font-bold text-white mb-4 uppercase">{t('footer.legal')}</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="Poppins text-white/80 hover:text-white transition-colors duration-300">Retailer T&Cs</a></li>
-                <li><a href="#" className="Poppins text-white/80 hover:text-white transition-colors duration-300">Privacy</a></li>
+                <li><a href="#" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.retailerTerms')}</a></li>
+                <li><a href="#" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.privacy')}</a></li>
               </ul>
             </div>
 
             {/* Column 4: Contact Us */}
             <div className="footer-column">
-              <h3 className="Space text-lg font-bold text-white mb-4 uppercase">Contact Us</h3>
+              <h3 className="Space text-lg font-bold text-white mb-4 uppercase">{t('footer.contact')}</h3>
               <div className="space-y-2">
                 <div>
-                  <span className="Poppins text-white/80">Address:</span>
-                  <p className="Poppins text-white/80">Swedenborgsgatan 12, 753 34 Uppsala, Sweden.</p>
+                  <span className="Poppins text-white/80">{t('footer.address')}</span>
+                  <p className="Poppins text-white/80">{t('footer.addressText')}</p>
                 </div>
                 <div>
                   <p className="Poppins text-white/80">+46 761 038 155</p>

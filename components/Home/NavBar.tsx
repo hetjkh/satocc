@@ -13,15 +13,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu, X, ExternalLink, Languages, ArrowUp, MoveUpRight } from "lucide-react";
 import { ModeToggle } from "../toggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { gsap } from "gsap";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
   const navRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonsRef = useRef<HTMLDivElement>(null);
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'ar' : 'en');
+  };
 
   useEffect(() => {
     // Hide navbar on admin pages
@@ -84,11 +90,11 @@ export default function Navbar() {
         <div className="flex justify-center items-center w-auto h-full">
         {/* Desktop Menu */}
         <div ref={menuRef} className="hidden w-auto Poppins font-medium lg:flex items-center justify-center gap-5 text-white">
-          <Link href="/" className="hover:text-primary transition">HOME</Link>
+          <Link href="/" className="hover:text-primary transition">{t('nav.home')}</Link>
 
           {/* About link + dropdown icon */}
           <div className="flex items-center gap-1">
-            <Link href="/about" className="hover:text-primary transition">ABOUT</Link>
+            <Link href="/about" className="hover:text-primary transition">{t('nav.about')}</Link>
             <DropdownMenu>
               <DropdownMenuTrigger className="hover:text-primary transition cursor-pointer">
                 <ArrowUp className="rotate-180 w-5 h-5" />
@@ -96,38 +102,42 @@ export default function Navbar() {
               <DropdownMenuContent className="left-20 rounded-xl bg-black/50 border-border/50 text-white p-5 backdrop-blur-lg">
                 <DropdownMenuItem asChild>
                   <Link href="/achievements" className="flex justify-between w-full">
-                    ACHIEVEMENTS <MoveUpRight className="w-4 h-4 text-green-500" />
+                    {t('nav.achievements')} <MoveUpRight className="w-4 h-4 text-green-500" />
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/partnership" className="flex justify-between w-full">
-                    PARTNERSHIP <MoveUpRight className="w-4 h-4 text-green-500" />
+                    {t('nav.partnership')} <MoveUpRight className="w-4 h-4 text-green-500" />
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/board" className="flex justify-between w-full">
-                    BOARD MEMBERS <MoveUpRight className="w-4 h-4 text-green-500" />
+                    {t('nav.boardMembers')} <MoveUpRight className="w-4 h-4 text-green-500" />
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
 
-          <Link href="/product" className="hover:text-primary transition">PRODUCT</Link>
-          <Link href="/signup" className="hover:text-primary transition">SIGN UP</Link>
-          <Link href="/blogs" className="hover:text-primary transition">BLOGS</Link>
+          <Link href="/product" className="hover:text-primary transition">{t('nav.product')}</Link>
+          <Link href="/signup" className="hover:text-primary transition">{t('nav.signup')}</Link>
+          <Link href="/blogs" className="hover:text-primary transition">{t('nav.blogs')}</Link>
         </div>
 
         {/* Right Side */}
         <div ref={buttonsRef} className="hidden lg:flex items-center w-auto ml-5 gap-2">
             <ModeToggle/>
-          <Button className="bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_30px] shadow-purple rounded-full transition-all duration-300 cursor-pointer hover:scale-110" size="icon">
+          <Button 
+            onClick={toggleLanguage}
+            className="bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_30px] shadow-purple rounded-full transition-all duration-300 cursor-pointer hover:scale-110" 
+            size="icon"
+          >
             <Languages className="h-5 w-5" />
           </Button>
-          <Button className="Space rounded-full text-md font-bold px-5 py-5 bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">FREE DEMO</Button>
+          <Button className="Space rounded-full text-md font-bold px-5 py-5 bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">{t('nav.freeDemo')}</Button>
           <Link href="https://app.satoccifinance.se/dashboard" target="_blank" rel="noopener noreferrer">
             <Button className="Space rounded-full text-md font-bold px-5 py-5 bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">
-              BUSINESS LOGIN
+              {t('nav.businessLogin')}
             </Button>
           </Link>
         </div>
@@ -145,32 +155,32 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div className="lg:hidden bg-background border-t border-border px-6 py-4 space-y-4">
-          <Link href="/" className="block">HOME</Link>
+          <Link href="/" className="block">{t('nav.home')}</Link>
 
           <details>
-            <summary className="cursor-pointer">ABOUT</summary>
+            <summary className="cursor-pointer">{t('nav.about')}</summary>
             <div className="ml-4 mt-2 space-y-2 text-sm">
               <Link href="/achievements" className="flex items-center gap-1">
-                ACHIEVEMENTS <ExternalLink className="w-4 h-4 text-green-500" />
+                {t('nav.achievements')} <ExternalLink className="w-4 h-4 text-green-500" />
               </Link>
               <Link href="/partnership" className="flex items-center gap-1">
-                PARTNERSHIP <ExternalLink className="w-4 h-4 text-green-500" />
+                {t('nav.partnership')} <ExternalLink className="w-4 h-4 text-green-500" />
               </Link>
               <Link href="/board" className="flex items-center gap-1">
-                BOARD MEMBERS <ExternalLink className="w-4 h-4 text-green-500" />
+                {t('nav.boardMembers')} <ExternalLink className="w-4 h-4 text-green-500" />
               </Link>
             </div>
           </details>
 
-          <Link href="/product" className="block">PRODUCT</Link>
-          <Link href="/signup" className="block">SIGN UP</Link>
-          <Link href="/blogs" className="block">BLOGS</Link>
+          <Link href="/product" className="block">{t('nav.product')}</Link>
+          <Link href="/signup" className="block">{t('nav.signup')}</Link>
+          <Link href="/blogs" className="block">{t('nav.blogs')}</Link>
 
           <div className="flex items-center gap-3 mt-6">
-            <Button className="rounded-full font-bold w-full">FREE DEMO</Button>
+            <Button className="rounded-full font-bold w-full">{t('nav.freeDemo')}</Button>
             <Link href="https://app.satoccifinance.se/dashboard" target="_blank" rel="noopener noreferrer" className="w-full">
               <Button className="rounded-full font-bold w-full" variant="outline">
-                BUSINESS LOGIN
+                {t('nav.businessLogin')}
               </Button>
             </Link>
           </div>

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, FileText, LogOut } from "lucide-react";
+import { MessageSquare, FileText, LogOut, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminDashboard() {
@@ -77,6 +77,26 @@ export default function AdminDashboard() {
               </CardContent>
             </Card>
           </Link>
+
+          {/* Team Members Management */}
+          <Link href="/admin/team">
+            <Card className="hover:shadow-lg transition-all cursor-pointer h-full">
+              <CardHeader>
+                <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Users className="w-6 h-6 text-green-500" />
+                </div>
+                <CardTitle>Team Members</CardTitle>
+                <CardDescription>
+                  Manage team members displayed on the About page
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button variant="outline" className="w-full">
+                  Manage Team
+                </Button>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         <div className="mt-12 p-6 bg-card rounded-lg border">
@@ -89,6 +109,10 @@ export default function AdminDashboard() {
             <div>
               <strong className="text-foreground">Customer Reviews:</strong> Add customer testimonials
               in three formats: text only, image with text, or video with text. Reviews appear on the homepage.
+            </div>
+            <div>
+              <strong className="text-foreground">Team Members:</strong> Add and manage team members
+              with their photos, titles, emails, and experience. Team members appear on the About page.
             </div>
           </div>
         </div>

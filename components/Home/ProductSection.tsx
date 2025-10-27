@@ -19,8 +19,7 @@ export default function ProductSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      if (!headerTitleRef.current || !headerDescRef.current) return;
-
+    
       // Ensure elements are visible by default
       gsap.set([headerTitleRef.current, headerDescRef.current], { opacity: 1 });
 

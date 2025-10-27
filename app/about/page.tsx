@@ -4,14 +4,29 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import MusicButton from "@/components/music/MusicButton";
 import Footer from "@/components/Footer";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { MoveUpRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+interface TeamMember {
+  _id: string;
+  name: string;
+  title: string;
+  email: string;
+  experience: string;
+  image: string;
+  order: number;
+  isActive: boolean;
+}
+
 export default function AboutPage() {
+  // State for team members
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loadingTeam, setLoadingTeam] = useState(true);
+
   // Hero refs
   const heroBadgeRef = useRef<HTMLButtonElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
@@ -34,6 +49,26 @@ export default function AboutPage() {
   // Team section refs
   const teamHeaderRef = useRef<HTMLDivElement>(null);
   const teamGridRef = useRef<HTMLDivElement>(null);
+
+  // Fetch team members from API
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        setLoadingTeam(true);
+        const response = await fetch("http://localhost:5000/api/team-members");
+        const data = await response.json();
+        if (data.success) {
+          setTeamMembers(data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch team members:", error);
+      } finally {
+        setLoadingTeam(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
 
 
   useEffect(() => {
@@ -362,8 +397,79 @@ export default function AboutPage() {
       </section>
 
       {/* Core Identity Section */}
-      <section ref={coreIdentityRef} className="flex justify-center items-center w-full py-20">
-        <div className="relative w-[95%] lg:w-full max-w-full pl-20">
+      <section ref={coreIdentityRef} className="flex justify-center items-center w-full py-12 sm:py-16 lg:py-20">
+        <div className="relative w-[95%] lg:w-full max-w-full px-4 sm:px-6 lg:pl-20">
+          {/* Mobile Layout - Card-based Design */}
+          <div className="lg:hidden">
+            <div className="space-y-6 sm:space-y-8">
+              {/* WHO WE ARE */}
+              <div className="bg-card border border-foreground/20 rounded-2xl p-6 sm:p-8 identity-item hover:shadow-lg transition-all duration-300">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-foreground text-background rounded-full flex items-center justify-center">
+                    <span className="text-lg sm:text-xl font-bold">01</span>
+                  </div>
+                  <h3 className="Space text-xl sm:text-2xl font-semibold uppercase identity-title">
+                    WHO WE ARE
+                  </h3>
+                </div>
+                <div className="h-px bg-foreground/20 mb-4 identity-line"></div>
+                <p className="Poppins text-sm sm:text-base font-normal text-foreground/80 leading-relaxed identity-description">
+                  We&apos;re driven by the everyday challenges shoppers and retailers face, turning technology into trust and ease, one payment at a time.
+                </p>
+              </div>
+
+              {/* WHAT WE BELIEVE */}
+              <div className="bg-card border border-foreground/20 rounded-2xl p-6 sm:p-8 identity-item hover:shadow-lg transition-all duration-300">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-foreground text-background rounded-full flex items-center justify-center">
+                    <span className="text-lg sm:text-xl font-bold">02</span>
+                  </div>
+                  <h3 className="Space text-xl sm:text-2xl font-semibold uppercase identity-title">
+                    WHAT WE BELIEVE
+                  </h3>
+                </div>
+                <div className="h-px bg-foreground/20 mb-4 identity-line"></div>
+                <p className="Poppins text-sm sm:text-base font-normal text-foreground/80 leading-relaxed identity-description">
+                  Our mission is to revolutionize the way people engage in transactions, simplifying the payment process through cutting-edge technology.
+                </p>
+              </div>
+
+              {/* OUR MISSION */}
+              <div className="bg-card border border-foreground/20 rounded-2xl p-6 sm:p-8 identity-item hover:shadow-lg transition-all duration-300">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-foreground text-background rounded-full flex items-center justify-center">
+                    <span className="text-lg sm:text-xl font-bold">03</span>
+                  </div>
+                  <h3 className="Space text-xl sm:text-2xl font-semibold uppercase identity-title">
+                    OUR MISSION
+                  </h3>
+                </div>
+                <div className="h-px bg-foreground/20 mb-4 identity-line"></div>
+                <p className="Poppins text-sm sm:text-base font-normal text-foreground/80 leading-relaxed identity-description">
+                  To simplify shopping by delivering faster, smarter, and greener checkout experiences for consumers and retailers worldwide.
+                </p>
+              </div>
+
+              {/* OUR VISION */}
+              <div className="bg-card border border-foreground/20 rounded-2xl p-6 sm:p-8 identity-item hover:shadow-lg transition-all duration-300">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-foreground text-background rounded-full flex items-center justify-center">
+                    <span className="text-lg sm:text-xl font-bold">04</span>
+                  </div>
+                  <h3 className="Space text-xl sm:text-2xl font-semibold uppercase identity-title">
+                    OUR VISION
+                  </h3>
+                </div>
+                <div className="h-px bg-foreground/20 mb-4 identity-line"></div>
+                <p className="Poppins text-sm sm:text-base font-normal text-foreground/80 leading-relaxed identity-description">
+                  To create a future where every store offers seamless shopping without lines, delays, or waste.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Layout - Original Design */}
+          <div className="hidden lg:block">
           <div className="space-y-12">
             {/* WHO WE ARE */}
             <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-24 identity-item">
@@ -439,6 +545,7 @@ export default function AboutPage() {
                   </p>
                 </div>
                 <div className="h-px bg-foreground/20 mt-6 absolute -left-[50vw] right-0 identity-line"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -446,10 +553,27 @@ export default function AboutPage() {
       </section>
 
       {/* Our Story Section */}
-      <section className="flex justify-center items-center w-full py-20">
-        <div className="relative w-[95%] lg:w-full max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div ref={storyContentRef}>
+      <section className="flex justify-center items-center w-full py-12 sm:py-16 lg:py-20">
+        <div className="relative w-[95%] lg:w-full max-w-7xl px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+            {/* Mobile Layout - Badge above image */}
+            <div className="lg:hidden order-1">
+              <Button ref={storyBadgeRef} className="Poppins rounded-full text-sm sm:text-base font-medium px-4 sm:px-5 py-4 sm:py-5 bg-transparent text-foreground border-2 border-foreground mb-4 sm:mb-6 hover:scale-105 hover:bg-foreground hover:text-background transition-all duration-300">
+                Our Journey
+              </Button>
+            </div>
+            
+            <div ref={storyImageRef} className="relative h-[300px] sm:h-[400px] lg:h-[500px] overflow-hidden rounded-3xl sm:rounded-4xl order-2 lg:order-2">
+              <Image
+                src="/signup.jpg"
+                alt="Satocci Team"
+                fill
+                className="object-cover hover:scale-110 transition-transform duration-700"
+              />
+            </div>
+            
+            {/* Desktop Layout - Full content */}
+            <div ref={storyContentRef} className="hidden lg:block lg:order-1">
               <Button ref={storyBadgeRef} className="Poppins rounded-full text-base lg:text-lg font-medium px-5 py-5 bg-transparent text-foreground border-2 border-foreground mb-6 hover:scale-105 hover:bg-foreground hover:text-background transition-all duration-300">
                 Our Journey
               </Button>
@@ -473,23 +597,163 @@ export default function AboutPage() {
                 </div>
               </Button>
             </div>
-            <div ref={storyImageRef} className="relative h-[500px] overflow-hidden rounded-4xl">
-              <Image
-                src="/signup.jpg"
-                alt="Satocci Team"
-                fill
-                className="object-cover hover:scale-110 transition-transform duration-700"
-              />
+            
+            {/* Mobile Layout - Content below image */}
+            <div ref={storyContentRef} className="lg:hidden order-3">
+              <h2 ref={storyTitleRef} className="Space text-2xl sm:text-3xl md:text-4xl uppercase font-semibold mb-4 sm:mb-6 leading-tight">
+                From Sweden to the World
+              </h2>
+              <p className="Poppins text-sm sm:text-base font-normal mb-4 sm:mb-6 text-foreground/80 leading-relaxed">
+                Satocci™ began as a vision to revolutionize retail technology. Despite initial challenges, 
+                including a &quot;no&quot; on Sweden&apos;s Dragon&apos;s Den, we persevered and transformed rejection into 
+                global success.
+              </p>
+              <p className="Poppins text-sm sm:text-base font-normal mb-6 sm:mb-8 text-foreground/80 leading-relaxed">
+                Today, we&apos;re scaling our retail tech solution across the Middle East and beyond, 
+                helping retailers create seamless, contactless shopping experiences that delight 
+                customers and drive business growth.
+              </p>
+              <Button className="Space rounded-full text-xs sm:text-sm font-bold px-3 sm:px-2 py-4 sm:py-5 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105">
+                <span className="ml-2 sm:ml-3">Learn More About Our Journey</span>
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-background text-foreground rounded-full flex items-center justify-center">
+                  <MoveUpRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                </div>
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
       {/* CEO Profile Section */}
-      <section className="flex justify-center items-center w-full py-16">
-        <div className="relative w-[95%] lg:w-full max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-            <div ref={ceoImageRef} className="relative h-[500px] overflow-hidden rounded-3xl">
+      <section className="flex justify-center items-center w-full py-12 sm:py-16 lg:py-16">
+        <div className="relative w-[95%] lg:w-full max-w-7xl px-4 sm:px-6">
+          {/* Mobile Layout - Split-Screen with Interactive Elements */}
+          <div className="lg:hidden">
+            {/* CEO Image - Top 60% */}
+            <div ref={ceoImageRef} className="relative h-[300px] sm:h-[350px] overflow-hidden rounded-2xl mb-6">
+              <Image
+                src="/team/melodi.png"
+                alt="Melodi Askelöf - CEO & Co-Founder"
+                fill
+                className="object-cover hover:scale-110 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+              <div className="absolute bottom-4 left-4 text-white">
+                <p className="Space text-sm font-bold uppercase mb-1">HELLO!</p>
+                <p className="Space text-lg font-bold uppercase mb-1">I'M MELODI ASKELÖF</p>
+                <p className="Poppins text-xs font-medium uppercase text-white/90">CEO & CO-FOUNDER</p>
+              </div>
+            </div>
+
+            {/* Interactive Content Sections */}
+            <div className="space-y-4">
+              {/* Bio Section */}
+              <div className="bg-card border border-foreground/20 rounded-xl p-5 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center justify-between cursor-pointer" onClick={() => {
+                  const content = document.getElementById('bio-content');
+                  const icon = document.getElementById('bio-icon');
+                  if (content && icon) {
+                    content.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180');
+                  }
+                }}>
+                  <h3 className="Space text-base font-semibold uppercase">About Melodi</h3>
+                  <div id="bio-icon" className="w-6 h-6 bg-foreground text-background rounded-full flex items-center justify-center transition-transform duration-300">
+                    <span className="text-xs">▼</span>
+                  </div>
+                </div>
+                <div id="bio-content" className="mt-4">
+                  <p className="Poppins text-sm text-foreground/80 leading-relaxed">
+                    With over 15+ years of experience across banking, finance, sales, marketing, and telecommunications, 
+                    Melodi brings visionary leadership to revolutionize retail technology.
+                  </p>
+                </div>
+              </div>
+
+              {/* Vision Section */}
+              <div className="bg-card border border-foreground/20 rounded-xl p-5 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center justify-between cursor-pointer" onClick={() => {
+                  const content = document.getElementById('vision-content');
+                  const icon = document.getElementById('vision-icon');
+                  if (content && icon) {
+                    content.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180');
+                  }
+                }}>
+                  <h3 className="Space text-base font-semibold uppercase">Her Vision</h3>
+                  <div id="vision-icon" className="w-6 h-6 bg-foreground text-background rounded-full flex items-center justify-center transition-transform duration-300">
+                    <span className="text-xs">▼</span>
+                  </div>
+                </div>
+                <div id="vision-content" className="hidden mt-4">
+                  <div className="space-y-3">
+                    <p className="Poppins text-sm text-foreground/80 leading-relaxed italic">
+                      "I've always believed in the power of trust, relationships, and innovation to transform industries."
+                    </p>
+                    <p className="Poppins text-sm text-foreground/80 leading-relaxed italic">
+                      "That's why I co-founded <strong>Satocci</strong> – to create a smarter, simpler, and more sustainable way to shop."
+                    </p>
+                    <p className="Poppins text-sm text-foreground/80 leading-relaxed italic">
+                      "Technology is about freedom. <strong>Satocci</strong>'s mission is to make checkout lines obsolete."
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Achievements Section */}
+              <div className="bg-card border border-foreground/20 rounded-xl p-5 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center justify-between cursor-pointer" onClick={() => {
+                  const content = document.getElementById('achievements-content');
+                  const icon = document.getElementById('achievements-icon');
+                  if (content && icon) {
+                    content.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180');
+                  }
+                }}>
+                  <h3 className="Space text-base font-semibold uppercase">Key Achievements</h3>
+                  <div id="achievements-icon" className="w-6 h-6 bg-foreground text-background rounded-full flex items-center justify-center transition-transform duration-300">
+                    <span className="text-xs">▼</span>
+                  </div>
+                </div>
+                <div id="achievements-content" className="hidden mt-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold">15+</span>
+                      </div>
+                      <div>
+                        <p className="Space text-sm font-semibold">Years of Experience</p>
+                        <p className="Poppins text-xs text-foreground/70">Banking, Finance, Sales, Marketing</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold">🌍</span>
+                      </div>
+                      <div>
+                        <p className="Space text-sm font-semibold">Global Mission</p>
+                        <p className="Poppins text-xs text-foreground/70">Connecting customers worldwide</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold">⚡</span>
+                      </div>
+                      <div>
+                        <p className="Space text-sm font-semibold">Future-Ready Retail</p>
+                        <p className="Poppins text-xs text-foreground/70">Making checkout lines obsolete</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Layout - Original Design */}
+          <div className="hidden lg:block">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+              <div ref={ceoImageRef} className="relative h-[500px] overflow-hidden rounded-3xl">
               <Image
                 src="/team/melodi.png"
                 alt="Melodi Askelöf - CEO & Co-Founder"
@@ -536,6 +800,7 @@ export default function AboutPage() {
                   <p className="Poppins text-sm text-foreground/80">
                     On a mission to make checkout lines obsolete with Scan & Pay.
                   </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -559,138 +824,35 @@ export default function AboutPage() {
             </div>
           </div>
           <div ref={teamGridRef} className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[
-              {
-                name: "Ashok Sahu",
-                title: "Chief Technology Officer",
-                email: "ashoksahu@satocci.com",
-                experience: "+12 years in Software Development, AI & Machine Learning.",
-                image: "/team/team2.jpg"
-              },
-              {
-                name: "Michael Rodriguez",
-                title: "Head of Product",
-                email: "michaelrodriguez@satocci.com",
-                experience: "+10 years in Product Strategy & User Experience Design.",
-                image: "/team/team3.jpg"
-              },
-              {
-                name: "Sarah Chen",
-                title: "Head of Engineering",
-                email: "sarahchen@satocci.com",
-                experience: "+8 years in Full-Stack Development & Cloud Architecture.",
-                image: "/team/team4.jpg"
-              },
-              {
-                name: "David Kim",
-                title: "Head of Business Development",
-                email: "davidkim@satocci.com",
-                experience: "+14 years in Strategic Partnerships & Global Expansion.",
-                image: "/team/team5.jpg"
-              },
-              {
-                name: "Emma Thompson",
-                title: "Head of Marketing",
-                email: "emmathompson@satocci.com",
-                experience: "+9 years in Digital Marketing & Brand Strategy.",
-                image: "/team/team6.jpg"
-              },
-              {
-                name: "James Wilson",
-                title: "Head of Operations",
-                email: "jameswilson@satocci.com",
-                experience: "+11 years in Operations Management & Process Optimization.",
-                image: "/team/team7.jpg"
-              },
-              {
-                name: "Lisa Anderson",
-                title: "Head of Customer Success",
-                email: "lisaanderson@satocci.com",
-                experience: "+8 years in Customer Relations & Support Management.",
-                image: "/team/team8.jpg"
-              },
-              {
-                name: "Robert Brown",
-                title: "Senior Software Engineer",
-                email: "robertbrown@satocci.com",
-                experience: "+7 years in Backend Development & API Design.",
-                image: "/team/team9.jpg"
-              },
-              {
-                name: "Maria Garcia",
-                title: "UX/UI Designer",
-                email: "mariagarcia@satocci.com",
-                experience: "+6 years in User Interface Design & User Experience.",
-                image: "/team/team10.jpg"
-              },
-              {
-                name: "Ahmed Hassan",
-                title: "DevOps Engineer",
-                email: "ahmedhassan@satocci.com",
-                experience: "+9 years in Cloud Infrastructure & Deployment.",
-                image: "/team/team11.jpg"
-              },
-              {
-                name: "Jennifer Lee",
-                title: "Data Scientist",
-                email: "jenniferlee@satocci.com",
-                experience: "+10 years in Machine Learning & Data Analytics.",
-                image: "/team/team12.jpg"
-              },
-              {
-                name: "Carlos Martinez",
-                title: "Frontend Developer",
-                email: "carlosmartinez@satocci.com",
-                experience: "+5 years in React, TypeScript & Modern Web Technologies.",
-                image: "/team/team13.jpg"
-              },
-              {
-                name: "Priya Sharma",
-                title: "Quality Assurance Lead",
-                email: "priyasharma@satocci.com",
-                experience: "+8 years in Software Testing & Quality Assurance.",
-                image: "/team/team14.jpg"
-              },
-              {
-                name: "Thomas Johnson",
-                title: "Security Engineer",
-                email: "thomasjohnson@satocci.com",
-                experience: "+12 years in Cybersecurity & Information Security.",
-                image: "/team/team15.jpg"
-              },
-              {
-                name: "Fatima Al-Rashid",
-                title: "Business Analyst",
-                email: "fatimaalrashid@satocci.com",
-                experience: "+7 years in Business Process Analysis & Strategy.",
-                image: "/team/team16.jpg"
-              },
-              {
-                name: "Kevin O'Connor",
-                title: "Mobile App Developer",
-                email: "kevinoconnor@satocci.com",
-                experience: "+6 years in iOS & Android Development.",
-                image: "/team/team17.jpg"
-              }
-            ].map((member, index) => (
-              <div key={index} className="bg-card border border-foreground/20 rounded-2xl p-5 shadow-lg hover:shadow-2xl hover:scale-[1.05] transition-all duration-500 group">
-                <div className="relative mb-5">
-                  <div className="w-full h-72 bg-foreground/10 rounded-xl overflow-hidden">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      width={300}
-                      height={288}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                </div>
-                <h3 className="Space text-xl font-bold mb-2 text-foreground">{member.name}</h3>
-                <p className="Poppins text-sm font-semibold text-foreground/80 mb-2">{member.title}</p>
-                <p className="Poppins text-xs text-foreground/70 mb-3">{member.email}</p>
-                <p className="Poppins text-xs text-foreground/80 leading-relaxed">{member.experience}</p>
+            {loadingTeam ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-foreground/60">Loading team members...</p>
               </div>
-            ))}
+            ) : teamMembers.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-foreground/60">No team members to display.</p>
+              </div>
+            ) : (
+              teamMembers.map((member) => (
+                <div key={member._id} className="bg-card border border-foreground/20 rounded-2xl p-5 shadow-lg hover:shadow-2xl hover:scale-[1.05] transition-all duration-500 group">
+                  <div className="relative mb-5">
+                    <div className="w-full h-72 bg-foreground/10 rounded-xl overflow-hidden">
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        width={300}
+                        height={288}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                  </div>
+                  <h3 className="Space text-xl font-bold mb-2 text-foreground">{member.name}</h3>
+                  <p className="Poppins text-sm font-semibold text-foreground/80 mb-2">{member.title}</p>
+                  <p className="Poppins text-xs text-foreground/70 mb-3">{member.email}</p>
+                  <p className="Poppins text-xs text-foreground/80 leading-relaxed">{member.experience}</p>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>

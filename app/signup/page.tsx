@@ -649,41 +649,14 @@ export default function Home() {
               )}
             </form>
           </div>
-          <div ref={imageRef} className="relative w-full lg:w-1/2 h-auto rounded-2xl mt-12 lg:mt-18">
-            <div className="flex flex-col gap-5 lg:gap-6 justify-center">
-              {/* Step 1 */}
-              <div className="bg-card border border-foreground/20 rounded-2xl p-5 lg:p-6 hover:shadow-lg transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-foreground text-background Space font-bold shrink-0 aspect-square">1</div>
-                  <div>
-                    <p className="Space text-lg lg:text-xl font-semibold text-foreground">Contact Us</p>
-                    <p className="Poppins text-sm lg:text-base text-foreground/70 leading-relaxed mt-1">Tell us more about your store, your customers, and how you operate.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 2 */}
-              <div className="bg-card border border-foreground/20 rounded-2xl p-5 lg:p-6 hover:shadow-lg transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-foreground text-background Space font-bold shrink-0 aspect-square">2</div>
-                  <div>
-                    <p className="Space text-lg lg:text-xl font-semibold text-foreground">Live Demo & Onboarding</p>
-                    <p className="Poppins text-sm lg:text-base text-foreground/70 leading-relaxed mt-1">We will ensure that your inventories are in sync and that your team is trained to start.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 3 */}
-              <div className="bg-card border border-foreground/20 rounded-2xl p-5 lg:p-6 hover:shadow-lg transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-foreground text-background Space font-bold shrink-0 aspect-square">3</div>
-                  <div>
-                    <p className="Space text-lg lg:text-xl font-semibold text-foreground">Continuous Improvement</p>
-                    <p className="Poppins text-sm lg:text-base text-foreground/70 leading-relaxed mt-1">We work closely with you even after launch gathering feedback and updating features.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div ref={imageRef} className="relative w-full lg:w-1/2 h-[280px] sm:h-[330px] lg:h-[380px] rounded-2xl mt-12 lg:mt-18">
+            <Image
+              src="/signup.jpg"
+              alt="Satocci Signup"
+              width={400}
+              height={300}
+              className="w-full h-full rounded-2xl object-cover hover:scale-105 transition-transform duration-700"
+            />
           </div>
         </div>
       </section>
