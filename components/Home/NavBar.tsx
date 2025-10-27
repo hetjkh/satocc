@@ -176,7 +176,19 @@ export default function Navbar() {
           <Link href="/signup" className="block">{t('nav.signup')}</Link>
           <Link href="/blogs" className="block">{t('nav.blogs')}</Link>
 
-          <div className="flex items-center gap-3 mt-6">
+          {/* Mobile Controls */}
+          <div className="flex items-center justify-center gap-3 mt-6 mb-4">
+            <ModeToggle/>
+            <Button 
+              onClick={toggleLanguage}
+              className="bg-white text-black hover:bg-purple hover:text-white hover:shadow-[0_0px_30px] shadow-purple rounded-full transition-all duration-300 cursor-pointer hover:scale-110" 
+              size="icon"
+            >
+              <Languages className="h-5 w-5" />
+            </Button>
+          </div>
+
+          <div className="flex items-center gap-3">
             <Button className="rounded-full font-bold w-full">{t('nav.freeDemo')}</Button>
             <Link href="https://app.satoccifinance.se/dashboard" target="_blank" rel="noopener noreferrer" className="w-full">
               <Button className="rounded-full font-bold w-full" variant="outline">
