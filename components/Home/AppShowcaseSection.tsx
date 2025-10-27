@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MoveUpRight } from "lucide-react";
 import { useEffect, useRef } from "react";
@@ -120,16 +119,21 @@ export default function AppShowcaseSection() {
             </div>
           </div>
 
-          {/* Right Side - Image */}
+          {/* Right Side - Video */}
           <div className="w-full lg:w-1/2 flex justify-center lg:justify-end order-1 lg:order-2">
-             <div ref={imageRef} className="relative w-full max-w-md sm:max-w-lg lg:max-w-lg xl:max-w-lg">
-              <Image
-                src="/apphand.png"
-                alt="Satocci in action - seamless shopping experience"
-                width={600}
-                height={600}
-                className="object-contain w-full h-auto"
-                priority
+             <div ref={imageRef} className="relative w-full max-w-md sm:max-w-lg lg:max-w-lg xl:max-w-lg" style={{ backgroundColor: 'transparent' }}>
+              <img
+                src="/customer-journey-SR-1-unscreen.gif"
+                alt="Satocci customer journey"
+                className="w-full h-auto rounded-lg"
+                style={{ 
+                  backgroundColor: 'transparent !important',
+                  background: 'none !important',
+                  backgroundImage: 'none !important',
+                  backgroundSize: 'none !important',
+                  backgroundRepeat: 'no-repeat !important',
+                  backgroundPosition: 'unset !important'
+                }}
               />
             </div>
           </div>

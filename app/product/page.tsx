@@ -6,10 +6,12 @@ import Footer from "@/components/Footer";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ProductPage() {
+  const { t } = useLanguage();
   // Hero section refs
   const heroBadgeRef = useRef<HTMLButtonElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
@@ -69,20 +71,23 @@ export default function ProductPage() {
         <div className="relative flex justify-between items-end w-[95%] lg:w-full mb-10 max-w-7xl">
           <div className="w-full lg:w-[50%] justify-start items-start text-left">
             <Button ref={heroBadgeRef} className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 bg-transparent text-foreground border-2 border-foreground mb-5 hover:scale-105 transition-transform duration-300">
-              Products & Features
+              {t('product.hero.badge')}
             </Button>
             <h1 ref={heroTitleRef} className="Space text-4xl lg:text-5xl uppercase font-semibold mb-5 lg:mb-0">
-              SATOCCI PRODUCTS &<br />
-              FEATURES FOR MODERN<br />
-              RETAIL SOLUTIONS
+              {t('product.hero.title').split('\n').map((line, index) => (
+                <span key={index}>
+                  {line}
+                  {index < t('product.hero.title').split('\n').length - 1 && <br />}
+                </span>
+              ))}
             </h1>
             <p ref={heroDescRef} className="block lg:hidden Poppins text-sm font-medium mb-8">
-              Revolutionize your shopping experience with our innovative payment solutions and smart features designed to make every transaction seamless and effortless.
+              {t('product.hero.description')}
             </p>
           </div>
           <div className="hidden lg:block w-[40%] justify-start items-end text-left">
             <p ref={heroDescRef} className="Poppins text-md font-normal mb-8">
-              Revolutionize your shopping experience with our innovative payment solutions and smart features designed to make every transaction seamless and effortless.
+              {t('product.hero.description')}
             </p>
           </div>
         </div>

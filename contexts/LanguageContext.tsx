@@ -190,6 +190,52 @@ const translations = {
     'signup.form.submitting': 'Submitting...',
     'signup.form.success': 'Form submitted successfully! We will get in touch with you soon.',
     'signup.form.error': 'Error submitting form. Please try again.',
+
+    // Product Page
+    'product.hero.badge': 'Products & Features',
+    'product.hero.title': 'SATOCCI PRODUCTS &\nFEATURES FOR MODERN\nRETAIL SOLUTIONS',
+    'product.hero.description': 'Revolutionize your shopping experience with our innovative payment solutions and smart features designed to make every transaction seamless and effortless.',
+    
+    'product.feature1.title': 'Offer Your Shoppers Flexible Payments with Tabby & Satocci',
+    'product.feature1.point1': 'Enable customers to split payments into manageable installments.',
+    'product.feature1.point2': 'Enhance shopping convenience and improve the overall customer experience.',
+    'product.feature1.point3': 'Boost sales conversions by offering a more accessible payment option.',
+    'product.feature1.cardTitle': 'SPLIT PAYMENT OPTIONS',
+    'product.feature1.cardPoint1': 'Real-time tracking',
+    'product.feature1.cardPoint2': 'Secure payments',
+    'product.feature1.cardPoint3': 'Instant notifications',
+    
+    'product.feature2.title': 'Skip The Line and Shop Smart',
+    'product.feature2.point1': 'Skip the line and shop smart with our streamlined online shopping experience.',
+    'product.feature2.point2': 'Avoid the hassle of queues and crowded stores.',
+    'product.feature2.point3': 'Enjoy fast, easy, and secure purchasing.',
+    'product.feature2.point4': 'Get your products delivered right to you, saving time and effort.',
+    'product.feature2.cardTitle': 'SMART SHOPPING',
+    'product.feature2.cardPoint1': 'Store locator',
+    'product.feature2.cardPoint2': 'Real-time inventory',
+    'product.feature2.cardPoint3': 'Quick checkout',
+    
+    'product.feature3.title': 'Latest Transactions',
+    'product.feature3.point1': 'Manage and view the latest transactions on behalf of Satocci in real-time.',
+    'product.feature3.point2': 'Stay up-to-date with customer payments and purchase history.',
+    'product.feature3.point3': 'Easily track sales, refunds, and payment status through an intuitive dashboard.',
+    'product.feature3.point4': 'Ensure smooth transaction flow and customer satisfaction with detailed reporting.',
+    'product.feature3.cardTitle': 'REAL-TIME TRACKING',
+    'product.feature3.cardPoint1': 'Transaction history',
+    'product.feature3.cardPoint2': 'Payment analytics',
+    'product.feature3.cardPoint3': 'Dashboard insights',
+    
+    'product.feature4.title': 'Scan & Pay',
+    'product.feature4.point1': 'Simplify payments with Scan & Pay for a seamless shopping experience.',
+    'product.feature4.point2': 'Customers can quickly complete transactions by scanning a QR code.',
+    'product.feature4.point3': 'Eliminate the need for cash or cards, offering secure and contactless payments.',
+    'product.feature4.point4': 'Speed up checkout processes, enhancing customer convenience and satisfaction.',
+    'product.feature4.cardTitle': 'QUICK QR PAYMENTS',
+    'product.feature4.cardPoint1': 'QR code scanning',
+    'product.feature4.cardPoint2': 'Contactless payments',
+    'product.feature4.cardPoint3': 'Instant processing',
+    
+    'product.downloadButton': 'DOWNLOAD APP',
   },
   ar: {
     // Homepage
@@ -367,6 +413,52 @@ const translations = {
     'signup.form.submitting': 'جاري الإرسال...',
     'signup.form.success': 'تم إرسال النموذج بنجاح! سنتواصل معك قريبًا.',
     'signup.form.error': 'خطأ في إرسال النموذج. يرجى المحاولة مرة أخرى.',
+
+    // Product Page
+    'product.hero.badge': 'المنتجات والميزات',
+    'product.hero.title': 'منتجات وميزات ساتوتشي\nلحلول البيع بالتجزئة الحديثة',
+    'product.hero.description': 'أحدث ثورة في تجربة التسوق الخاصة بك مع حلول الدفع المبتكرة والميزات الذكية المصممة لجعل كل معاملة سلسة وبلا جهد.',
+    
+    'product.feature1.title': 'قدم لعملائك مدفوعات مرنة مع تابي و ساتوتشي',
+    'product.feature1.point1': 'تمكين العملاء من تقسيم المدفوعات إلى أقساط قابلة للإدارة.',
+    'product.feature1.point2': 'تحسين راحة التسوق وتحسين تجربة العملاء الشاملة.',
+    'product.feature1.point3': 'زيادة تحويلات المبيعات من خلال تقديم خيار دفع أكثر سهولة.',
+    'product.feature1.cardTitle': 'خيارات الدفع المقسم',
+    'product.feature1.cardPoint1': 'تتبع في الوقت الفعلي',
+    'product.feature1.cardPoint2': 'مدفوعات آمنة',
+    'product.feature1.cardPoint3': 'إشعارات فورية',
+    
+    'product.feature2.title': 'تخطى الطابور وتسوق بذكاء',
+    'product.feature2.point1': 'تخطى الطابور وتسوق بذكاء مع تجربة التسوق عبر الإنترنت المبسطة.',
+    'product.feature2.point2': 'تجنب إزعاج الطوابير والمتاجر المزدحمة.',
+    'product.feature2.point3': 'استمتع بالشراء السريع والسهل والآمن.',
+    'product.feature2.point4': 'احصل على منتجاتك مُسلمة إليك مباشرة، مما يوفر الوقت والجهد.',
+    'product.feature2.cardTitle': 'تسوق ذكي',
+    'product.feature2.cardPoint1': 'موقع المتجر',
+    'product.feature2.cardPoint2': 'مخزون في الوقت الفعلي',
+    'product.feature2.cardPoint3': 'دفع سريع',
+    
+    'product.feature3.title': 'أحدث المعاملات',
+    'product.feature3.point1': 'إدارة وعرض أحدث المعاملات نيابة عن ساتوتشي في الوقت الفعلي.',
+    'product.feature3.point2': 'ابق محدثًا مع مدفوعات العملاء وتاريخ الشراء.',
+    'product.feature3.point3': 'تتبع بسهولة المبيعات والاستردادات وحالة الدفع من خلال لوحة تحكم بديهية.',
+    'product.feature3.point4': 'ضمان تدفق المعاملات السلس ورضا العملاء مع التقارير التفصيلية.',
+    'product.feature3.cardTitle': 'تتبع في الوقت الفعلي',
+    'product.feature3.cardPoint1': 'تاريخ المعاملات',
+    'product.feature3.cardPoint2': 'تحليلات الدفع',
+    'product.feature3.cardPoint3': 'رؤى لوحة التحكم',
+    
+    'product.feature4.title': 'امسح وادفع',
+    'product.feature4.point1': 'تبسيط المدفوعات مع امسح وادفع لتجربة تسوق سلسة.',
+    'product.feature4.point2': 'يمكن للعملاء إكمال المعاملات بسرعة عن طريق مسح رمز QR.',
+    'product.feature4.point3': 'إلغاء الحاجة للنقود أو البطاقات، وتقديم مدفوعات آمنة ولا تلامس.',
+    'product.feature4.point4': 'تسريع عمليات الدفع، مما يعزز راحة العملاء ورضاهم.',
+    'product.feature4.cardTitle': 'مدفوعات QR سريعة',
+    'product.feature4.cardPoint1': 'مسح رمز QR',
+    'product.feature4.cardPoint2': 'مدفوعات لا تلامس',
+    'product.feature4.cardPoint3': 'معالجة فورية',
+    
+    'product.downloadButton': 'تحميل التطبيق',
   }
 };
 
