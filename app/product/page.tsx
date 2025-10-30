@@ -1,12 +1,14 @@
 "use client";
 
 import ProductSection from "@/components/Home/ProductSection";
+import ProductBenefits from "@/components/Home/ProductBenefits";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { useLanguage } from "@/contexts/LanguageContext";
+import CircularGallery from './CircularGallery'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +18,8 @@ export default function ProductPage() {
   const heroBadgeRef = useRef<HTMLButtonElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroDescRef = useRef<HTMLParagraphElement>(null);
+  // Gallery pin ref
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   // GSAP Animations
   useEffect(() => {
@@ -47,6 +51,25 @@ export default function ProductPage() {
         );
       }
     });
+
+    return () => ctx.revert();
+  }, []);
+
+  // Pin the gallery section on desktop like signup page steps
+  useEffect(() => {
+    const isLargeScreen = typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
+    if (!isLargeScreen || !galleryRef.current) return;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: galleryRef.current,
+        start: 'top top',
+        end: '+=150%',
+        scrub: 1,
+        pin: true,
+        pinSpacing: true,
+      });
+    }, galleryRef);
 
     return () => ctx.revert();
   }, []);
@@ -95,6 +118,37 @@ export default function ProductPage() {
 
       {/* Product Features */}
       <ProductSection />
+
+      {/* Cashback/Benefits Section */}
+      <ProductBenefits />
+
+      {/* Card Showcase Section */}
+      <section className="relative w-full py-20 bg-transparent" ref={galleryRef}>
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="Space text-4xl lg:text-5xl font-bold mb-6 text-foreground">
+              {t('product.gallery.title') || 'Choose Your Card'}
+            </h2>
+            <p className="Poppins text-xl text-muted-foreground max-w-3xl mx-auto">
+              {t('product.gallery.description') || 'Select from our range of virtual cards designed for every need'}
+            </p>
+          </div>
+          <div style={{ height: '700px', position: 'relative', overflow: 'visible', paddingBottom: '120px' }}>
+            <CircularGallery 
+              bend={2} 
+              textColor="#000000" 
+              borderRadius={0.15} 
+              scrollEase={0.1}
+              scrollSpeed={2}
+              items={[
+                { image: '/scan.png', text: 'Scan & Shop' },
+                { image: '/pay.png', text: 'Pay Instantly' },
+                { image: '/go.png', text: 'Ready to Go' }
+              ]}
+            />
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <Footer />

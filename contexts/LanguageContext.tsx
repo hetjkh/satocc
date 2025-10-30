@@ -235,7 +235,19 @@ const translations = {
     'product.feature4.cardPoint2': 'Contactless payments',
     'product.feature4.cardPoint3': 'Instant processing',
     
+    // Product Gallery
+    'product.gallery.title': 'Choose Your Card',
+    'product.gallery.description': 'Select from our range of virtual cards designed for every need',
+
     'product.downloadButton': 'DOWNLOAD APP',
+    // Product Benefits
+    'product.benefits.title': 'CASHBACK',
+    'product.benefits.instant.title': 'INSTANT CARD ACCESS',
+    'product.benefits.instant.desc': 'Apply and get your card ready to use in minutes. Start spending right away, no delays.',
+    'product.benefits.cashback.title': 'CASHBACK REWARDS',
+    'product.benefits.cashback.desc': 'Earn 5% cashback on every purchase, online or in‑store. Save more as you spend smarter.',
+    'product.benefits.security.title': 'SECURE TRANSACTIONS ALWAYS',
+    'product.benefits.security.desc': 'Every payment is protected with bank‑level encryption and advanced security protocols.',
   },
   ar: {
     // Homepage
@@ -458,7 +470,19 @@ const translations = {
     'product.feature4.cardPoint2': 'مدفوعات لا تلامس',
     'product.feature4.cardPoint3': 'معالجة فورية',
     
+    // Product Gallery
+    'product.gallery.title': 'اختر بطاقتك',
+    'product.gallery.description': 'اختر من مجموعتنا من البطاقات الافتراضية المصممة لكل احتياج',
+
     'product.downloadButton': 'تحميل التطبيق',
+    // Product Benefits
+    'product.benefits.title': 'استرداد نقدي',
+    'product.benefits.instant.title': 'وصول فوري للبطاقة',
+    'product.benefits.instant.desc': 'قدّم الطلب واحصل على بطاقتك جاهزة للاستخدام خلال دقائق. ابدأ الإنفاق فورًا بدون تأخير.',
+    'product.benefits.cashback.title': 'مكافآت الاسترداد النقدي',
+    'product.benefits.cashback.desc': 'اكسب 5٪ استرداد نقدي على كل عملية شراء، عبر الإنترنت أو في المتجر. وفر أكثر كلما أنفقت بذكاء.',
+    'product.benefits.security.title': 'معاملات آمنة دائمًا',
+    'product.benefits.security.desc': 'كل عملية دفع محمية بتشفير على مستوى البنوك وبروتوكولات أمان متقدمة.',
   }
 };
 

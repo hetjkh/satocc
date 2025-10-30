@@ -4,7 +4,6 @@ import NavBar from "@/components/Home/NavBar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Background from "@/components/Home/Particles";
-import LenisWrapper from "@/components/LenisWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -84,22 +83,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
-        <LenisWrapper>
-          <ThemeProvider
-            attribute="class" // adds `class="dark"` or `class="light"` on <html>
-            defaultTheme="system" // can be "light" | "dark" | "system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <LanguageProvider>
-              <Background />
-              <NavBar />
-              <div className="w-full overflow-x-hidden">
-                {children}
-              </div>
-            </LanguageProvider>
-          </ThemeProvider>
-        </LenisWrapper>
+        <ThemeProvider
+          attribute="class" // adds `class="dark"` or `class="light"` on <html>
+          defaultTheme="system" // can be "light" | "dark" | "system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LanguageProvider>
+            <Background />
+            <NavBar />
+            <div className="w-full overflow-x-hidden">
+              {children}
+            </div>
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
