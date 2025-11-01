@@ -264,10 +264,10 @@ export default function Footer() {
               <h3 className="Space text-lg font-bold text-white mb-4 uppercase">{t('footer.landingPages')}</h3>
               <ul className="space-y-2">
                 <li><Link href="/" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.home')}</Link></li>
-                <li><a href="/about" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.about')}</a></li>
-                <li><a href="/signup" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.join')}</a></li>
-                <li><a href="/blogs" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.news')}</a></li>
-                <li><a href="#faq" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.faqs')}</a></li>
+                <li><Link href="/about" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.about')}</Link></li>
+                <li><Link href="/product" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.product')}</Link></li>
+                <li><Link href="/signup" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.join')}</Link></li>
+                <li><Link href="/blogs" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.news')}</Link></li>
               </ul>
             </div>
 
@@ -275,8 +275,8 @@ export default function Footer() {
             <div className="footer-column">
               <h3 className="Space text-lg font-bold text-white mb-4 uppercase">{t('footer.legal')}</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.retailerTerms')}</a></li>
-                <li><a href="#" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.privacy')}</a></li>
+                <li><Link href="/terms" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.retailerTerms')}</Link></li>
+                <li><Link href="/privacy" className="Poppins text-white/80 hover:text-white transition-colors duration-300">{t('footer.privacy')}</Link></li>
               </ul>
             </div>
 
