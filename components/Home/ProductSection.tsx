@@ -301,7 +301,7 @@ export default function ProductSection() {
             <div ref={mobile2Ref} className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 -translate-x-48 z-10">
               <div className="relative w-[600px] h-[1100px]">
                 <Image
-                  src="/1.png"
+                  src="/3.png"
                   alt="Satocci Mobile App - Smart Shopping"
                   fill
                   className="object-contain"

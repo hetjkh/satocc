@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
         muted
         playsInline
       >
-        <source src="/Videos/home.mp4" type="video/mp4" />
+        <source src="/car.mp4" type="video/mp4" />
       </video>
       <div className="absolute top-0 left-0 w-full h-full bg-background/80 backdrop-blur-sm"></div>
 

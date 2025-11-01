@@ -6,20 +6,15 @@ import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { useLanguage } from "@/contexts/LanguageContext";
 import CircularGallery from './CircularGallery'
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function ProductPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   // Hero section refs
   const heroBadgeRef = useRef<HTMLButtonElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroDescRef = useRef<HTMLParagraphElement>(null);
-  // Gallery pin ref
-  const galleryRef = useRef<HTMLDivElement>(null);
 
   // GSAP Animations
   useEffect(() => {
@@ -55,25 +50,6 @@ export default function ProductPage() {
     return () => ctx.revert();
   }, []);
 
-  // Pin the gallery section on desktop like signup page steps
-  useEffect(() => {
-    const isLargeScreen = typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
-    if (!isLargeScreen || !galleryRef.current) return;
-
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: galleryRef.current,
-        start: 'top top',
-        end: '+=150%',
-        scrub: 1,
-        pin: true,
-        pinSpacing: true,
-      });
-    }, galleryRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <div className="w-full min-h-screen bg-transparent text-foreground">
       {/* Hero Section with Video */}
@@ -87,7 +63,7 @@ export default function ProductPage() {
           muted
           playsInline
         >
-          <source src="/Videos/home.mp4" type="video/mp4" />
+          <source src="/car.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent from-[50%] via-background/50 via-[75%] to-background to-[100%]"></div>
@@ -123,7 +99,7 @@ export default function ProductPage() {
       <ProductBenefits />
 
       {/* Card Showcase Section */}
-      <section className="relative w-full py-20 bg-transparent" ref={galleryRef}>
+      <section className="relative w-full py-20 bg-transparent">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="Space text-4xl lg:text-5xl font-bold mb-6 text-foreground">
@@ -133,17 +109,17 @@ export default function ProductPage() {
               {t('product.gallery.description') || 'Select from our range of virtual cards designed for every need'}
             </p>
           </div>
-          <div style={{ height: '700px', position: 'relative', overflow: 'visible', paddingBottom: '120px' }}>
+          <div style={{ height: '800px', position: 'relative', overflow: 'visible', paddingBottom: '120px' }}>
             <CircularGallery 
+              key={language}
               bend={2} 
-              textColor="#000000" 
               borderRadius={0.15} 
               scrollEase={0.1}
               scrollSpeed={2}
               items={[
-                { image: '/scan.png', text: 'Scan & Shop' },
-                { image: '/pay.png', text: 'Pay Instantly' },
-                { image: '/go.png', text: 'Ready to Go' }
+                { image: '/scan.png', text: t('product.gallery.item1') },
+                { image: '/pay.png', text: t('product.gallery.item2') },
+                { image: '/go.png', text: t('product.gallery.item3') }
               ]}
             />
           </div>

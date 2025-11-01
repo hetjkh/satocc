@@ -5,6 +5,14 @@ import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { 
+  Zap, Clock, Rocket,
+  FileText, FolderOpen, CheckCircle,
+  Gift, Star, TrendingUp,
+  DollarSign, PieChart, Wallet,
+  Shield, Lock, Eye,
+  History, Calendar, List
+} from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,37 +24,43 @@ export default function FeaturesSection() {
       title: t('features.freedom.title'),
       description: t('features.freedom.description'),
       image: "/extra/1.jpg",
-      alt: "Freedom from Waiting"
+      alt: "Freedom from Waiting",
+      icons: [Zap, Clock, Rocket]
     },
     {
       title: t('features.receipts.title'),
       description: t('features.receipts.description'),
       image: "/extra/3.jpg",
-      alt: "Smart Receipts"
+      alt: "Smart Receipts",
+      icons: [FileText, FolderOpen, CheckCircle]
     },
     {
       title: t('features.rewards.title'),
       description: t('features.rewards.description'),
       image: "/extra/5.jpg",
-      alt: "Instant Rewards"
+      alt: "Instant Rewards",
+      icons: [Gift, Star, TrendingUp]
     },
     {
       title: t('features.budget.title'),
       description: t('features.budget.description'),
       image: "/extra/6.jpg",
-      alt: "Budget Tracking"
+      alt: "Budget Tracking",
+      icons: [DollarSign, PieChart, Wallet]
     },
     {
       title: t('features.security.title'),
       description: t('features.security.description'),
       image: "/extra/4.jpg",
-      alt: "Secure Payments"
+      alt: "Secure Payments",
+      icons: [Shield, Lock, Eye]
     },
     {
       title: t('features.history.title'),
       description: t('features.history.description'),
       image: "/extra/2.png",
-      alt: "Shopping History"
+      alt: "Shopping History",
+      icons: [History, Calendar, List]
     }
   ];
 
@@ -99,7 +113,7 @@ export default function FeaturesSection() {
           if (index === 0) {
             // First card is present from the start at stack position 0
             const y = 0 * offsetStep;
-            gsap.set(card, { y, opacity: 1, scale: 1 });
+            gsap.set(card, { y, opacity: 1, scale: 1, pointerEvents: 'auto' });
             return;
           }
 
@@ -115,8 +129,9 @@ export default function FeaturesSection() {
           const y = gsap.utils.interpolate(yStart, yStack, local);
           const opacity = local;
           const scale = gsap.utils.interpolate(0.98, 1, local);
+          const pointerEvents = opacity === 1 ? 'auto' : 'none';
 
-          gsap.set(card, { y, opacity, scale });
+          gsap.set(card, { y, opacity, scale, pointerEvents });
         });
       }
     });
@@ -160,27 +175,36 @@ export default function FeaturesSection() {
                 willChange: "transform, opacity"
               }}
             >
-              <div className="bg-card rounded-3xl shadow-2xl overflow-hidden w-full max-w-5xl">
+              <div className="bg-card rounded-3xl shadow-2xl overflow-hidden w-full max-w-6xl">
                 <div className="flex flex-col sm:flex-row">
                   {/* Image Left */}
-                  <div className="relative w-full sm:w-1/2 h-[260px] sm:h-[380px]">
-                    <Image
-                      src={feature.image}
-                      alt={feature.alt}
-                      fill
-                      className="object-cover"
-                    />
+                  <div className="relative w-full sm:w-1/2 h-[300px] sm:h-[450px] p-6 sm:p-8">
+                    <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                      <Image
+                        src={feature.image}
+                        alt={feature.alt}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                   </div>
 
                   {/* Text Right */}
-                  <div className="w-full sm:w-1/2 p-6 sm:p-8 flex items-center">
+                  <div className="w-full sm:w-1/2 p-6 sm:p-8 lg:p-12 flex items-center">
                     <div>
                       <h3 className="Space text-2xl sm:text-3xl font-bold text-foreground mb-4">
                         {feature.title}
                       </h3>
-                      <p className="Poppins text-base sm:text-lg text-muted-foreground leading-relaxed">
+                      <p className="Poppins text-base sm:text-lg text-muted-foreground leading-relaxed mb-6">
                         {feature.description}
                       </p>
+                      <div className="flex items-center gap-6 mt-16">
+                        {feature.icons.map((Icon, iconIndex) => (
+                          <div key={iconIndex} className="w-12 h-12 bg-foreground/10 hover:bg-purple hover:shadow-[0_0px_20px] shadow-purple rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer hover:scale-110">
+                            <Icon className="w-6 h-6 text-foreground hover:text-white transition-all duration-300" />
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

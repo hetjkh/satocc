@@ -107,13 +107,13 @@ export default function AppShowcaseSection() {
                 {t('app.title')}
               </h2>
               
-              <p ref={descRef} className="Poppins text-sm sm:text-base lg:text-base font-medium max-w-xl mb-8 lg:mb-12 text-muted-foreground leading-relaxed">
+              <p ref={descRef} className="Poppins text-sm sm:text-base lg:text-base font-medium max-w-xl mb-16 lg:mb-20 text-muted-foreground leading-relaxed">
                 {t('app.description')}
               </p>
-              <Button ref={buttonRef} className="Space rounded-full text-sm sm:text-base lg:text-base font-bold px-4 sm:px-6 py-4 sm:py-6 lg:py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105 w-fit">
-                <span className="ml-2 sm:ml-3">{t('app.button')}</span>
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-background text-foreground rounded-full flex items-center justify-center">
-                  <MoveUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Button ref={buttonRef} className="Space rounded-full text-md font-bold px-2 py-7 bg-foreground text-background hover:bg-purple hover:text-white hover:shadow-[0_0px_20px] shadow-purple transition-all duration-300 cursor-pointer hover:scale-105 w-fit">
+                <span className="ml-3">{t('app.button')}</span>
+                <div className="w-10 h-10 bg-background text-foreground rounded-full flex items-center justify-center">
+                  <MoveUpRight className="w-4 h-4" />
                 </div>
               </Button>
             </div>

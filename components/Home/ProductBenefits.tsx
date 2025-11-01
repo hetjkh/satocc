@@ -43,14 +43,14 @@ export default function ProductBenefits() {
             <div
               key={idx}
               className="group relative flex items-start gap-6 p-4 lg:p-5 rounded-2xl pb-10 mb-6 border-b border-foreground/10 last:pb-0 last:mb-0 last:border-none
-              transition-all duration-500 ease-out group-hover/benefits:opacity-70 hover:opacity-100 hover:scale-[1.01] hover:shadow-[0_10px_30px_rgba(133,76,217,0.35)]"
+              transition-all duration-500 ease-out group-hover/benefits:opacity-70 hover:opacity-100 hover:scale-[1.01] hover:shadow-[0_0px_20px] hover:shadow-purple"
               onMouseEnter={() => setHovered(idx)}
               onMouseLeave={() => setHovered(null)}
             >
               {/* Animated gradient sweep overlay for smooth color */}
               <span
-                className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-purple via-fuchsia-500 to-purple opacity-0
-                transition-all duration-500 ease-out transform -translate-x-8 group-hover:translate-x-0 group-hover:opacity-100 hover:opacity-100 hover:translate-x-0"
+                className="pointer-events-none absolute inset-0 rounded-2xl bg-purple opacity-0
+                transition-all duration-500 ease-out transform -translate-x-8 group-hover:translate-x-0 group-hover:opacity-100 hover:opacity-100 hover:translate-x-0 shadow-[0_0px_20px] shadow-purple group-hover:shadow-[0_0px_20px] group-hover:shadow-purple"
               />
 
               <div className="relative z-10 w-[72px] h-[72px] rounded-2xl bg-foreground/5 border border-foreground/10 grid place-items-center text-foreground transition-colors duration-500 group-hover:bg-white/20 group-hover:border-white/30 group-hover:text-white">
@@ -60,7 +60,7 @@ export default function ProductBenefits() {
                 <h3 className="Space text-lg md:text-xl font-extrabold tracking-wide text-foreground mb-1 transition-colors duration-500 group-hover:text-white">
                   {it.title}
                 </h3>
-                <p className="Poppins text-sm md:text-base text-muted-foreground leading-relaxed transition-colors duration-500 group-hover:text-white/90">
+                <p className={`Poppins text-sm md:text-base text-muted-foreground leading-relaxed transition-colors duration-500 group-hover:text-white/90 ${idx === 2 ? 'mb-1' : ''}`}>
                   {it.desc}
                 </p>
               </div>

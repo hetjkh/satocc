@@ -371,7 +371,7 @@ export default function AboutPage() {
           muted
           playsInline
         >
-          <source src="/Videos/home.mp4" type="video/mp4" />
+          <source src="/car.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent from-[50%] via-background/50 via-[75%] to-background to-[100%]"></div>

@@ -1,86 +1,164 @@
-import { Camera, Geometry, Mesh, Plane, Program, Renderer, Texture, Transform, type OGLRenderingContext } from 'ogl';
-import { useEffect, useRef } from 'react';
+import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
+import { useEffect, useRef, useCallback } from 'react';
+import { useTheme } from 'next-themes';
 
-import './CircularGallery.css';
+type GL = Renderer['gl'];
 
 function debounce<T extends (...args: unknown[]) => void>(func: T, wait: number) {
-  let timeout: NodeJS.Timeout;
-  return function (this: ThisParameterType<T> | undefined, ...args: Parameters<T>) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  } as T;
+  let timeout: number;
+  return function (this: unknown, ...args: Parameters<T>) {
+    window.clearTimeout(timeout);
+    timeout = window.setTimeout(() => func.apply(this, args), wait);
+  };
 }
 
-function lerp(p1: number, p2: number, t: number) {
+function lerp(p1: number, p2: number, t: number): number {
   return p1 + (p2 - p1) * t;
 }
 
-function autoBind<T extends object>(instance: T) {
+function autoBind(instance: object): void {
   const proto = Object.getPrototypeOf(instance);
   Object.getOwnPropertyNames(proto).forEach(key => {
     if (key !== 'constructor') {
-      const fn = (instance as Record<string, unknown>)[key];
-      if (typeof fn === 'function') {
-        const method = fn as (...args: unknown[]) => unknown;
-        (instance as Record<string, unknown>)[key] = method.bind(instance);
+      const value = (instance as Record<string, unknown>)[key];
+      if (typeof value === 'function') {
+        (instance as Record<string, unknown>)[key] = value.bind(instance);
       }
     }
   });
 }
 
-function createTextTexture(gl: OGLRenderingContext, text: string, font = 'bold 30px monospace', color = 'black') {
+function getFontSize(font: string): number {
+  const match = font.match(/(\d+)px/);
+  return match ? parseInt(match[1], 10) : 30;
+}
+
+function createTextTexture(
+  gl: GL,
+  text: string,
+  font: string = 'bold 16px Poppins, sans-serif',
+  color: string = '#000000'
+): { texture: Texture; width: number; height: number } {
   const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  if (!context) return { texture: null, width: 0, height: 0 };
-  
+  const context = canvas.getContext('2d', { alpha: true });
+  if (!context) throw new Error('Could not get 2d context');
+
   context.font = font;
   const metrics = context.measureText(text);
   const textWidth = Math.ceil(metrics.width);
-  const textHeight = Math.ceil(parseInt(font, 10) * 1.2);
-  canvas.width = textWidth + 20;
-  canvas.height = textHeight + 20;
+  const fontSize = getFontSize(font);
+  const textHeight = Math.ceil(fontSize * 1.2);
+
+  // Add extra padding for the white box around text - reduced for smaller boxes
+  const padding = 12;
+  canvas.width = textWidth + padding * 2;
+  canvas.height = textHeight + padding * 2;
+  
+  // Make it fully rounded like buttons (pill shape) - use half the height for full rounding
+  const borderRadius = canvas.height / 2;
+
+  // Enable high-quality text rendering
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = 'high';
+  
+  // Clear canvas with transparent background
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw white rounded rectangle background box
+  const boxX = 0;
+  const boxY = 0;
+  const boxWidth = canvas.width;
+  const boxHeight = canvas.height;
+  
+  // Create rounded rectangle path
+  context.beginPath();
+  context.moveTo(boxX + borderRadius, boxY);
+  context.lineTo(boxX + boxWidth - borderRadius, boxY);
+  context.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + borderRadius);
+  context.lineTo(boxX + boxWidth, boxY + boxHeight - borderRadius);
+  context.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - borderRadius, boxY + boxHeight);
+  context.lineTo(boxX + borderRadius, boxY + boxHeight);
+  context.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - borderRadius);
+  context.lineTo(boxX, boxY + borderRadius);
+  context.quadraticCurveTo(boxX, boxY, boxX + borderRadius, boxY);
+  context.closePath();
+  
+  // Fill the white box
+  context.fillStyle = '#ffffff';
+  context.fill();
+  
+  // Set font and text properties
   context.font = font;
-  context.fillStyle = color;
+  
+  // Use the provided color directly - it's already computed from theme
+  // Ensure it's a valid hex color for canvas
+  let textColor = color || '#000000';
+  
+  // Convert rgb to hex if needed (canvas works best with hex)
+  if (textColor.startsWith('rgb')) {
+    const rgb = textColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]).toString(16).padStart(2, '0');
+      const g = parseInt(rgb[1]).toString(16).padStart(2, '0');
+      const b = parseInt(rgb[2]).toString(16).padStart(2, '0');
+      textColor = `#${r}${g}${b}`;
+    } else {
+      textColor = '#000000';
+    }
+  }
+  
+  // Ensure it's a valid hex color
+  if (!textColor.startsWith('#')) {
+    textColor = '#000000';
+  }
+  
+  // Render solid filled text (not outlined)
+  context.fillStyle = textColor;
+  context.strokeStyle = textColor; // Same as fill to avoid outline effect
+  context.lineWidth = 0;
   context.textBaseline = 'middle';
   context.textAlign = 'center';
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw filled text on top of the white box
   context.fillText(text, canvas.width / 2, canvas.height / 2);
+
   const texture = new Texture(gl, { generateMipmaps: false });
   texture.image = canvas;
   return { texture, width: canvas.width, height: canvas.height };
 }
 
-class Title {
-  gl: OGLRenderingContext;
+interface TitleProps {
+  gl: GL;
   plane: Mesh;
   renderer: Renderer;
   text: string;
-  textColor: string;
+  textColor?: string;
+  font?: string;
+}
+
+class Title {
+  gl: GL;
+  plane: Mesh;
+  renderer: Renderer;
+  text: string;
+  textColor: string | undefined;
   font: string;
   mesh!: Mesh;
 
-  constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif' }: {
-    gl: OGLRenderingContext;
-    plane: Mesh;
-    renderer: Renderer;
-    text: string;
-    textColor?: string;
-    font?: string;
-  }) {
+  constructor({ gl, plane, renderer, text, textColor, font = 'bold 16px Poppins, sans-serif' }: TitleProps) {
     autoBind(this);
     this.gl = gl;
     this.plane = plane;
     this.renderer = renderer;
     this.text = text;
-    this.textColor = textColor;
+    // Use provided color or default to black
+    this.textColor = textColor || '#000000';
     this.font = font;
     this.createMesh();
   }
 
   createMesh() {
     const { texture, width, height } = createTextTexture(this.gl, this.text, this.font, this.textColor);
-    if (!texture) return;
-    
     const geometry = new Plane(this.gl);
     const program = new Program(this.gl, {
       vertex: `
@@ -109,10 +187,10 @@ class Title {
     });
     this.mesh = new Mesh(this.gl, { geometry, program });
     const aspect = width / height;
-    const textHeight = this.plane.scale.y * 0.15;
-    const textWidth = textHeight * aspect;
-    this.mesh.scale.set(textWidth, textHeight, 1);
-    this.mesh.position.y = -this.plane.scale.y * 0.5 - textHeight * 0.5 - 0.5;
+    const textHeightScaled = this.plane.scale.y * 0.15;
+    const textWidthScaled = textHeightScaled * aspect;
+    this.mesh.scale.set(textWidthScaled, textHeightScaled, 1);
+    this.mesh.position.y = -this.plane.scale.y * 0.5 - textHeightScaled * 0.5 - 0.05;
     this.mesh.setParent(this.plane);
   }
 }
@@ -122,15 +200,14 @@ interface ScreenSize {
   height: number;
 }
 
-interface ViewportSize {
+interface Viewport {
   width: number;
   height: number;
 }
 
-class Media {
-  extra: number = 0;
-  geometry: Geometry;
-  gl: OGLRenderingContext;
+interface MediaProps {
+  geometry: Plane;
+  gl: GL;
   image: string;
   index: number;
   length: number;
@@ -138,22 +215,40 @@ class Media {
   scene: Transform;
   screen: ScreenSize;
   text: string;
-  viewport: ViewportSize;
+  viewport: Viewport;
   bend: number;
-  textColor: string;
+  textColor: string | undefined;
+  borderRadius?: number;
+  font?: string;
+}
+
+class Media {
+  extra: number = 0;
+  geometry: Plane;
+  gl: GL;
+  image: string;
+  index: number;
+  length: number;
+  renderer: Renderer;
+  scene: Transform;
+  screen: ScreenSize;
+  text: string;
+  viewport: Viewport;
+  bend: number;
+  textColor: string | undefined;
   borderRadius: number;
-  font: string;
+  font?: string;
   program!: Program;
   plane!: Mesh;
   title!: Title;
+  scale!: number;
+  padding!: number;
+  width!: number;
+  widthTotal!: number;
+  x!: number;
   speed: number = 0;
   isBefore: boolean = false;
   isAfter: boolean = false;
-  scale: number = 0;
-  padding: number = 0;
-  width: number = 0;
-  widthTotal: number = 0;
-  x: number = 0;
 
   constructor({
     geometry,
@@ -170,22 +265,7 @@ class Media {
     textColor,
     borderRadius = 0,
     font
-  }: {
-    geometry: Geometry;
-    gl: OGLRenderingContext;
-    image: string;
-    index: number;
-    length: number;
-    renderer: Renderer;
-    scene: Transform;
-    screen: ScreenSize;
-    text: string;
-    viewport: ViewportSize;
-    bend: number;
-    textColor: string;
-    borderRadius?: number;
-    font: string;
-  }) {
+  }: MediaProps) {
     this.geometry = geometry;
     this.gl = gl;
     this.image = image;
@@ -300,7 +380,7 @@ class Media {
     });
   }
 
-  update(scroll: { current: number; last: number }, direction: string) {
+  update(scroll: { current: number; last: number }, direction: 'right' | 'left') {
     this.plane.position.x = this.x - scroll.current - this.extra;
 
     const x = this.plane.position.x;
@@ -342,7 +422,7 @@ class Media {
     }
   }
 
-  onResize({ screen, viewport }: { screen?: ScreenSize; viewport?: ViewportSize } = {}) {
+  onResize({ screen, viewport }: { screen?: ScreenSize; viewport?: Viewport } = {}) {
     if (screen) this.screen = screen;
     if (viewport) {
       this.viewport = viewport;
@@ -350,83 +430,82 @@ class Media {
         this.plane.program.uniforms.uViewportSizes.value = [this.viewport.width, this.viewport.height];
       }
     }
-    this.scale = this.screen.height / 1200; // Increased scale for larger cards
-    this.plane.scale.y = (this.viewport.height * (1200 * this.scale)) / this.screen.height; // Increased from 900 to 1200
-    this.plane.scale.x = (this.viewport.width * (900 * this.scale)) / this.screen.width; // Increased from 700 to 900
+    this.scale = this.screen.height / 1500;
+    this.plane.scale.y = (this.viewport.height * (950 * this.scale)) / this.screen.height;
+    this.plane.scale.x = (this.viewport.width * (800 * this.scale)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
-    this.padding = this.plane.scale.x * 0.5; // Increased padding for one-by-one display
+    this.padding = 2;
     this.width = this.plane.scale.x + this.padding;
     this.widthTotal = this.width * this.length;
     this.x = this.width * this.index;
   }
 }
 
-interface GalleryItem {
-  image: string;
-  text: string;
-}
-
-interface ScrollState {
-  ease: number;
-  current: number;
-  target: number;
-  last: number;
-  position: number;
+interface AppConfig {
+  items?: { image: string; text: string }[];
+  bend?: number;
+  textColor?: string;
+  borderRadius?: number;
+  font?: string;
+  scrollSpeed?: number;
+  scrollEase?: number;
 }
 
 class App {
   container: HTMLElement;
   scrollSpeed: number;
-  scroll: ScrollState;
-  onCheckDebounce: ReturnType<typeof debounce<() => void>>;
+  scroll: {
+    ease: number;
+    current: number;
+    target: number;
+    last: number;
+    position?: number;
+  };
+  onCheckDebounce: (...args: unknown[]) => void;
   renderer!: Renderer;
-  gl!: OGLRenderingContext;
+  gl!: GL;
   camera!: Camera;
   scene!: Transform;
-  screen!: ScreenSize;
-  viewport!: ViewportSize;
   planeGeometry!: Plane;
-  mediasImages!: GalleryItem[];
-  medias!: Media[];
+  medias: Media[] = [];
+  mediasImages: { image: string; text: string }[] = [];
+  screen!: { width: number; height: number };
+  viewport!: { width: number; height: number };
   raf: number = 0;
-  isDown: boolean = false;
-  start: number = 0;
+
   boundOnResize!: () => void;
-  boundOnWheel!: (e: WheelEvent) => void;
+  boundOnWheel!: (e: Event) => void;
   boundOnTouchDown!: (e: MouseEvent | TouchEvent) => void;
   boundOnTouchMove!: (e: MouseEvent | TouchEvent) => void;
   boundOnTouchUp!: () => void;
+
+  isDown: boolean = false;
+  start: number = 0;
 
   constructor(
     container: HTMLElement,
     {
       items,
-      bend,
-      textColor = '#ffffff',
+      bend = 1,
+      textColor,
       borderRadius = 0,
-      font = 'bold 30px Figtree',
+      font = 'bold 24px Poppins, sans-serif',
       scrollSpeed = 2,
       scrollEase = 0.05
-    }: {
-      items?: GalleryItem[];
-      bend?: number;
-      textColor?: string;
-      borderRadius?: number;
-      font?: string;
-      scrollSpeed?: number;
-      scrollEase?: number;
-    } = {}
+    }: AppConfig
   ) {
     document.documentElement.classList.remove('no-js');
     this.container = container;
     this.scrollSpeed = scrollSpeed;
-    this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0, position: 0 };
-    this.onCheckDebounce = debounce(this.onCheck, 200);
+    this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
+    this.onCheckDebounce = debounce(this.onCheck.bind(this), 200);
     this.createRenderer();
     this.createCamera();
     this.createScene();
     this.onResize();
     this.createGeometry();
+    // Don't compute color here - let createTextTexture handle it at texture creation time
+    // Pass textColor (can be undefined) so createTextTexture can check current theme state
     this.createMedias(items, bend, textColor, borderRadius, font);
     this.update();
     this.addEventListeners();
@@ -440,12 +519,7 @@ class App {
     });
     this.gl = this.renderer.gl;
     this.gl.clearColor(0, 0, 0, 0);
-    this.gl.canvas.style.position = 'absolute';
-    this.gl.canvas.style.top = '0';
-    this.gl.canvas.style.left = '0';
-    this.gl.canvas.style.width = '100%';
-    this.gl.canvas.style.height = '100%';
-    this.container.appendChild(this.gl.canvas);
+    this.container.appendChild(this.renderer.gl.canvas as HTMLCanvasElement);
   }
 
   createCamera() {
@@ -465,20 +539,62 @@ class App {
     });
   }
 
-  createMedias(items: GalleryItem[] = [], bend = 1, textColor: string, borderRadius: number, font: string) {
+  createMedias(
+    items: { image: string; text: string }[] | undefined,
+    bend: number = 1,
+    textColor: string | undefined,
+    borderRadius: number,
+    font: string
+  ) {
     const defaultItems = [
-      { image: `https://picsum.photos/seed/1/800/600?grayscale`, text: 'Bridge' },
-      { image: `https://picsum.photos/seed/2/800/600?grayscale`, text: 'Desk Setup' },
-      { image: `https://picsum.photos/seed/3/800/600?grayscale`, text: 'Waterfall' },
-      { image: `https://picsum.photos/seed/4/800/600?grayscale`, text: 'Strawberries' },
-      { image: `https://picsum.photos/seed/5/800/600?grayscale`, text: 'Deep Diving' },
-      { image: `https://picsum.photos/seed/16/800/600?grayscale`, text: 'Train Track' },
-      { image: `https://picsum.photos/seed/17/800/600?grayscale`, text: 'Santorini' },
-      { image: `https://picsum.photos/seed/8/800/600?grayscale`, text: 'Blurry Lights' },
-      { image: `https://picsum.photos/seed/9/800/600?grayscale`, text: 'New York' },
-      { image: `https://picsum.photos/seed/10/800/600?grayscale`, text: 'Good Boy' },
-      { image: `https://picsum.photos/seed/21/800/600?grayscale`, text: 'Coastline' },
-      { image: `https://picsum.photos/seed/12/800/600?grayscale`, text: 'Palm Trees' }
+      {
+        image: `https://picsum.photos/seed/1/800/600?grayscale`,
+        text: 'Bridge'
+      },
+      {
+        image: `https://picsum.photos/seed/2/800/600?grayscale`,
+        text: 'Desk Setup'
+      },
+      {
+        image: `https://picsum.photos/seed/3/800/600?grayscale`,
+        text: 'Waterfall'
+      },
+      {
+        image: `https://picsum.photos/seed/4/800/600?grayscale`,
+        text: 'Strawberries'
+      },
+      {
+        image: `https://picsum.photos/seed/5/800/600?grayscale`,
+        text: 'Deep Diving'
+      },
+      {
+        image: `https://picsum.photos/seed/16/800/600?grayscale`,
+        text: 'Train Track'
+      },
+      {
+        image: `https://picsum.photos/seed/17/800/600?grayscale`,
+        text: 'Santorini'
+      },
+      {
+        image: `https://picsum.photos/seed/8/800/600?grayscale`,
+        text: 'Blurry Lights'
+      },
+      {
+        image: `https://picsum.photos/seed/9/800/600?grayscale`,
+        text: 'New York'
+      },
+      {
+        image: `https://picsum.photos/seed/10/800/600?grayscale`,
+        text: 'Good Boy'
+      },
+      {
+        image: `https://picsum.photos/seed/21/800/600?grayscale`,
+        text: 'Coastline'
+      },
+      {
+        image: `https://picsum.photos/seed/12/800/600?grayscale`,
+        text: 'Palm Trees'
+      }
     ];
     const galleryItems = items && items.length ? items : defaultItems;
     this.mediasImages = galleryItems.concat(galleryItems);
@@ -512,7 +628,7 @@ class App {
     if (!this.isDown) return;
     const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
-    this.scroll.target = this.scroll.position + distance;
+    this.scroll.target = (this.scroll.position ?? 0) + distance;
   }
 
   onTouchUp() {
@@ -520,11 +636,12 @@ class App {
     this.onCheck();
   }
 
-  onWheel(e: WheelEvent) {
-    const delta = (typeof e.deltaY === 'number' ? e.deltaY : 0)
-      || (e as { wheelDelta?: number }).wheelDelta
-      || (e as { detail?: number }).detail
-      || 0;
+  onWheel(e: Event) {
+    const wheelEvent = e as WheelEvent;
+    // Handle different wheel event types (WheelEvent, MouseWheelEvent, etc.)
+    const delta = wheelEvent.deltaY || 
+                  (wheelEvent as unknown as { wheelDelta?: number }).wheelDelta || 
+                  (wheelEvent as unknown as { detail?: number }).detail || 0;
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
     this.onCheckDebounce();
   }
@@ -573,72 +690,86 @@ class App {
     this.boundOnTouchMove = this.onTouchMove.bind(this);
     this.boundOnTouchUp = this.onTouchUp.bind(this);
     window.addEventListener('resize', this.boundOnResize);
-    // Scope interaction to the gallery container so the page can scroll normally
-    this.container.addEventListener('mousewheel', this.boundOnWheel as EventListener);
-    this.container.addEventListener('wheel', this.boundOnWheel, { passive: true });
-    this.container.addEventListener('mousedown', this.boundOnTouchDown);
-    this.container.addEventListener('mousemove', this.boundOnTouchMove);
-    this.container.addEventListener('mouseup', this.boundOnTouchUp);
-    this.container.addEventListener('touchstart', this.boundOnTouchDown, { passive: true });
-    this.container.addEventListener('touchmove', this.boundOnTouchMove, { passive: true });
-    this.container.addEventListener('touchend', this.boundOnTouchUp);
+    window.addEventListener('mousewheel', this.boundOnWheel);
+    window.addEventListener('wheel', this.boundOnWheel);
+    window.addEventListener('mousedown', this.boundOnTouchDown);
+    window.addEventListener('mousemove', this.boundOnTouchMove);
+    window.addEventListener('mouseup', this.boundOnTouchUp);
+    window.addEventListener('touchstart', this.boundOnTouchDown);
+    window.addEventListener('touchmove', this.boundOnTouchMove);
+    window.addEventListener('touchend', this.boundOnTouchUp);
   }
 
   destroy() {
     window.cancelAnimationFrame(this.raf);
     window.removeEventListener('resize', this.boundOnResize);
-    if (this.container) {
-      this.container.removeEventListener('mousewheel', this.boundOnWheel as unknown as EventListener);
-      this.container.removeEventListener('wheel', this.boundOnWheel);
-      this.container.removeEventListener('mousedown', this.boundOnTouchDown);
-      this.container.removeEventListener('mousemove', this.boundOnTouchMove);
-      this.container.removeEventListener('mouseup', this.boundOnTouchUp);
-      this.container.removeEventListener('touchstart', this.boundOnTouchDown);
-      this.container.removeEventListener('touchmove', this.boundOnTouchMove);
-      this.container.removeEventListener('touchend', this.boundOnTouchUp);
-    }
+    window.removeEventListener('mousewheel', this.boundOnWheel);
+    window.removeEventListener('wheel', this.boundOnWheel);
+    window.removeEventListener('mousedown', this.boundOnTouchDown);
+    window.removeEventListener('mousemove', this.boundOnTouchMove);
+    window.removeEventListener('mouseup', this.boundOnTouchUp);
+    window.removeEventListener('touchstart', this.boundOnTouchDown);
+    window.removeEventListener('touchmove', this.boundOnTouchMove);
+    window.removeEventListener('touchend', this.boundOnTouchUp);
     if (this.renderer && this.renderer.gl && this.renderer.gl.canvas.parentNode) {
-      this.renderer.gl.canvas.parentNode.removeChild(this.renderer.gl.canvas);
+      this.renderer.gl.canvas.parentNode.removeChild(this.renderer.gl.canvas as HTMLCanvasElement);
     }
   }
 }
 
-export default function CircularGallery({
-  items,
-  bend = 3,
-  textColor = '#ffffff',
-  borderRadius = 0.05,
-  font = 'bold 30px Figtree',
-  scrollSpeed = 2,
-  scrollEase = 0.05
-}: {
-  items?: Array<{ image: string; text: string }>;
+interface CircularGalleryProps {
+  items?: { image: string; text: string }[];
   bend?: number;
   textColor?: string;
   borderRadius?: number;
   font?: string;
   scrollSpeed?: number;
   scrollEase?: number;
-}) {
+}
+
+export default function CircularGallery({
+  items,
+  bend = 3,
+  textColor,
+  borderRadius = 0.15,
+  font = 'bold 16px Poppins, sans-serif',
+  scrollSpeed = 2,
+  scrollEase = 0.1
+}: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { theme, resolvedTheme } = useTheme();
+  
+  // Get text color - use exact same logic as Particles component
+  // Particles: theme === "light" ? "#000" : "#fff"
+  // For text: light = black, dark/other = white
+  const getTextColor = useCallback((): string => {
+    // Use resolvedTheme if available (handles 'system' theme), otherwise use theme
+    const currentTheme = resolvedTheme || theme;
+    
+    // Exact same logic as Particles component
+    return currentTheme === "light" ? "#000000" : "#ffffff";
+  }, [theme, resolvedTheme]);
   
   useEffect(() => {
     if (!containerRef.current) return;
     
-    const app = new App(containerRef.current, { 
-      items, 
-      bend, 
-      textColor, 
-      borderRadius, 
-      font, 
-      scrollSpeed, 
-      scrollEase 
+    // Get color - same simple approach as Particles component
+    const computedColor = textColor || getTextColor();
+    
+    const app = new App(containerRef.current, {
+      items,
+      bend,
+      textColor: computedColor,
+      borderRadius,
+      font,
+      scrollSpeed,
+      scrollEase
     });
     
     return () => {
       app.destroy();
     };
-  }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase]);
+  }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase, theme, resolvedTheme, getTextColor]);
   
-  return <div className="circular-gallery" ref={containerRef} />;
+  return <div className="w-full h-full overflow-hidden cursor-grab active:cursor-grabbing" ref={containerRef} />;
 }

@@ -236,8 +236,11 @@ const translations = {
     'product.feature4.cardPoint3': 'Instant processing',
     
     // Product Gallery
-    'product.gallery.title': 'Choose Your Card',
-    'product.gallery.description': 'Select from our range of virtual cards designed for every need',
+    'product.gallery.title': 'HOW IT WORKS',
+    'product.gallery.description': 'Shop seamlessly in three simple steps: scan your items, pay instantly, and you\'re ready to go',
+    'product.gallery.item1': 'Scan & Shop',
+    'product.gallery.item2': 'Pay Instantly',
+    'product.gallery.item3': 'Ready to Go',
 
     'product.downloadButton': 'DOWNLOAD APP',
     // Product Benefits
@@ -471,8 +474,11 @@ const translations = {
     'product.feature4.cardPoint3': 'معالجة فورية',
     
     // Product Gallery
-    'product.gallery.title': 'اختر بطاقتك',
-    'product.gallery.description': 'اختر من مجموعتنا من البطاقات الافتراضية المصممة لكل احتياج',
+    'product.gallery.title': 'كيف يعمل',
+    'product.gallery.description': 'تسوق بسلاسة في ثلاث خطوات بسيطة: امسح عناصرك، ادفع فورًا، وأنت مستعد للذهاب',
+    'product.gallery.item1': 'امسح وتسوق',
+    'product.gallery.item2': 'ادفع فورًا',
+    'product.gallery.item3': 'جاهز للذهاب',
 
     'product.downloadButton': 'تحميل التطبيق',
     // Product Benefits
