@@ -24,31 +24,31 @@ export default function HomePage() {
   const heroButtonsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Hero section animations
+    // Hero section animations - optimized to not interfere with video
     const ctx = gsap.context(() => {
       // Ensure elements are visible
-      gsap.set([heroTitleRef.current, heroDescRef.current], { opacity: 1 });
+      gsap.set([heroTitleRef.current, heroDescRef.current], { opacity: 1, force3D: false });
       if (heroButtonsRef.current) {
-        gsap.set(heroButtonsRef.current.children, { opacity: 1 });
+        gsap.set(heroButtonsRef.current.children, { opacity: 1, force3D: false });
       }
 
-      // Animate hero title
+      // Animate hero title - reduced complexity for better performance
       gsap.fromTo(heroTitleRef.current,
         { opacity: 0, y: 80 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.2 }
+        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out", delay: 0.2, force3D: false }
       );
 
-      // Animate hero description
+      // Animate hero description - reduced complexity
       gsap.fromTo(heroDescRef.current,
         { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.4 }
+        { opacity: 1, y: 0, duration: 0.6, ease: "power1.out", delay: 0.4, force3D: false }
       );
 
-      // Animate hero buttons with stagger
+      // Animate hero buttons with stagger - simplified
       if (heroButtonsRef.current) {
         gsap.fromTo(heroButtonsRef.current.children,
-          { opacity: 0, scale: 0.8, y: 20 },
-          { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.7)", stagger: 0.08, delay: 0.6 }
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: "power1.out", stagger: 0.06, delay: 0.6, force3D: false }
         );
       }
     });
@@ -59,18 +59,38 @@ export default function HomePage() {
   return (
     <div className="w-full min-h-screen flex flex-col bg-transparent text-foreground">
       {/* Hero Section */}
-      <section className="relative h-[100vh] z-10 w-full flex items-end justify-center text-center">
+      <section className="relative h-[100vh] z-10 w-full flex items-end justify-center text-center" style={{ isolation: 'isolate', contain: 'layout style paint' }}>
         <video
           className="absolute top-0 left-0 w-full h-full object-cover"
-          controls 
           autoPlay
           loop
+          muted
           playsInline
+          preload="metadata"
+          disablePictureInPicture
+          controlsList="nodownload nofullscreen noremoteplayback"
+          style={{ 
+            transform: 'translate3d(0, 0, 0)',
+            willChange: 'transform',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            WebkitTransform: 'translate3d(0, 0, 0)',
+            objectFit: 'cover',
+            isolation: 'isolate'
+          }}
         >
           <source src="/car.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent from-[50%] via-background/50 via-[75%] to-background to-[100%]"></div>
+        <div 
+          className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-background/50 to-background pointer-events-none"
+          style={{ 
+            transform: 'translateZ(0)',
+            willChange: 'opacity',
+            isolation: 'isolate',
+            backfaceVisibility: 'hidden'
+          }}
+        ></div>
         <div ref={heroContentRef} className="relative flex justify-between items-end w-[95%] lg:w-full mb-10 max-w-7xl">
           <div className="w-full lg:w-[50%] justify-start items-start text-left">
             <h1 ref={heroTitleRef} className="Space text-4xl lg:text-6xl uppercase font-bold mb-5">
