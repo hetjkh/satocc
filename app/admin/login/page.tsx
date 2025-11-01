@@ -24,7 +24,6 @@ export default function AdminLoginPage() {
   const badgeRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     // Check if already logged in
@@ -78,38 +77,15 @@ export default function AdminLoginPage() {
     }, 800);
   };
 
-  // Ensure video plays when page becomes visible
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (videoRef.current && document.visibilityState === 'visible') {
-        videoRef.current.play().catch(() => {});
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, []);
-
   return (
     <main className="min-h-screen bg-background text-foreground flex items-center justify-center relative overflow-hidden">
       {/* Background Video */}
       <video
-        ref={videoRef}
         className="absolute top-0 left-0 w-full h-full object-cover"
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
-        onError={(e) => {
-          console.error('Video error:', e);
-        }}
-        onPause={() => {
-          if (videoRef.current && document.visibilityState === 'visible') {
-            videoRef.current.play().catch(() => {});
-          }
-        }}
       >
         <source src="/Videos/home.mp4" type="video/mp4" />
       </video>

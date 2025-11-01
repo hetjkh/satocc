@@ -1,5 +1,5 @@
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
 
 type GL = Renderer['gl'];
@@ -19,11 +19,8 @@ function lerp(p1: number, p2: number, t: number): number {
 function autoBind(instance: object): void {
   const proto = Object.getPrototypeOf(instance);
   Object.getOwnPropertyNames(proto).forEach(key => {
-    if (key !== 'constructor') {
-      const value = (instance as Record<string, unknown>)[key];
-      if (typeof value === 'function') {
-        (instance as Record<string, unknown>)[key] = value.bind(instance);
-      }
+    if (key !== 'constructor' && typeof (instance as Record<string, unknown>)[key] === 'function') {
+      (instance as Record<string, unknown>)[key] = ((instance as Record<string, unknown>)[key] as () => void).bind(instance);
     }
   });
 }
@@ -505,8 +502,8 @@ class App {
     this.onResize();
     this.createGeometry();
     // Don't compute color here - let createTextTexture handle it at texture creation time
-    // Pass textColor (can be undefined) so createTextTexture can check current theme state
-    this.createMedias(items, bend, textColor, borderRadius, font);
+    // Pass undefined so createTextTexture can check current theme state
+    this.createMedias(items, bend, undefined, borderRadius, font);
     this.update();
     this.addEventListeners();
   }
@@ -638,10 +635,8 @@ class App {
 
   onWheel(e: Event) {
     const wheelEvent = e as WheelEvent;
-    // Handle different wheel event types (WheelEvent, MouseWheelEvent, etc.)
-    const delta = wheelEvent.deltaY || 
-                  (wheelEvent as unknown as { wheelDelta?: number }).wheelDelta || 
-                  (wheelEvent as unknown as { detail?: number }).detail || 0;
+    const legacyEvent = wheelEvent as WheelEvent & { wheelDelta?: number; detail?: number };
+    const delta = wheelEvent.deltaY || legacyEvent.wheelDelta || legacyEvent.detail || 0;
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
     this.onCheckDebounce();
   }
@@ -739,22 +734,16 @@ export default function CircularGallery({
   const containerRef = useRef<HTMLDivElement>(null);
   const { theme, resolvedTheme } = useTheme();
   
-  // Get text color - use exact same logic as Particles component
-  // Particles: theme === "light" ? "#000" : "#fff"
-  // For text: light = black, dark/other = white
-  const getTextColor = useCallback((): string => {
-    // Use resolvedTheme if available (handles 'system' theme), otherwise use theme
-    const currentTheme = resolvedTheme || theme;
-    
-    // Exact same logic as Particles component
-    return currentTheme === "light" ? "#000000" : "#ffffff";
-  }, [theme, resolvedTheme]);
-  
   useEffect(() => {
     if (!containerRef.current) return;
     
-    // Get color - same simple approach as Particles component
-    const computedColor = textColor || getTextColor();
+    // Get text color - use exact same logic as Particles component
+    // Particles: theme === "light" ? "#000" : "#fff"
+    // For text: light = black, dark/other = white
+    // Use resolvedTheme if available (handles 'system' theme), otherwise use theme
+    const currentTheme = resolvedTheme || theme;
+    const defaultTextColor = currentTheme === "light" ? "#000000" : "#ffffff";
+    const computedColor = textColor || defaultTextColor;
     
     const app = new App(containerRef.current, {
       items,
@@ -769,7 +758,7 @@ export default function CircularGallery({
     return () => {
       app.destroy();
     };
-  }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase, theme, resolvedTheme, getTextColor]);
+  }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase, theme, resolvedTheme]);
   
   return <div className="w-full h-full overflow-hidden cursor-grab active:cursor-grabbing" ref={containerRef} />;
 }
