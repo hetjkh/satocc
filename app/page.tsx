@@ -57,37 +57,18 @@ export default function HomePage() {
     return () => ctx.revert();
   }, []);
 
-  // Load and play video only when visible
+  // Ensure video plays when page becomes visible
   useEffect(() => {
-    if (!videoRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && videoRef.current) {
-            videoRef.current.load();
-            videoRef.current.play().catch(() => {});
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
-
     const handleVisibilityChange = () => {
       if (videoRef.current && document.visibilityState === 'visible') {
-        videoRef.current.play().catch(() => {});
-      } else if (videoRef.current && document.visibilityState === 'hidden') {
-        videoRef.current.pause();
+        videoRef.current.play().catch(() => {
+          // Ignore play promise rejection
+        });
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
-      observer.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
@@ -103,9 +84,17 @@ export default function HomePage() {
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
           onError={(e) => {
             console.error('Video error:', e);
+          }}
+          onPause={() => {
+            // Auto-resume if paused unexpectedly
+            if (videoRef.current && document.visibilityState === 'visible') {
+              videoRef.current.play().catch(() => {
+                // Ignore play promise rejection
+              });
+            }
           }}
         >
           <source src="/car.mp4" type="video/mp4" />

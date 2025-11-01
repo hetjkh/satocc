@@ -359,37 +359,15 @@ export default function AboutPage() {
     return () => ctx.revert();
   }, []);
 
-  // Load and play video only when visible
+  // Ensure video plays when page becomes visible
   useEffect(() => {
-    if (!videoRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && videoRef.current) {
-            videoRef.current.load();
-            videoRef.current.play().catch(() => {});
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
-
     const handleVisibilityChange = () => {
       if (videoRef.current && document.visibilityState === 'visible') {
         videoRef.current.play().catch(() => {});
-      } else if (videoRef.current && document.visibilityState === 'hidden') {
-        videoRef.current.pause();
       }
     };
-
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
-      observer.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
@@ -405,12 +383,17 @@ export default function AboutPage() {
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
           onError={(e) => {
             console.error('Video error:', e);
           }}
+          onPause={() => {
+            if (videoRef.current && document.visibilityState === 'visible') {
+              videoRef.current.play().catch(() => {});
+            }
+          }}
         >
-          <source src="/car.mp4" type="video/mp4" />
+          <source src="/Videos/home.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent from-[50%] via-background/50 via-[75%] to-background to-[100%]"></div>
