@@ -38,6 +38,7 @@ export default function Home() {
   const formSectionDescRef = useRef<HTMLParagraphElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -297,6 +298,19 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Ensure video plays when page becomes visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (videoRef.current && document.visibilityState === 'visible') {
+        videoRef.current.play().catch(() => {});
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -341,13 +355,21 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[100vh] w-full flex items-end justify-center text-center">
         <video
+          ref={videoRef}
           className="absolute top-0 left-0 w-full h-full object-cover"
-          controls
-          preload="none"
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
+          onError={(e) => {
+            console.error('Video error:', e);
+          }}
+          onPause={() => {
+            if (videoRef.current && document.visibilityState === 'visible') {
+              videoRef.current.play().catch(() => {});
+            }
+          }}
         >
           <source src="/car.mp4" type="video/mp4" />
           Your browser does not support the video tag.

@@ -42,6 +42,7 @@ export default function BlogPage() {
   const recentPostsRef = useRef<HTMLDivElement>(null);
   const gridTitleRef = useRef<HTMLHeadingElement>(null);
   const gridContainerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -233,18 +234,39 @@ export default function BlogPage() {
     return `${minutes} min read`;
   };
 
+  // Ensure video plays when page becomes visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (videoRef.current && document.visibilityState === 'visible') {
+        videoRef.current.play().catch(() => {});
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-transparent text-foreground relative z-10">
       {/* Hero Section */}
       <section className="relative h-[60vh] sm:h-[70vh] lg:h-[100vh] w-full flex items-end justify-center text-center">
         <video
+          ref={videoRef}
           className="absolute top-0 left-0 w-full h-full object-cover"
-          controls
-          preload="none"
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
+          onError={(e) => {
+            console.error('Video error:', e);
+          }}
+          onPause={() => {
+            if (videoRef.current && document.visibilityState === 'visible') {
+              videoRef.current.play().catch(() => {});
+            }
+          }}
         >
           <source src="/car.mp4" type="video/mp4" />
           Your browser does not support the video tag.

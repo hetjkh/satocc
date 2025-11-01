@@ -32,6 +32,7 @@ export default function AboutPage() {
   // Hero refs
   const heroBadgeRef = useRef<HTMLButtonElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const heroDescRef = useRef<HTMLParagraphElement>(null);
 
   // Core identity refs
@@ -358,18 +359,39 @@ export default function AboutPage() {
     return () => ctx.revert();
   }, []);
 
+  // Ensure video plays when page becomes visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (videoRef.current && document.visibilityState === 'visible') {
+        videoRef.current.play().catch(() => {});
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Hero Section */}
       <section className="relative h-[100vh] w-full flex items-end justify-center text-center">
         <video
+          ref={videoRef}
           className="absolute top-0 left-0 w-full h-full object-cover"
-          controls
-          preload="none"
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
+          onError={(e) => {
+            console.error('Video error:', e);
+          }}
+          onPause={() => {
+            if (videoRef.current && document.visibilityState === 'visible') {
+              videoRef.current.play().catch(() => {});
+            }
+          }}
         >
           <source src="/car.mp4" type="video/mp4" />
           Your browser does not support the video tag.

@@ -22,6 +22,7 @@ export default function HomePage() {
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroDescRef = useRef<HTMLParagraphElement>(null);
   const heroButtonsRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     // Hero section animations
@@ -56,16 +57,45 @@ export default function HomePage() {
     return () => ctx.revert();
   }, []);
 
+  // Ensure video plays when page becomes visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (videoRef.current && document.visibilityState === 'visible') {
+        videoRef.current.play().catch(() => {
+          // Ignore play promise rejection
+        });
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-transparent text-foreground">
       {/* Hero Section */}
       <section className="relative h-[100vh] z-10 w-full flex items-end justify-center text-center">
         <video
+          ref={videoRef}
           className="absolute top-0 left-0 w-full h-full object-cover"
-          controls 
           autoPlay
           loop
+          muted
           playsInline
+          preload="auto"
+          onError={(e) => {
+            console.error('Video error:', e);
+          }}
+          onPause={() => {
+            // Auto-resume if paused unexpectedly
+            if (videoRef.current && document.visibilityState === 'visible') {
+              videoRef.current.play().catch(() => {
+                // Ignore play promise rejection
+              });
+            }
+          }}
         >
           <source src="/car.mp4" type="video/mp4" />
           Your browser does not support the video tag.
