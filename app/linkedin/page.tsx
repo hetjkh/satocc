@@ -47,7 +47,7 @@ interface Post {
   updatedAt: string;
 }
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://satocii-backend.onrender.com';
 
 export default function LinkedInPage() {
   const [userInfo, setUserInfo] = useState<LinkedInUser | null>(null);

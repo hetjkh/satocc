@@ -54,7 +54,7 @@ export default function AdminReviewsPage() {
   const fetchReviews = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/reviews/all");
+      const response = await fetch("https://satocii-backend.onrender.com/api/reviews/all");
       const data = await response.json();
       if (data.success) {
         setReviews(data.data);
@@ -77,8 +77,8 @@ export default function AdminReviewsPage() {
 
     try {
       const url = editingId
-        ? `http://localhost:5000/api/reviews/${editingId}`
-        : "http://localhost:5000/api/reviews";
+        ? `https://satocii-backend.onrender.com/api/reviews/${editingId}`
+        : "https://satocii-backend.onrender.com/api/reviews";
       
       const method = editingId ? "PUT" : "POST";
 
@@ -113,7 +113,7 @@ export default function AdminReviewsPage() {
 
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/reviews/${id}`, {
+      const response = await fetch(`https://satocii-backend.onrender.com/api/reviews/${id}`, {
         method: "DELETE",
       });
 
@@ -136,7 +136,7 @@ export default function AdminReviewsPage() {
   const handleToggleActive = async (id: string) => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/reviews/${id}/toggle`, {
+      const response = await fetch(`https://satocii-backend.onrender.com/api/reviews/${id}/toggle`, {
         method: "PATCH",
       });
 
@@ -194,7 +194,7 @@ export default function AdminReviewsPage() {
         setUploadingMediaImage(true);
       }
 
-      const response = await fetch('http://localhost:5000/api/upload-image', {
+      const response = await fetch('https://satocii-backend.onrender.com/api/upload-image', {
         method: 'POST',
         body: formData,
       });

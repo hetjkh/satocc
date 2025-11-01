@@ -59,7 +59,7 @@ export default function AboutPage() {
     const fetchTeamMembers = async () => {
       try {
         setLoadingTeam(true);
-        const response = await fetch("http://localhost:5000/api/team-members");
+        const response = await fetch("https://satocii-backend.onrender.com/api/team-members");
         const data = await response.json();
         if (data.success) {
           setTeamMembers(data.data);

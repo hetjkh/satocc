@@ -1,7 +1,7 @@
 // LinkedIn API utility functions
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-production-backend-url.com' 
-  : 'http://localhost:5000';
+  ? 'https://satocii-backend.onrender.com' 
+  : 'https://satocii-backend.onrender.com';
 
 export interface LinkedInUser {
   sub: string;

@@ -51,7 +51,7 @@ export default function AdminTeamPage() {
   const fetchTeamMembers = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/team-members/all");
+      const response = await fetch("https://satocii-backend.onrender.com/api/team-members/all");
       const data = await response.json();
       if (data.success) {
         setTeamMembers(data.data);
@@ -74,8 +74,8 @@ export default function AdminTeamPage() {
 
     try {
       const url = editingId
-        ? `http://localhost:5000/api/team-members/${editingId}`
-        : "http://localhost:5000/api/team-members";
+        ? `https://satocii-backend.onrender.com/api/team-members/${editingId}`
+        : "https://satocii-backend.onrender.com/api/team-members";
       
       const method = editingId ? "PUT" : "POST";
 
@@ -110,7 +110,7 @@ export default function AdminTeamPage() {
 
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/team-members/${id}`, {
+      const response = await fetch(`https://satocii-backend.onrender.com/api/team-members/${id}`, {
         method: "DELETE",
       });
 
@@ -133,7 +133,7 @@ export default function AdminTeamPage() {
   const handleToggleActive = async (id: string) => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/team-members/${id}/toggle`, {
+      const response = await fetch(`https://satocii-backend.onrender.com/api/team-members/${id}/toggle`, {
         method: "PATCH",
       });
 
@@ -185,7 +185,7 @@ export default function AdminTeamPage() {
     try {
       setUploadingImage(true);
 
-      const response = await fetch('http://localhost:5000/api/upload-image', {
+      const response = await fetch('https://satocii-backend.onrender.com/api/upload-image', {
         method: 'POST',
         body: formData,
       });

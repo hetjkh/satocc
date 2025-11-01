@@ -330,7 +330,7 @@ export default function Home() {
     setSubmitMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/submit-form', {
+      const response = await fetch('https://satocii-backend.onrender.com/api/submit-form', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
