@@ -36,6 +36,11 @@ export default function ProductSection() {
   const right4ContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Only run animations on desktop (md and above)
+    if (window.innerWidth < 768) {
+      return;
+    }
+
     const ctx = gsap.context(() => {
       // Set initial states - all features hidden except first
       gsap.set([mobile2Ref.current], { 
@@ -201,10 +206,154 @@ export default function ProductSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="w-full py-20 bg-transparent relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* All Features in Same Position - Overlapping */}
-        <div className="relative min-h-[800px] flex items-center justify-center">
+    <section ref={sectionRef} className="w-full py-10 md:py-20 bg-transparent relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        {/* Mobile Layout - Simple Vertical Stack */}
+        <div className="md:hidden space-y-12 pb-20">
+          {/* Feature 1 */}
+          <div className="flex flex-col items-center text-center space-y-6">
+            <h3 className="Space text-2xl font-bold text-foreground uppercase">
+              {t('product.feature1.title')}
+            </h3>
+            <div className="relative w-[180px] h-[320px]">
+              <Image
+                src="/1.png"
+                alt="Satocci Mobile App"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div className="space-y-3 max-w-sm">
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature1.point1')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature1.point2')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature1.point3')}
+              </p>
+            </div>
+            <Button className="Space rounded-full text-sm font-bold px-2 py-5 bg-foreground text-background hover:bg-purple hover:text-white">
+              <span className="ml-3">{t('product.downloadButton')}</span>
+              <div className="w-8 h-8 bg-background text-foreground rounded-full flex items-center justify-center">
+                <MoveUpRight className="w-4 h-4" />
+              </div>
+            </Button>
+          </div>
+
+          {/* Feature 2 */}
+          <div className="flex flex-col items-center text-center space-y-6">
+            <h3 className="Space text-2xl font-bold text-foreground uppercase">
+              {t('product.feature2.title')}
+            </h3>
+            <div className="relative w-[180px] h-[320px]">
+              <Image
+                src="/3.png"
+                alt="Satocci Mobile App"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div className="space-y-3 max-w-sm">
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature2.point1')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature2.point2')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature2.point3')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature2.point4')}
+              </p>
+            </div>
+            <Button className="Space rounded-full text-sm font-bold px-2 py-5 bg-foreground text-background hover:bg-purple hover:text-white">
+              <span className="ml-3">{t('product.downloadButton')}</span>
+              <div className="w-8 h-8 bg-background text-foreground rounded-full flex items-center justify-center">
+                <MoveUpRight className="w-4 h-4" />
+              </div>
+            </Button>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="flex flex-col items-center text-center space-y-6">
+            <h3 className="Space text-2xl font-bold text-foreground uppercase">
+              {t('product.feature3.title')}
+            </h3>
+            <div className="relative w-[180px] h-[320px]">
+              <Image
+                src="/1.png"
+                alt="Satocci Mobile App"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div className="space-y-3 max-w-sm">
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature3.point1')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature3.point2')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature3.point3')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature3.point4')}
+              </p>
+            </div>
+            <Button className="Space rounded-full text-sm font-bold px-2 py-5 bg-foreground text-background hover:bg-purple hover:text-white">
+              <span className="ml-3">{t('product.downloadButton')}</span>
+              <div className="w-8 h-8 bg-background text-foreground rounded-full flex items-center justify-center">
+                <MoveUpRight className="w-4 h-4" />
+              </div>
+            </Button>
+          </div>
+
+          {/* Feature 4 */}
+          <div className="flex flex-col items-center text-center space-y-6">
+            <h3 className="Space text-2xl font-bold text-foreground uppercase">
+              {t('product.feature4.title')}
+            </h3>
+            <div className="relative w-[180px] h-[320px]">
+              <Image
+                src="/1.png"
+                alt="Satocci Mobile App"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div className="space-y-3 max-w-sm">
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature4.point1')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature4.point2')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature4.point3')}
+              </p>
+              <p className="Poppins text-sm text-muted-foreground">
+                • {t('product.feature4.point4')}
+              </p>
+            </div>
+            <Button className="Space rounded-full text-sm font-bold px-2 py-5 bg-foreground text-background hover:bg-purple hover:text-white">
+              <span className="ml-3">{t('product.downloadButton')}</span>
+              <div className="w-8 h-8 bg-background text-foreground rounded-full flex items-center justify-center">
+                <MoveUpRight className="w-4 h-4" />
+              </div>
+            </Button>
+          </div>
+        </div>
+
+        {/* Desktop Layout - Original Design */}
+        <div className="hidden md:block relative min-h-[800px] flex items-center justify-center">
           {/* Feature 1: Tabby & Satocci Flexible Payments */}
           <div className="absolute inset-0 flex items-center justify-center">
             {/* Left Content */}
