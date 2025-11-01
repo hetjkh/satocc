@@ -15,18 +15,45 @@ export default function ProductPage() {
   const heroBadgeRef = useRef<HTMLButtonElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroDescRef = useRef<HTMLParagraphElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    // Pause particles when hero section is in view for better video performance
+    if (heroSectionRef.current) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              window.dispatchEvent(new CustomEvent('pause-particles'));
+            } else {
+              window.dispatchEvent(new CustomEvent('resume-particles'));
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+      
+      observer.observe(heroSectionRef.current);
+      
+      return () => {
+        observer.disconnect();
+        window.dispatchEvent(new CustomEvent('resume-particles'));
+      };
+    }
+  }, []);
 
   // GSAP Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Set initial visibility
-      gsap.set([heroBadgeRef.current, heroTitleRef.current, heroDescRef.current], { opacity: 1 });
+      gsap.set([heroBadgeRef.current, heroTitleRef.current, heroDescRef.current], { opacity: 1, force3D: false });
 
       // Hero Badge Animation
       if (heroBadgeRef.current) {
         gsap.fromTo(heroBadgeRef.current,
           { opacity: 0, scale: 0.8, y: 30 },
-          { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "back.out(1.7)", delay: 0.2 }
+          { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.2, force3D: false }
         );
       }
 
@@ -34,7 +61,7 @@ export default function ProductPage() {
       if (heroTitleRef.current) {
         gsap.fromTo(heroTitleRef.current,
           { opacity: 0, y: 60 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.4 }
+          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out", delay: 0.4, force3D: false }
         );
       }
 
@@ -42,7 +69,7 @@ export default function ProductPage() {
       if (heroDescRef.current) {
         gsap.fromTo(heroDescRef.current,
           { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.6 }
+          { opacity: 1, y: 0, duration: 0.6, ease: "power1.out", delay: 0.6, force3D: false }
         );
       }
     });
@@ -53,20 +80,46 @@ export default function ProductPage() {
   return (
     <div className="w-full min-h-screen bg-transparent text-foreground">
       {/* Hero Section with Video */}
-      <section className="relative h-[100vh] w-full flex items-end justify-center text-center">
+      <section ref={heroSectionRef} className="relative h-[100vh] w-full flex items-end justify-center text-center" style={{ isolation: 'isolate', contain: 'layout style paint' }}>
         <video
+          ref={videoRef}
           className="absolute top-0 left-0 w-full h-full object-cover"
-          controls
-          preload="none"
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
+          disablePictureInPicture
+          controlsList="nodownload nofullscreen noremoteplayback"
+          style={{ 
+            transform: 'translate3d(0, 0, 0)',
+            willChange: 'auto',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            WebkitTransform: 'translate3d(0, 0, 0)',
+            objectFit: 'cover',
+            isolation: 'isolate'
+          }}
+          onLoadedData={(e) => {
+            const video = e.currentTarget;
+            if (video) {
+              video.playbackRate = 1.0;
+              video.defaultPlaybackRate = 1.0;
+            }
+          }}
         >
-          <source src="/Videos/home.mp4" type="video/mp4" />
+          <source src="/car.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent from-[50%] via-background/50 via-[75%] to-background to-[100%]"></div>
+        <div 
+          className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-background/50 to-background pointer-events-none"
+          style={{ 
+            transform: 'translateZ(0)',
+            willChange: 'opacity',
+            isolation: 'isolate',
+            backfaceVisibility: 'hidden'
+          }}
+        ></div>
         <div className="relative flex justify-between items-end w-[95%] lg:w-full mb-10 max-w-7xl">
           <div className="w-full lg:w-[50%] justify-start items-start text-left">
             <Button ref={heroBadgeRef} className="Poppins rounded-full text-xl lg:text-xl font-medium p-6 lg:p-6 bg-transparent text-foreground border-2 border-foreground mb-5 hover:scale-105 transition-transform duration-300">
