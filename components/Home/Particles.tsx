@@ -117,7 +117,15 @@ const Particles = ({
   const remap = (v: number, a1: number, b1: number, a2: number, b2: number) =>
     Math.max(((v - a1) * (b2 - a2)) / (b1 - a1) + a2, 0)
 
+  const animationFrameRef = useRef<number | null>(null)
+  const isPausedRef = useRef(false)
+
   const animate = useCallback(() => {
+    if (isPausedRef.current) {
+      animationFrameRef.current = requestAnimationFrame(animate)
+      return
+    }
+    
     clear()
     const time = Date.now() / 1000
     circles.current.forEach((c: { x: number; y: number; translateX: number; translateY: number; size: number; alpha: number; targetAlpha: number; dx: number; dy: number; magnetism: number; twinkleSpeed: number; twinkleOffset: number }, i: number) => {
@@ -150,8 +158,23 @@ const Particles = ({
         drawCircle(circleParams())
       }
     })
-    requestAnimationFrame(animate)
+    animationFrameRef.current = requestAnimationFrame(animate)
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Expose pause/resume methods
+  useEffect(() => {
+    const pause = () => { isPausedRef.current = true }
+    const resume = () => { isPausedRef.current = false }
+    
+    // Listen for custom events to pause/resume particles
+    window.addEventListener('pause-particles', pause)
+    window.addEventListener('resume-particles', resume)
+    
+    return () => {
+      window.removeEventListener('pause-particles', pause)
+      window.removeEventListener('resume-particles', resume)
+    }
   }, [])
 
   useEffect(() => {
@@ -160,7 +183,12 @@ const Particles = ({
     drawParticles()
     animate()
     window.addEventListener("resize", resizeCanvas)
-    return () => window.removeEventListener("resize", resizeCanvas)
+    return () => {
+      window.removeEventListener("resize", resizeCanvas)
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
   }, [color, resizeCanvas, drawParticles, animate])
 
   useEffect(() => {
@@ -185,7 +213,7 @@ export default function Background() {
 
   return (
     <div className="fixed z-0 top-0 flex h-[100vh] w-[100vw] flex-col items-center justify-center overflow-hidden bg-transparent pointer-events-none">
-      <Particles className="absolute inset-0" quantity={150} ease={80} color={color} />
+      <Particles className="absolute inset-0" quantity={50} ease={80} color={color} />
     </div>
   )
 }

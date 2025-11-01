@@ -22,6 +22,35 @@ export default function HomePage() {
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroDescRef = useRef<HTMLParagraphElement>(null);
   const heroButtonsRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    // Pause particles when hero section is in view for better video performance
+    if (heroSectionRef.current) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // Pause particles when video section is visible
+              window.dispatchEvent(new CustomEvent('pause-particles'));
+            } else {
+              // Resume particles when scrolled away
+              window.dispatchEvent(new CustomEvent('resume-particles'));
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+      
+      observer.observe(heroSectionRef.current);
+      
+      return () => {
+        observer.disconnect();
+        window.dispatchEvent(new CustomEvent('resume-particles'));
+      };
+    }
+  }, []);
 
   useEffect(() => {
     // Hero section animations - optimized to not interfere with video
@@ -59,24 +88,33 @@ export default function HomePage() {
   return (
     <div className="w-full min-h-screen flex flex-col bg-transparent text-foreground">
       {/* Hero Section */}
-      <section className="relative h-[100vh] z-10 w-full flex items-end justify-center text-center" style={{ isolation: 'isolate', contain: 'layout style paint' }}>
+      <section ref={heroSectionRef} className="relative h-[100vh] z-10 w-full flex items-end justify-center text-center" style={{ isolation: 'isolate', contain: 'layout style paint' }}>
         <video
+          ref={videoRef}
           className="absolute top-0 left-0 w-full h-full object-cover"
           autoPlay
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
           disablePictureInPicture
           controlsList="nodownload nofullscreen noremoteplayback"
           style={{ 
             transform: 'translate3d(0, 0, 0)',
-            willChange: 'transform',
+            willChange: 'auto',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
             WebkitTransform: 'translate3d(0, 0, 0)',
             objectFit: 'cover',
             isolation: 'isolate'
+          }}
+          onLoadedData={(e) => {
+            // Ensure smooth playback
+            const video = e.currentTarget;
+            if (video) {
+              video.playbackRate = 1.0;
+              video.defaultPlaybackRate = 1.0;
+            }
           }}
         >
           <source src="/car.mp4" type="video/mp4" />
